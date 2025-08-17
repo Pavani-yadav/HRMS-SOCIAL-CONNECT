@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Search - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>🔍 Employee Search</h1>
+            <p>Search and find employee information quickly</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <!-- Search Form Card -->
+            <section class="card">
+                <h2>🔎 Search Employees</h2>
+                <div class="form-group">
+                    <label for="searchInput" class="form-label">Employee Name or Email</label>
+                    <input type="text" id="searchInput" class="form-input" placeholder="Enter name or email to search">
+                </div>
+                
+                <div style="display: flex; gap: var(--spacing-3); flex-wrap: wrap;">
+                    <button onclick="searchEmployee()" class="btn btn-primary">
+                        🔎 Search Employee
+                    </button>
+                    <button onclick="showAllEmployees()" class="btn btn-secondary">
+                        👥 Show All Employees
+                    </button>
+                    <button onclick="clearResults()" class="btn btn-secondary">
+                        🗑️ Clear Results
+                    </button>
+                </div>
+                
+                <div id="searchResults" class="results-container"></div>
+            </section>
+
+            <!-- Advanced Search -->
+            <section class="card">
+                <h2>🎯 Advanced Search</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4);">
+                    <div class="form-group">
+                        <label for="departmentFilter" class="form-label">Department</label>
+                        <select id="departmentFilter" class="form-input">
+                            <option value="">All Departments</option>
+                            <option value="IT">Information Technology</option>
+                            <option value="HR">Human Resources</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Operations">Operations</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roleFilter" class="form-label">Role</label>
+                        <input type="text" id="roleFilter" class="form-input" placeholder="Filter by role">
+                    </div>
+                </div>
+                
+                <button onclick="advancedSearch()" class="btn btn-success">
+                    🎯 Advanced Search
+                </button>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample employee data
+        const employees = [
+            { name: "John Doe", email: "john.doe@company.com", role: "Software Engineer", department: "IT" },
+            { name: "Jane Smith", email: "jane.smith@company.com", role: "Marketing Manager", department: "Marketing" },
+            { name: "Mike Johnson", email: "mike.johnson@company.com", role: "Sales Representative", department: "Sales" },
+            { name: "Sarah Wilson", email: "sarah.wilson@company.com", role: "HR Specialist", department: "HR" },
+            { name: "David Brown", email: "david.brown@company.com", role: "Financial Analyst", department: "Finance" },
+            { name: "Lisa Davis", email: "lisa.davis@company.com", role: "Operations Manager", department: "Operations" },
+            { name: "Tom Anderson", email: "tom.anderson@company.com", role: "Senior Developer", department: "IT" },
+            { name: "Emily Taylor", email: "emily.taylor@company.com", role: "Content Writer", department: "Marketing" }
+        ];
+
+        function searchEmployee() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (!searchTerm) {
+                resultsContainer.innerHTML = '<div class="no-results">Please enter a name or email to search.</div>';
+                return;
+            }
+            
+            // Add loading state
+            resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
+            
+            setTimeout(() => {
+                const results = employees.filter(emp => 
+                    emp.name.toLowerCase().includes(searchTerm) || 
+                    emp.email.toLowerCase().includes(searchTerm)
+                );
+                
+                displayResults(results);
+            }, 500);
+        }
+
+        function showAllEmployees() {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '<div class="loading">Loading all employees...</div>';
+            
+            setTimeout(() => {
+                displayResults(employees);
+            }, 300);
+        }
+
+        function advancedSearch() {
+            const department = document.getElementById('departmentFilter').value;
+            const role = document.getElementById('roleFilter').value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
+            
+            setTimeout(() => {
+                let results = employees;
+                
+                if (department) {
+                    results = results.filter(emp => emp.department === department);
+                }
+                
+                if (role) {
+                    results = results.filter(emp => emp.role.toLowerCase().includes(role));
+                }
+                
+                displayResults(results);
+            }, 500);
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">No employees found matching your criteria.</div>';
+                return;
+            }
+            
+            const output = results.map(emp => `
+                <div class="employee-card animate-fade-in">
+                    <div class="employee-name">${emp.name}</div>
+                    <div class="employee-details">${emp.email} • ${emp.role} • ${emp.department}</div>
+                </div>
+            `).join('');
+            
+            resultsContainer.innerHTML = output;
+        }
+
+        function clearResults() {
+            document.getElementById('searchResults').innerHTML = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('departmentFilter').value = '';
+            document.getElementById('roleFilter').value = '';
+        }
+
+        // Add enter key support for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchEmployee();
+            }
+        });
+    </script>
+</body>
+</html>

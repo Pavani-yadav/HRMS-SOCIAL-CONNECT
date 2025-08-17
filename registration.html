@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>👤 Employee Registration</h1>
+            <p>Register new employees and manage their information</p>
+            <a href="dashboard-clean.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <!-- Registration Form Card -->
+            <section class="card">
+                <h2>📝 New Employee Registration</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name *</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address *</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter email address" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="role" class="form-label">Job Role *</label>
+                        <input type="text" id="role" name="role" class="form-input" placeholder="Enter job role" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="department" class="form-label">Department</label>
+                        <select id="department" name="department" class="form-input">
+                            <option value="">Select Department</option>
+                            <option value="IT">Information Technology</option>
+                            <option value="HR">Human Resources</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Operations">Operations</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" placeholder="Enter phone number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" name="startDate" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="salary" class="form-label">Salary</label>
+                        <input type="number" id="salary" name="salary" class="form-input" placeholder="Enter salary amount">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        ✅ Register Employee
+                    </button>
+                </form>
+            </section>
+
+            <!-- Recent Registrations -->
+            <section class="card" style="margin-top: var(--spacing-8);">
+                <h2>📋 Recent Registrations</h2>
+                <div id="recentRegistrations">
+                    <div class="employee-card">
+                        <div class="employee-name">John Doe</div>
+                        <div class="employee-details">john.doe@company.com • Software Engineer</div>
+                    </div>
+                    <div class="employee-card">
+                        <div class="employee-name">Jane Smith</div>
+                        <div class="employee-details">jane.smith@company.com • Marketing Manager</div>
+                    </div>
+                    <div class="employee-card">
+                        <div class="employee-name">Mike Johnson</div>
+                        <div class="employee-details">mike.johnson@company.com • Sales Representative</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const submitButton = this.querySelector('button[type="submit"]');
+            
+            // Add loading state
+            submitButton.textContent = 'Registering...';
+            submitButton.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = 'Employee registered successfully!';
+                this.parentNode.insertBefore(alertDiv, this);
+                
+                // Add to recent registrations
+                const recentDiv = document.getElementById('recentRegistrations');
+                const newEmployee = document.createElement('div');
+                newEmployee.className = 'employee-card animate-fade-in';
+                newEmployee.innerHTML = `
+                    <div class="employee-name">${formData.get('name')}</div>
+                    <div class="employee-details">${formData.get('email')} • ${formData.get('role')}</div>
+                `;
+                recentDiv.insertBefore(newEmployee, recentDiv.firstChild);
+                
+                // Remove alert after 3 seconds
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                this.reset();
+                
+                submitButton.textContent = '✅ Register Employee';
+                submitButton.disabled = false;
+            }, 1500);
+        });
+
+        // Set today's date as default for start date
+        document.getElementById('startDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>

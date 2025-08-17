@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>JavaScript Test Page</h1>
+    
+    <button onclick="alert('Direct inline works!')">Direct Inline Test</button>
+    <button onclick="testFunction()">External Function Test</button>
+    <button onclick="loadComponent('chat')">Load Component Test</button>
+    
+    <div id="contentArea">
+        <p>Default content here</p>
+    </div>
+    
+    <script>
+        console.log('=== SIMPLE TEST SCRIPT LOADING ===');
+        
+        function testFunction() {
+            alert('External function works!');
+            console.log('testFunction called');
+        }
+        
+        function loadComponent(componentName) {
+            console.log('loadComponent called with:', componentName);
+            alert('loadComponent called with: ' + componentName);
+            
+            const contentArea = document.getElementById('contentArea');
+            if (contentArea) {
+                contentArea.innerHTML = '<h2>Component: ' + componentName + '</h2><p>Component loaded successfully!</p>';
+            } else {
+                console.error('contentArea not found');
+            }
+        }
+        
+        // Make functions global
+        window.testFunction = testFunction;
+        window.loadComponent = loadComponent;
+        
+        console.log('Functions defined and made global');
+        console.log('window.testFunction:', typeof window.testFunction);
+        console.log('window.loadComponent:', typeof window.loadComponent);
+    </script>
+</body>
+</html>

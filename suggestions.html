@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggestion Box - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>💡 Suggestion Box</h1>
+            <p>Share your ideas and help improve our workplace</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <!-- Submit Suggestion -->
+            <section class="card" style="margin-bottom: var(--spacing-6);">
+                <h2>✍️ Submit a Suggestion</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Your suggestions are valuable to us! Share your ideas anonymously to help improve our workplace.
+                </p>
+                
+                <form id="suggestionForm">
+                    <div class="form-group">
+                        <label for="suggestionCategory" class="form-label">Category</label>
+                        <select id="suggestionCategory" class="form-input">
+                            <option value="workplace">🏢 Workplace Environment</option>
+                            <option value="process">⚙️ Process Improvement</option>
+                            <option value="benefits">💰 Benefits & Compensation</option>
+                            <option value="technology">💻 Technology & Tools</option>
+                            <option value="culture">🤝 Company Culture</option>
+                            <option value="training">📚 Training & Development</option>
+                            <option value="other">🔧 Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="suggestionTitle" class="form-label">Title *</label>
+                        <input type="text" id="suggestionTitle" class="form-input" placeholder="Brief title for your suggestion" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="suggestionContent" class="form-label">Suggestion Details *</label>
+                        <textarea id="suggestionContent" class="form-input" rows="5" placeholder="Describe your suggestion in detail. What problem does it solve? How would it help?" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="suggestionImpact" class="form-label">Expected Impact</label>
+                        <select id="suggestionImpact" class="form-input">
+                            <option value="low">🟢 Low Impact</option>
+                            <option value="medium">🟡 Medium Impact</option>
+                            <option value="high">🔴 High Impact</option>
+                        </select>
+                    </div>
+                    
+                    <div style="background: var(--gray-50); padding: var(--spacing-4); border-radius: var(--radius-md); margin-bottom: var(--spacing-4);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-2); margin-bottom: var(--spacing-2);">
+                            <input type="checkbox" id="anonymousSubmission" checked>
+                            <label for="anonymousSubmission" style="color: var(--gray-700);">Submit anonymously</label>
+                        </div>
+                        <p style="color: var(--gray-600); font-size: var(--font-size-sm);">
+                            🔒 Your suggestion will be submitted anonymously. Management will not be able to identify who submitted it.
+                        </p>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--spacing-3);">
+                        <button type="submit" class="btn btn-primary">💡 Submit Suggestion</button>
+                        <button type="button" onclick="clearSuggestionForm()" class="btn btn-secondary">🗑️ Clear</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Filter and Sort -->
+            <section class="card" style="margin-bottom: var(--spacing-6);">
+                <div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap; align-items: end;">
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label for="searchSuggestions" class="form-label">Search Suggestions</label>
+                        <input type="text" id="searchSuggestions" class="form-input" placeholder="Search by title or content">
+                    </div>
+                    <div class="form-group">
+                        <label for="filterCategory" class="form-label">Category</label>
+                        <select id="filterCategory" class="form-input">
+                            <option value="">All Categories</option>
+                            <option value="workplace">🏢 Workplace Environment</option>
+                            <option value="process">⚙️ Process Improvement</option>
+                            <option value="benefits">💰 Benefits & Compensation</option>
+                            <option value="technology">💻 Technology & Tools</option>
+                            <option value="culture">🤝 Company Culture</option>
+                            <option value="training">📚 Training & Development</option>
+                            <option value="other">🔧 Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sortBy" class="form-label">Sort By</label>
+                        <select id="sortBy" class="form-input">
+                            <option value="newest">📅 Newest First</option>
+                            <option value="oldest">📅 Oldest First</option>
+                            <option value="votes">👍 Most Voted</option>
+                            <option value="impact">🎯 High Impact</option>
+                        </select>
+                    </div>
+                    <button onclick="filterSuggestions()" class="btn btn-primary">🔍 Filter</button>
+                </div>
+            </section>
+
+            <!-- Suggestions List -->
+            <div id="suggestionsList">
+                <!-- Suggestions will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample suggestions data
+        let suggestions = [
+            {
+                id: 1,
+                title: "Flexible Working Hours",
+                content: "I suggest implementing more flexible working hours to help employees maintain better work-life balance. This could include core hours from 10 AM to 3 PM with flexible start and end times.",
+                category: "workplace",
+                impact: "high",
+                status: "under_review",
+                votes: 23,
+                comments: 8,
+                submittedDate: "2024-01-15",
+                anonymous: true,
+                userVoted: false
+            },
+            {
+                id: 2,
+                title: "Upgrade Development Tools",
+                content: "Our current development environment is outdated. Upgrading to newer IDEs and tools would significantly improve productivity and code quality.",
+                category: "technology",
+                impact: "medium",
+                status: "approved",
+                votes: 18,
+                comments: 5,
+                submittedDate: "2024-01-12",
+                anonymous: true,
+                userVoted: true
+            },
+            {
+                id: 3,
+                title: "Monthly Team Building Activities",
+                content: "Regular team building activities could help improve collaboration and morale. I suggest organizing monthly events like game nights, outdoor activities, or skill-sharing sessions.",
+                category: "culture",
+                impact: "medium",
+                status: "new",
+                votes: 31,
+                comments: 12,
+                submittedDate: "2024-01-18",
+                anonymous: true,
+                userVoted: false
+            },
+            {
+                id: 4,
+                title: "Remote Work Equipment Allowance",
+                content: "Providing an annual allowance for home office equipment would help remote workers set up productive workspaces and show company support for remote work.",
+                category: "benefits",
+                impact: "high",
+                status: "implemented",
+                votes: 45,
+                comments: 15,
+                submittedDate: "2024-01-08",
+                anonymous: true,
+                userVoted: false
+            },
+            {
+                id: 5,
+                title: "Automated Code Review Process",
+                content: "Implementing automated code review tools could help catch issues early and standardize our code quality across all projects.",
+                category: "process",
+                impact: "medium",
+                status: "rejected",
+                votes: 12,
+                comments: 3,
+                submittedDate: "2024-01-10",
+                anonymous: true,
+                userVoted: false
+            }
+        ];
+
+        function getCategoryIcon(category) {
+            const icons = {
+                workplace: "🏢",
+                process: "⚙️",
+                benefits: "💰",
+                technology: "💻",
+                culture: "🤝",
+                training: "📚",
+                other: "🔧"
+            };
+            return icons[category] || "🔧";
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                new: "var(--primary-color)",
+                under_review: "var(--accent-color)",
+                approved: "var(--secondary-color)",
+                implemented: "#10b981",
+                rejected: "var(--danger-color)"
+            };
+            return colors[status] || "var(--gray-500)";
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                new: "🆕 New",
+                under_review: "👀 Under Review",
+                approved: "✅ Approved",
+                implemented: "🚀 Implemented",
+                rejected: "❌ Rejected"
+            };
+            return texts[status] || "Unknown";
+        }
+
+        function getImpactColor(impact) {
+            const colors = {
+                low: "var(--secondary-color)",
+                medium: "var(--accent-color)",
+                high: "var(--danger-color)"
+            };
+            return colors[impact] || "var(--gray-500)";
+        }
+
+        function loadSuggestions(suggestionsToShow = suggestions) {
+            const container = document.getElementById('suggestionsList');
+            
+            if (suggestionsToShow.length === 0) {
+                container.innerHTML = '<div class="no-results">No suggestions found.</div>';
+                return;
+            }
+            
+            const suggestionCards = suggestionsToShow.map(suggestion => `
+                <div class="suggestion-item animate-fade-in">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-3);">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-2); margin-bottom: var(--spacing-2);">
+                                <span style="background: var(--gray-600); color: white; padding: var(--spacing-1) var(--spacing-2); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+                                    ${getCategoryIcon(suggestion.category)} ${suggestion.category.toUpperCase()}
+                                </span>
+                                <span style="background: ${getImpactColor(suggestion.impact)}; color: white; padding: var(--spacing-1) var(--spacing-2); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+                                    ${suggestion.impact.toUpperCase()} IMPACT
+                                </span>
+                                <span style="background: ${getStatusColor(suggestion.status)}; color: white; padding: var(--spacing-1) var(--spacing-2); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+                                    ${getStatusText(suggestion.status)}
+                                </span>
+                            </div>
+                            <h3 style="margin-bottom: var(--spacing-2); color: var(--gray-800);">${suggestion.title}</h3>
+                            <p style="color: var(--gray-600); line-height: 1.6; margin-bottom: var(--spacing-3);">${suggestion.content}</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-4); color: var(--gray-500); font-size: var(--font-size-sm);">
+                            <span>📅 ${new Date(suggestion.submittedDate).toLocaleDateString()}</span>
+                            <span>🔒 Anonymous</span>
+                        </div>
+                        <div class="suggestion-votes">
+                            <button class="vote-btn ${suggestion.userVoted ? 'active' : ''}" onclick="voteSuggestion(${suggestion.id})">
+                                👍 ${suggestion.votes}
+                            </button>
+                            <button class="vote-btn" onclick="showComments(${suggestion.id})">
+                                💬 ${suggestion.comments}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = suggestionCards;
+        }
+
+        function filterSuggestions() {
+            const searchTerm = document.getElementById('searchSuggestions').value.toLowerCase();
+            const category = document.getElementById('filterCategory').value;
+            const sortBy = document.getElementById('sortBy').value;
+            
+            let filtered = suggestions;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(suggestion => 
+                    suggestion.title.toLowerCase().includes(searchTerm) ||
+                    suggestion.content.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (category) {
+                filtered = filtered.filter(suggestion => suggestion.category === category);
+            }
+            
+            // Sort suggestions
+            filtered.sort((a, b) => {
+                switch (sortBy) {
+                    case 'newest':
+                        return new Date(b.submittedDate) - new Date(a.submittedDate);
+                    case 'oldest':
+                        return new Date(a.submittedDate) - new Date(b.submittedDate);
+                    case 'votes':
+                        return b.votes - a.votes;
+                    case 'impact':
+                        const impactOrder = { high: 3, medium: 2, low: 1 };
+                        return impactOrder[b.impact] - impactOrder[a.impact];
+                    default:
+                        return 0;
+                }
+            });
+            
+            loadSuggestions(filtered);
+        }
+
+        function voteSuggestion(id) {
+            const suggestion = suggestions.find(s => s.id === id);
+            if (suggestion && !suggestion.userVoted) {
+                suggestion.votes++;
+                suggestion.userVoted = true;
+                
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = 'Thank you for your vote!';
+                document.querySelector('main .container').insertBefore(alertDiv, document.querySelector('main .container').firstChild);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                loadSuggestions();
+            }
+        }
+
+        function showComments(id) {
+            alert(`Showing comments for suggestion ${id}...`);
+            // This would open a comments modal or navigate to a detailed view
+        }
+
+        function clearSuggestionForm() {
+            document.getElementById('suggestionForm').reset();
+            document.getElementById('anonymousSubmission').checked = true;
+        }
+
+        // Handle form submission
+        document.getElementById('suggestionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('suggestionTitle').value;
+            const category = document.getElementById('suggestionCategory').value;
+            const content = document.getElementById('suggestionContent').value;
+            const impact = document.getElementById('suggestionImpact').value;
+            const anonymous = document.getElementById('anonymousSubmission').checked;
+            
+            const newSuggestion = {
+                id: suggestions.length + 1,
+                title: title,
+                content: content,
+                category: category,
+                impact: impact,
+                status: 'new',
+                votes: 0,
+                comments: 0,
+                submittedDate: new Date().toISOString().split('T')[0],
+                anonymous: anonymous,
+                userVoted: false
+            };
+            
+            suggestions.unshift(newSuggestion);
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success';
+            alertDiv.textContent = 'Your suggestion has been submitted successfully!';
+            this.parentNode.insertBefore(alertDiv, this);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+            
+            this.reset();
+            document.getElementById('anonymousSubmission').checked = true;
+            loadSuggestions();
+        });
+
+        // Load suggestions on page load
+        window.addEventListener('load', () => {
+            loadSuggestions();
+        });
+
+        // Add search functionality
+        document.getElementById('searchSuggestions').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterSuggestions();
+            }
+        });
+    </script>
+</body>
+</html>

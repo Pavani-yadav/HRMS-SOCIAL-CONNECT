@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS Social Connect - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👥</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>🏢 HRMS Social Connect</h1>
+            <p>Modern Human Resource Management System with Social Integration</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Quick Stats Section -->
+        <section class="card" style="margin-bottom: var(--spacing-8);">
+            <h2>📊 Quick Overview</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--primary-color);">127</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Total Employees</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--secondary-color);">47</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Active Recognitions</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--accent-color);">12</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Social Modules</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--danger-color);">89</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Online Users</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Modules Grid -->
+        <div class="grid">
+            <!-- Core HR Modules -->
+            <section class="card card-interactive" onclick="window.location.href='registration.html'">
+                <h2>👤 Employee Registration</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Register new employees and manage their basic information
+                </p>
+                <div class="btn-group">
+                    <a href="registration.html" class="btn btn-primary">
+                        ➕ Register New Employee
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='search.html'">
+                <h2>🔍 Employee Search</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Search and find employee information quickly
+                </p>
+                <div class="btn-group">
+                    <a href="search.html" class="btn btn-secondary">
+                        🔎 Search Employees
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='profiles.html'">
+                <h2>👥 Employee Profiles</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    View detailed employee profiles and connect with colleagues
+                </p>
+                <div class="btn-group">
+                    <a href="profiles.html" class="btn btn-secondary">
+                        👥 Browse Profiles
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='payroll.html'">
+                <h2>💰 Payroll Management</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    View and manage employee salary information
+                </p>
+                <div class="btn-group">
+                    <a href="payroll.html" class="btn btn-success">
+                        📊 View Payroll Data
+                    </a>
+                </div>
+            </section>
+
+            <!-- Communication & Social -->
+            <section class="card card-interactive" onclick="window.location.href='chat.html'">
+                <h2>💬 Chat & Messaging</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Real-time communication with colleagues and teams
+                </p>
+                <div class="btn-group">
+                    <a href="chat.html" class="btn btn-primary">
+                        💬 Open Chat
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='social-feed.html'">
+                <h2>📱 Social Feed</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Share updates and stay connected with your team
+                </p>
+                <div class="btn-group">
+                    <a href="social-feed.html" class="btn btn-secondary">
+                        📱 View Feed
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='announcements.html'">
+                <h2>📢 Announcements</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Company news, updates, and important notices
+                </p>
+                <div class="btn-group">
+                    <a href="announcements.html" class="btn btn-secondary">
+                        📢 View Announcements
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='events.html'">
+                <h2>📅 Events Calendar</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Company events, meetings, and important dates
+                </p>
+                <div class="btn-group">
+                    <a href="events.html" class="btn btn-secondary">
+                        📅 View Calendar
+                    </a>
+                </div>
+            </section>
+
+            <!-- Engagement & Feedback -->
+            <section class="card card-interactive" onclick="window.location.href='polls.html'">
+                <h2>📊 Polls & Surveys</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Participate in company polls and share feedback
+                </p>
+                <div class="btn-group">
+                    <a href="polls.html" class="btn btn-secondary">
+                        📊 View Polls
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='suggestions.html'">
+                <h2>💡 Suggestion Box</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Share ideas and suggestions to improve the workplace
+                </p>
+                <div class="btn-group">
+                    <a href="suggestions.html" class="btn btn-secondary">
+                        💡 Submit Ideas
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='recognition.html'">
+                <h2>🏆 Recognition</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Recognize and celebrate employee achievements
+                </p>
+                <div class="btn-group">
+                    <a href="recognition.html" class="btn btn-success">
+                        🏆 Give Recognition
+                    </a>
+                </div>
+            </section>
+
+            <section class="card card-interactive" onclick="window.location.href='gallery.html'">
+                <h2>📸 Photo Gallery</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Share and view photos from company events
+                </p>
+                <div class="btn-group">
+                    <a href="gallery.html" class="btn btn-secondary">
+                        📸 View Gallery
+                    </a>
+                </div>
+            </section>
+
+            <!-- Integration Hub -->
+            <section class="card card-interactive" onclick="window.location.href='hrms_connect.html'">
+                <h2>🌐 HRMS Social Connect</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Connect with external HRMS systems and social tools
+                </p>
+                <div class="btn-group">
+                    <a href="hrms_connect.html" class="nav-link">
+                        🚀 Launch Social Connect →
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <section class="card" style="margin-top: var(--spacing-8);">
+            <h2>📋 Recent Activity</h2>
+            <div style="margin-top: var(--spacing-4);">
+                <div class="employee-card">
+                    <div class="employee-name">🏆 Jane Smith received recognition for Excellence in Work</div>
+                    <div class="employee-details">Marketing Manager • 15 minutes ago</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-name">📊 New poll created: "Preferred Work Schedule"</div>
+                    <div class="employee-details">HR Department • 1 hour ago</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-name">📸 Photos uploaded from Team Building Workshop</div>
+                    <div class="employee-details">Events Team • 2 hours ago</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-name">💡 New suggestion: "Flexible Working Hours"</div>
+                    <div class="employee-details">Anonymous • 3 hours ago</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-name">📢 Company announcement: Health Insurance Benefits</div>
+                    <div class="employee-details">HR Department • 5 hours ago</div>
+                </div>
+                <div class="employee-card">
+                    <div class="employee-name">📅 Event created: Valentine's Day Office Party</div>
+                    <div class="employee-details">Events Committee • 1 day ago</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Add click animation for cards
+        document.querySelectorAll('.card-interactive').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Prevent double navigation if clicking on links
+                if (e.target.tagName === 'A') return;
+                
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Update stats with animation
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 20);
+        }
+
+        // Animate counters on page load
+        window.addEventListener('load', () => {
+            const counters = document.querySelectorAll('[style*="font-size: var(--font-size-2xl)"]');
+            const targets = [127, 47, 12, 89];
+            counters.forEach((counter, index) => {
+                if (targets[index]) {
+                    animateCounter(counter, targets[index]);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

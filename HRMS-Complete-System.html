@@ -1,0 +1,2969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS Social Connect - Complete System</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #10b981;
+            --secondary-dark: #059669;
+            --secondary-light: #6ee7b7;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-icon {
+            background-color: white;
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .nav-section {
+            padding: var(--spacing-4) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-section-title {
+            padding: 0 var(--spacing-4);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-3) var(--spacing-4);
+            cursor: pointer;
+            position: relative;
+            gap: var(--spacing-3);
+            transition: background-color 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-text {
+            flex: 1;
+        }
+
+        .nav-badge {
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .header {
+            background-color: white;
+            padding: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .page-subtitle {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            color: var(--gray-600);
+            transition: background-color 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--gray-100);
+        }
+
+        .action-icon {
+            font-size: 1.2rem;
+        }
+
+        .action-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        .content {
+            padding: var(--spacing-6);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .component-content {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.8); }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        .stat-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .quick-action-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .quick-action-btn:hover::before {
+            left: 100%;
+        }
+
+        .notification-badge {
+            animation: pulse 2s infinite;
+        }
+
+        .online-indicator {
+            animation: glow 2s infinite;
+        }
+
+        .message-bubble {
+            animation: slideIn 0.3s ease;
+        }
+
+        .activity-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .activity-item:hover {
+            transform: translateX(5px);
+            background: #f8fafc !important;
+        }
+
+        .interactive-btn {
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .interactive-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 12px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6b7280;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            padding: var(--spacing-4);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-title {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">HR</div>
+                    <span>HRMS Connect</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Core HR</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item active" onclick="loadDashboard(); updateActiveNav(this);">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-text">Dashboard</span>
+                        </li>
+                        <li class="nav-item" onclick="loadPayroll(); updateActiveNav(this);">
+                            <span class="nav-icon">💰</span>
+                            <span class="nav-text">Payroll Management</span>
+                        </li>
+                        <li class="nav-item" onclick="loadAttendance(); updateActiveNav(this);">
+                            <span class="nav-icon">⏰</span>
+                            <span class="nav-text">Attendance & Leave</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Communication</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item" onclick="loadChat(); updateActiveNav(this);">
+                            <span class="nav-icon">💬</span>
+                            <span class="nav-text">Chat & Messaging</span>
+                            <span class="nav-badge">3</span>
+                        </li>
+                        <li class="nav-item" onclick="loadSocialFeed(); updateActiveNav(this);">
+                            <span class="nav-icon">📱</span>
+                            <span class="nav-text">Social Feed</span>
+                        </li>
+                        <li class="nav-item" onclick="loadAnnouncements(); updateActiveNav(this);">
+                            <span class="nav-icon">📢</span>
+                            <span class="nav-text">Announcements</span>
+                            <span class="nav-badge">2</span>
+                        </li>
+                        <li class="nav-item" onclick="loadEvents(); updateActiveNav(this);">
+                            <span class="nav-icon">📅</span>
+                            <span class="nav-text">Events Calendar</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Engagement</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item" onclick="loadPolls(); updateActiveNav(this);">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Polls & Surveys</span>
+                        </li>
+                        <li class="nav-item" onclick="loadSuggestions(); updateActiveNav(this);">
+                            <span class="nav-icon">💡</span>
+                            <span class="nav-text">Suggestion Box</span>
+                        </li>
+                        <li class="nav-item" onclick="loadRecognition(); updateActiveNav(this);">
+                            <span class="nav-icon">🏆</span>
+                            <span class="nav-text">Recognition</span>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">JD</div>
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-title">Software Engineer</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+                    <div>
+                        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                        <p class="page-subtitle" id="pageSubtitle">Welcome back, John! Here's what's happening today.</p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="action-btn" onclick="showNotifications()">
+                            <span class="action-icon">🔔</span>
+                            <span class="action-badge">5</span>
+                        </button>
+                        <button class="action-btn" onclick="showSearch()">
+                            <span class="action-icon">🔍</span>
+                        </button>
+                        <button class="action-btn" onclick="showSettings()">
+                            <span class="action-icon">⚙️</span>
+                        </button>
+                        <button class="action-btn" onclick="alert('JavaScript is working!')" title="Test JS">
+                            <span class="action-icon">🧪</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content" id="contentArea">
+                <!-- Dashboard content will be loaded here -->
+                <div class="component-content">
+                    <section class="card" style="padding: 24px; margin-bottom: 24px;">
+                        <h2>🏠 Dashboard Overview</h2>
+                        <p style="margin-top: 16px;">Welcome to your HRMS dashboard. Click the test button (🧪) to verify JavaScript is working, then explore all components!</p>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Advanced HRMS System with Realistic Database-like Functionality
+
+        // Simulated Database
+        const HRMS_DATABASE = {
+            employees: [
+                { id: 1, name: 'John Doe', department: 'Engineering', position: 'Software Engineer', salary: 85000, email: 'john.doe@company.com', phone: '+1-555-0101', hireDate: '2022-03-15', status: 'Active', manager: 'Sarah Wilson', avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff&size=40' },
+                { id: 2, name: 'Sarah Wilson', department: 'HR', position: 'HR Manager', salary: 92000, email: 'sarah.wilson@company.com', phone: '+1-555-0102', hireDate: '2021-01-10', status: 'Active', manager: 'CEO', avatar: 'https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=40' },
+                { id: 3, name: 'Michael Brown', department: 'Engineering', position: 'Senior Developer', salary: 115000, email: 'michael.brown@company.com', phone: '+1-555-0103', hireDate: '2020-08-22', status: 'Active', manager: 'Sarah Wilson', avatar: 'https://ui-avatars.com/api/?name=Michael+Brown&background=6366f1&color=fff&size=40' },
+                { id: 4, name: 'Emily Davis', department: 'Marketing', position: 'Marketing Specialist', salary: 78000, email: 'emily.davis@company.com', phone: '+1-555-0104', hireDate: '2022-11-05', status: 'Active', manager: 'David Johnson', avatar: 'https://ui-avatars.com/api/?name=Emily+Davis&background=6366f1&color=fff&size=40' },
+                { id: 5, name: 'Alex Johnson', department: 'Marketing', position: 'Marketing Manager', salary: 95000, email: 'alex.johnson@company.com', phone: '+1-555-0105', hireDate: '2021-06-18', status: 'Active', manager: 'CEO', avatar: 'https://ui-avatars.com/api/?name=Alex+Johnson&background=6366f1&color=fff&size=40' }
+            ],
+
+            attendance: [
+                { employeeId: 1, date: '2024-07-21', checkIn: '09:15', checkOut: null, status: 'Present', hoursWorked: 0 },
+                { employeeId: 2, date: '2024-07-21', checkIn: '08:45', checkOut: '17:30', status: 'Present', hoursWorked: 8.75 },
+                { employeeId: 3, date: '2024-07-21', checkIn: '09:00', checkOut: '18:00', status: 'Present', hoursWorked: 9 },
+                { employeeId: 1, date: '2024-07-20', checkIn: '09:10', checkOut: '17:45', status: 'Present', hoursWorked: 8.58 },
+                { employeeId: 2, date: '2024-07-20', checkIn: '08:50', checkOut: '17:20', status: 'Present', hoursWorked: 8.5 }
+            ],
+
+            leaveRequests: [
+                { id: 1, employeeId: 1, type: 'Annual Leave', startDate: '2024-08-15', endDate: '2024-08-17', days: 3, reason: 'Family vacation', status: 'Pending', appliedDate: '2024-07-20', approver: 'Sarah Wilson' },
+                { id: 2, employeeId: 3, type: 'Sick Leave', startDate: '2024-07-25', endDate: '2024-07-25', days: 1, reason: 'Medical appointment', status: 'Approved', appliedDate: '2024-07-18', approver: 'Sarah Wilson' },
+                { id: 3, employeeId: 4, type: 'Personal Leave', startDate: '2024-08-01', endDate: '2024-08-02', days: 2, reason: 'Personal matters', status: 'Pending', appliedDate: '2024-07-19', approver: 'Alex Johnson' }
+            ],
+
+            payroll: [
+                { employeeId: 1, month: '2024-07', grossSalary: 7083.33, taxDeductions: 1416.67, benefits: 354.17, netPay: 5312.49, status: 'Processed' },
+                { employeeId: 2, month: '2024-07', grossSalary: 7666.67, taxDeductions: 1533.33, benefits: 383.33, netPay: 5750.01, status: 'Processed' },
+                { employeeId: 3, month: '2024-07', grossSalary: 9583.33, taxDeductions: 1916.67, benefits: 479.17, netPay: 7187.49, status: 'Processing' }
+            ],
+
+            messages: [
+                { id: 1, from: 2, to: 1, message: 'Hi John! How are you doing today?', timestamp: '2024-07-21 10:30', read: false },
+                { id: 2, from: 1, to: 2, message: 'Hi Sarah! I\'m doing great, thanks for asking!', timestamp: '2024-07-21 10:32', read: true },
+                { id: 3, from: 2, to: 1, message: 'That\'s wonderful to hear! Don\'t forget about the team meeting at 2 PM.', timestamp: '2024-07-21 10:35', read: false }
+            ],
+
+            socialPosts: [
+                { id: 1, authorId: 2, content: '🎉 Excited to announce our Q3 team building event! We\'ll be having a fun day at the local adventure park next Friday. Looking forward to seeing everyone there! #TeamBuilding #CompanyCulture', timestamp: '2024-07-21 08:30', likes: [1, 3, 4], comments: [{ authorId: 1, content: 'Can\'t wait! This sounds amazing!', timestamp: '2024-07-21 08:45' }] },
+                { id: 2, authorId: 3, content: 'Just finished implementing the new user authentication system! 🚀 The team worked incredibly hard on this feature. Special thanks to Emily and John for their amazing contributions. #Development #Teamwork', timestamp: '2024-07-21 14:20', likes: [1, 2, 4, 5], comments: [] }
+            ],
+
+            announcements: [
+                { id: 1, title: 'System Maintenance', content: 'Scheduled maintenance on Sunday, July 28th from 2:00 AM to 6:00 AM. All systems will be temporarily unavailable.', priority: 'High', date: '2024-07-21', author: 'IT Department' },
+                { id: 2, title: 'New Employee Welcome', content: 'Please join us in welcoming our new team members: Alex Johnson (Marketing) and Lisa Chen (Engineering).', priority: 'Medium', date: '2024-07-20', author: 'HR Department' },
+                { id: 3, title: 'Q3 All-Hands Meeting', content: 'Join us for our quarterly all-hands meeting on Friday, August 2nd at 3:00 PM in the main conference room.', priority: 'Medium', date: '2024-07-19', author: 'Management' }
+            ],
+
+            polls: [
+                { id: 1, question: 'What should be our next team building activity?', options: [
+                    { text: '🎳 Bowling Night', votes: 12 },
+                    { text: '🔍 Escape Room', votes: 18 },
+                    { text: '👨‍🍳 Cooking Class', votes: 8 }
+                ], totalVotes: 38, endDate: '2024-07-25', status: 'Active' }
+            ],
+
+            suggestions: [
+                { id: 1, content: 'Implement flexible working hours to improve work-life balance', author: 'Anonymous', votes: 15, status: 'Under Review', date: '2024-07-18' },
+                { id: 2, content: 'Add a coffee machine in the break room', author: 'Anonymous', votes: 8, status: 'Implemented', date: '2024-07-10' },
+                { id: 3, content: 'Organize monthly team lunch gatherings', author: 'Anonymous', votes: 22, status: 'Approved', date: '2024-07-15' }
+            ],
+
+            recognitions: [
+                { id: 1, from: 1, to: 2, message: 'Excellent leadership during the Q3 project launch. Sarah\'s guidance was instrumental in our success.', date: '2024-07-20', public: true },
+                { id: 2, from: 2, to: 3, message: 'Outstanding technical skills and mentorship. Michael consistently delivers high-quality code and helps junior developers.', date: '2024-07-19', public: true }
+            ]
+        };
+
+        // Current user session
+        const CURRENT_USER = HRMS_DATABASE.employees[0]; // John Doe
+
+        // Utility Functions
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function calculateHoursWorked(checkIn, checkOut) {
+            if (!checkOut) return 0;
+            const start = new Date(`2024-01-01 ${checkIn}`);
+            const end = new Date(`2024-01-01 ${checkOut}`);
+            return ((end - start) / (1000 * 60 * 60)).toFixed(2);
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+
+            if (sidebar.style.width === '80px') {
+                sidebar.style.width = '250px';
+                mainContent.style.marginLeft = '250px';
+            } else {
+                sidebar.style.width = '80px';
+                mainContent.style.marginLeft = '80px';
+            }
+        }
+
+        // Update active navigation
+        function updateActiveNav(activeItem) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 16px 24px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 500;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+
+            const colors = {
+                success: 'linear-gradient(135deg, #10b981, #059669)',
+                warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                error: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                info: 'linear-gradient(135deg, #6366f1, #4f46e5)'
+            };
+
+            notification.style.background = colors[type] || colors.info;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Advanced Dashboard with Real Data Processing
+        function loadDashboard() {
+            document.getElementById('pageTitle').textContent = 'Dashboard';
+            document.getElementById('pageSubtitle').textContent = 'Welcome back, ' + CURRENT_USER.name + '! Here\'s what\'s happening today.';
+
+            // Calculate real-time statistics
+            const totalEmployees = HRMS_DATABASE.employees.length;
+            const activeEmployees = HRMS_DATABASE.employees.filter(emp => emp.status === 'Active').length;
+            const todayAttendance = HRMS_DATABASE.attendance.filter(att => att.date === '2024-07-21');
+            const attendanceRate = Math.round((todayAttendance.length / activeEmployees) * 100);
+            const pendingRequests = HRMS_DATABASE.leaveRequests.filter(req => req.status === 'Pending').length;
+            const totalPayroll = HRMS_DATABASE.payroll.reduce((sum, pay) => sum + pay.grossSalary, 0);
+            const unreadMessages = HRMS_DATABASE.messages.filter(msg => msg.to === CURRENT_USER.id && !msg.read).length;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class="component-content">
+                    <!-- Quick Stats Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 32px;">
+                        <div class="card stat-card" onclick="loadEmployeeDetails()" style="padding: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 id="employeeCount" style="margin: 0; font-size: 2.5rem; font-weight: bold;">${totalEmployees}</h3>
+                                    <p style="margin: 8px 0 0 0; opacity: 0.9;">Total Employees</p>
+                                </div>
+                                <div style="font-size: 3rem; opacity: 0.7;">👥</div>
+                            </div>
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <span style="font-size: 0.9rem; opacity: 0.8;">↗️ ${activeEmployees} active employees</span>
+                                <div class="progress-bar" style="margin-top: 8px;">
+                                    <div class="progress-fill" style="width: ${(activeEmployees/totalEmployees)*100}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card" onclick="loadAttendanceReport()" style="padding: 24px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 id="attendanceRate" style="margin: 0; font-size: 2.5rem; font-weight: bold;">${attendanceRate}%</h3>
+                                    <p style="margin: 8px 0 0 0; opacity: 0.9;">Today's Attendance</p>
+                                </div>
+                                <div style="font-size: 3rem; opacity: 0.7;">📊</div>
+                            </div>
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <span style="font-size: 0.9rem; opacity: 0.8;">📅 ${todayAttendance.length}/${activeEmployees} employees present</span>
+                                <div class="progress-bar" style="margin-top: 8px;">
+                                    <div class="progress-fill" style="width: ${attendanceRate}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card" onclick="loadPendingRequests()" style="padding: 24px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 id="pendingCount" style="margin: 0; font-size: 2.5rem; font-weight: bold;">${pendingRequests}</h3>
+                                    <p style="margin: 8px 0 0 0; opacity: 0.9;">Pending Leave Requests</p>
+                                </div>
+                                <div style="font-size: 3rem; opacity: 0.7;">📋</div>
+                            </div>
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <span style="font-size: 0.9rem; opacity: 0.8;">⚠️ Requires manager approval</span>
+                                <div class="progress-bar" style="margin-top: 8px;">
+                                    <div class="progress-fill" style="width: ${Math.min(pendingRequests * 20, 100)}%; background: linear-gradient(90deg, #f59e0b, #ef4444);"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card" onclick="loadPayrollSummary()" style="padding: 24px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 id="payrollAmount" style="margin: 0; font-size: 2.5rem; font-weight: bold;">${formatCurrency(totalPayroll * 12)}</h3>
+                                    <p style="margin: 8px 0 0 0; opacity: 0.9;">Annual Payroll</p>
+                                </div>
+                                <div style="font-size: 3rem; opacity: 0.7;">💰</div>
+                            </div>
+                            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <span style="font-size: 0.9rem; opacity: 0.8;">💵 ${formatCurrency(totalPayroll)} monthly</span>
+                                <div class="progress-bar" style="margin-top: 8px;">
+                                    <div class="progress-fill" style="width: 85%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card" style="padding: 24px; margin-bottom: 32px;">
+                        <h2 style="margin-bottom: 24px;">⚡ Quick Actions</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                            <button onclick="loadChat(); updateActiveNav(document.querySelector('[onclick*=loadChat]'));" class="quick-action-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 20px; border-radius: 12px; cursor: pointer; text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 8px; animation: bounce 2s infinite;">💬</div>
+                                <h3 style="margin: 0; font-size: 1.1rem;">Start Chat</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.8; font-size: 0.9rem;">Message colleagues</p>
+                                <div class="notification-badge" style="position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">3</div>
+                            </button>
+
+                            <button onclick="quickCheckIn()" class="quick-action-btn" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 20px; border-radius: 12px; cursor: pointer; text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 8px;">⏰</div>
+                                <h3 style="margin: 0; font-size: 1.1rem;">Quick Check In</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.8; font-size: 0.9rem;">Mark attendance now</p>
+                                <div id="currentTime" style="position: absolute; top: 10px; right: 10px; font-size: 0.7rem; opacity: 0.8;"></div>
+                            </button>
+
+                            <button onclick="loadPayroll(); updateActiveNav(document.querySelector('[onclick*=loadPayroll]'));" class="quick-action-btn" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; padding: 20px; border-radius: 12px; cursor: pointer; text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 8px;">💰</div>
+                                <h3 style="margin: 0; font-size: 1.1rem;">View Payslip</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.8; font-size: 0.9rem;">Download payroll</p>
+                                <div style="position: absolute; top: 10px; right: 10px; background: #10b981; color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.6rem;">NEW</div>
+                            </button>
+
+                            <button onclick="loadSocialFeed(); updateActiveNav(document.querySelector('[onclick*=loadSocialFeed]'));" class="quick-action-btn" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none; padding: 20px; border-radius: 12px; cursor: pointer; text-align: left;">
+                                <div style="font-size: 2rem; margin-bottom: 8px;">📱</div>
+                                <h3 style="margin: 0; font-size: 1.1rem;">Social Feed</h3>
+                                <p style="margin: 4px 0 0 0; opacity: 0.8; font-size: 0.9rem;">Share updates</p>
+                                <div class="notification-badge" style="position: absolute; top: 10px; right: 10px; background: #8b5cf6; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">5</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Real-time Activity Feed & Analytics -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+                        <div class="card" style="padding: 24px;">
+                            <h2 style="margin-bottom: 24px;">📈 Recent Activity</h2>
+                            <div style="display: flex; flex-direction: column; gap: 16px;">
+                                ${HRMS_DATABASE.leaveRequests.slice(0, 3).map(request => {
+                                    const employee = HRMS_DATABASE.employees.find(emp => emp.id === request.employeeId);
+                                    const statusColor = request.status === 'Approved' ? '#10b981' : request.status === 'Pending' ? '#f59e0b' : '#ef4444';
+                                    return `
+                                        <div class="activity-item" style="display: flex; gap: 12px; padding: 16px; background: #f8fafc; border-radius: 8px; border-left: 4px solid ${statusColor};">
+                                            <div style="font-size: 1.5rem;">📝</div>
+                                            <div style="flex: 1;">
+                                                <h4 style="margin: 0; font-size: 0.95rem;">${request.type} Request</h4>
+                                                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #6b7280;">${employee.name} requested ${request.days} day(s) of ${request.type.toLowerCase()}</p>
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                                    <span style="font-size: 0.75rem; color: #9ca3af;">${formatDate(request.appliedDate)}</span>
+                                                    <span style="background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem;">${request.status}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+
+                                ${HRMS_DATABASE.attendance.slice(-2).map(att => {
+                                    const employee = HRMS_DATABASE.employees.find(emp => emp.id === att.employeeId);
+                                    return `
+                                        <div class="activity-item" style="display: flex; gap: 12px; padding: 16px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #6366f1;">
+                                            <div style="font-size: 1.5rem;">⏰</div>
+                                            <div style="flex: 1;">
+                                                <h4 style="margin: 0; font-size: 0.95rem;">Attendance Update</h4>
+                                                <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #6b7280;">${employee.name} ${att.checkOut ? 'completed' : 'started'} work day</p>
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                                                    <span style="font-size: 0.75rem; color: #9ca3af;">${formatDate(att.date)} • ${att.checkIn}${att.checkOut ? ' - ' + att.checkOut : ''}</span>
+                                                    <span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem;">${att.hoursWorked}h</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <div class="card" style="padding: 24px;">
+                            <h2 style="margin-bottom: 24px;">🔔 Your Notifications</h2>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                ${unreadMessages > 0 ? `
+                                    <div style="padding: 12px; background: #fef2f2; border-radius: 8px; border-left: 3px solid #ef4444;">
+                                        <h4 style="margin: 0; font-size: 0.9rem; color: #ef4444;">💬 New Messages</h4>
+                                        <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;">You have ${unreadMessages} unread message${unreadMessages > 1 ? 's' : ''}</p>
+                                    </div>
+                                ` : ''}
+
+                                ${HRMS_DATABASE.leaveRequests.filter(req => req.employeeId === CURRENT_USER.id && req.status === 'Pending').map(request => `
+                                    <div style="padding: 12px; background: #fffbeb; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                                        <h4 style="margin: 0; font-size: 0.9rem; color: #f59e0b;">📝 Leave Request Pending</h4>
+                                        <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;">${request.type} from ${formatDate(request.startDate)}</p>
+                                    </div>
+                                `).join('')}
+
+                                <div style="padding: 12px; background: #f0fdf4; border-radius: 8px; border-left: 3px solid #10b981;">
+                                    <h4 style="margin: 0; font-size: 0.9rem; color: #10b981;">💰 Payslip Available</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;">July 2024 payslip ready for download</p>
+                                </div>
+
+                                <div style="padding: 12px; background: #f0f9ff; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                    <h4 style="margin: 0; font-size: 0.9rem; color: #3b82f6;">🎉 Team Building Event</h4>
+                                    <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;">Adventure park trip this Friday</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Dashboard Stats Functions - REAL FUNCTIONALITY
+        function loadEmployeeDetails() {
+            document.getElementById('pageTitle').textContent = 'Employee Directory';
+            document.getElementById('pageSubtitle').textContent = 'Complete employee database and management system';
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <div class='card' style='padding: 24px; margin-bottom: 24px;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;'>
+                            <h2>👥 Employee Directory (${HRMS_DATABASE.employees.length} employees)</h2>
+                            <div style='display: flex; gap: 12px;'>
+                                <button onclick='addNewEmployee()' class='interactive-btn' style='background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer;'>+ Add Employee</button>
+                                <button onclick='exportEmployeeData()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer;'>📤 Export</button>
+                            </div>
+                        </div>
+
+                        <div style='display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;'>
+                            ${HRMS_DATABASE.employees.map(employee => `
+                                <div class='card' style='padding: 20px; transition: transform 0.2s; cursor: pointer;' onclick='viewEmployeeProfile(${employee.id})' onmouseover='this.style.transform="translateY(-2px)"' onmouseout='this.style.transform="translateY(0)"'>
+                                    <div style='display: flex; align-items: center; gap: 16px; margin-bottom: 16px;'>
+                                        <img src='${employee.avatar}' style='width: 60px; height: 60px; border-radius: 50%;'>
+                                        <div style='flex: 1;'>
+                                            <h3 style='margin: 0; color: #1f2937;'>${employee.name}</h3>
+                                            <p style='margin: 4px 0; color: #6b7280; font-size: 0.9rem;'>${employee.position}</p>
+                                            <p style='margin: 0; color: #6366f1; font-size: 0.8rem; font-weight: 500;'>${employee.department}</p>
+                                        </div>
+                                    </div>
+
+                                    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.85rem;'>
+                                        <div>
+                                            <span style='color: #6b7280;'>Salary:</span>
+                                            <div style='font-weight: 600; color: #10b981;'>${formatCurrency(employee.salary)}</div>
+                                        </div>
+                                        <div>
+                                            <span style='color: #6b7280;'>Hire Date:</span>
+                                            <div style='font-weight: 500;'>${formatDate(employee.hireDate)}</div>
+                                        </div>
+                                        <div>
+                                            <span style='color: #6b7280;'>Manager:</span>
+                                            <div style='font-weight: 500;'>${employee.manager}</div>
+                                        </div>
+                                        <div>
+                                            <span style='color: #6b7280;'>Status:</span>
+                                            <span style='background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem;'>${employee.status}</span>
+                                        </div>
+                                    </div>
+
+                                    <div style='margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px;'>
+                                        <button onclick='event.stopPropagation(); editEmployee(${employee.id})' style='background: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; flex: 1;'>Edit</button>
+                                        <button onclick='event.stopPropagation(); sendMessage(${employee.id})' style='background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; flex: 1;'>Message</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadAttendanceReport() {
+            document.getElementById('pageTitle').textContent = 'Attendance Analytics';
+            document.getElementById('pageSubtitle').textContent = 'Comprehensive attendance tracking and reporting system';
+
+            const todayAttendance = HRMS_DATABASE.attendance.filter(att => att.date === '2024-07-21');
+            const totalHours = HRMS_DATABASE.attendance.reduce((sum, att) => sum + att.hoursWorked, 0);
+            const avgHours = totalHours / HRMS_DATABASE.attendance.length;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 24px;'>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 2rem;'>${todayAttendance.length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Present Today</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 2rem;'>${avgHours.toFixed(1)}h</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Average Hours</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 2rem;'>${Math.round((todayAttendance.length / HRMS_DATABASE.employees.length) * 100)}%</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Attendance Rate</p>
+                        </div>
+                    </div>
+
+                    <div class='card' style='padding: 24px;'>
+                        <h3 style='margin-bottom: 20px;'>📊 Daily Attendance Records</h3>
+                        <div style='overflow-x: auto;'>
+                            <table style='width: 100%; border-collapse: collapse;'>
+                                <thead>
+                                    <tr style='background: #f9fafb;'>
+                                        <th style='padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;'>Employee</th>
+                                        <th style='padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;'>Date</th>
+                                        <th style='padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;'>Check In</th>
+                                        <th style='padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;'>Check Out</th>
+                                        <th style='padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;'>Hours</th>
+                                        <th style='padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;'>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${HRMS_DATABASE.attendance.map(record => {
+                                        const employee = HRMS_DATABASE.employees.find(emp => emp.id === record.employeeId);
+                                        return `
+                                            <tr style='border-bottom: 1px solid #e5e7eb;'>
+                                                <td style='padding: 12px;'>
+                                                    <div style='display: flex; align-items: center; gap: 8px;'>
+                                                        <img src='${employee.avatar}' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                        ${employee.name}
+                                                    </div>
+                                                </td>
+                                                <td style='padding: 12px;'>${formatDate(record.date)}</td>
+                                                <td style='padding: 12px; color: #10b981; font-weight: 500;'>${record.checkIn}</td>
+                                                <td style='padding: 12px; color: ${record.checkOut ? '#ef4444' : '#6b7280'}; font-weight: 500;'>${record.checkOut || 'Not yet'}</td>
+                                                <td style='padding: 12px; font-weight: 600;'>${record.hoursWorked}h</td>
+                                                <td style='padding: 12px;'>
+                                                    <span style='background: #10b981; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;'>${record.status}</span>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadPendingRequests() {
+            document.getElementById('pageTitle').textContent = 'Leave Requests Management';
+            document.getElementById('pageSubtitle').textContent = 'Review and manage employee leave requests';
+
+            const pendingRequests = HRMS_DATABASE.leaveRequests.filter(req => req.status === 'Pending');
+            const approvedRequests = HRMS_DATABASE.leaveRequests.filter(req => req.status === 'Approved');
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;'>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 2rem;'>${pendingRequests.length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Pending Requests</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 2rem;'>${approvedRequests.length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Approved Requests</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 2rem;'>${HRMS_DATABASE.leaveRequests.reduce((sum, req) => sum + req.days, 0)}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Total Days Requested</p>
+                        </div>
+                    </div>
+
+                    <div class='card' style='padding: 24px;'>
+                        <h3 style='margin-bottom: 20px;'>📋 Leave Requests</h3>
+                        <div style='display: flex; flex-direction: column; gap: 16px;'>
+                            ${HRMS_DATABASE.leaveRequests.map(request => {
+                                const employee = HRMS_DATABASE.employees.find(emp => emp.id === request.employeeId);
+                                const statusColor = request.status === 'Approved' ? '#10b981' : request.status === 'Pending' ? '#f59e0b' : '#ef4444';
+
+                                return `
+                                    <div class='card' style='padding: 20px; border-left: 4px solid ${statusColor};'>
+                                        <div style='display: flex; justify-content: between; align-items: start; gap: 16px;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; flex: 1;'>
+                                                <img src='${employee.avatar}' style='width: 48px; height: 48px; border-radius: 50%;'>
+                                                <div style='flex: 1;'>
+                                                    <h4 style='margin: 0; color: #1f2937;'>${employee.name}</h4>
+                                                    <p style='margin: 4px 0; color: #6b7280; font-size: 0.9rem;'>${employee.position} • ${employee.department}</p>
+                                                </div>
+                                            </div>
+
+                                            <div style='flex: 2;'>
+                                                <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;'>
+                                                    <div>
+                                                        <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Leave Type</span>
+                                                        <div style='font-weight: 600; color: #1f2937;'>${request.type}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Duration</span>
+                                                        <div style='font-weight: 600; color: #1f2937;'>${request.days} day${request.days > 1 ? 's' : ''}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Start Date</span>
+                                                        <div style='font-weight: 600; color: #1f2937;'>${formatDate(request.startDate)}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>End Date</span>
+                                                        <div style='font-weight: 600; color: #1f2937;'>${formatDate(request.endDate)}</div>
+                                                    </div>
+                                                </div>
+
+                                                <div style='margin-bottom: 12px;'>
+                                                    <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Reason</span>
+                                                    <div style='color: #1f2937;'>${request.reason}</div>
+                                                </div>
+                                            </div>
+
+                                            <div style='display: flex; flex-direction: column; align-items: end; gap: 8px;'>
+                                                <span style='background: ${statusColor}; color: white; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;'>${request.status}</span>
+                                                ${request.status === 'Pending' ? `
+                                                    <div style='display: flex; gap: 8px;'>
+                                                        <button onclick='approveLeaveRequest(${request.id})' style='background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>✓ Approve</button>
+                                                        <button onclick='rejectLeaveRequest(${request.id})' style='background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>✗ Reject</button>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadPayrollSummary() {
+            loadPayroll(); // Just redirect to the full payroll system
+        }
+
+        function quickCheckIn() {
+            const now = new Date();
+            const time = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            showNotification('✅ Checked in successfully at ' + time + '!', 'success');
+
+            // Update attendance rate
+            const attendanceElement = document.getElementById('attendanceRate');
+            if (attendanceElement) {
+                attendanceElement.textContent = '95%';
+            }
+        }
+
+        // Advanced Payroll Management System
+        function loadPayroll() {
+            document.getElementById('pageTitle').textContent = 'Payroll Management';
+            document.getElementById('pageSubtitle').textContent = 'Comprehensive payroll processing and employee compensation management';
+
+            const currentUserPayroll = HRMS_DATABASE.payroll.find(pay => pay.employeeId === CURRENT_USER.id);
+            const allPayrollData = HRMS_DATABASE.payroll;
+            const totalProcessed = allPayrollData.filter(pay => pay.status === 'Processed').length;
+            const totalProcessing = allPayrollData.filter(pay => pay.status === 'Processing').length;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <!-- Payroll Overview Cards -->
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 32px;'>
+                        <div class='card' style='padding: 24px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 2rem; font-weight: bold;'>${totalProcessed}</h3>
+                                    <p style='margin: 8px 0 0 0; opacity: 0.9;'>Processed</p>
+                                </div>
+                                <div style='font-size: 2.5rem; opacity: 0.7;'>✅</div>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 24px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 2rem; font-weight: bold;'>${totalProcessing}</h3>
+                                    <p style='margin: 8px 0 0 0; opacity: 0.9;'>Processing</p>
+                                </div>
+                                <div style='font-size: 2.5rem; opacity: 0.7;'>⏳</div>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 24px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 2rem; font-weight: bold;'>${formatCurrency(allPayrollData.reduce((sum, pay) => sum + pay.netPay, 0))}</h3>
+                                    <p style='margin: 8px 0 0 0; opacity: 0.9;'>Total Net Pay</p>
+                                </div>
+                                <div style='font-size: 2.5rem; opacity: 0.7;'>💰</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;'>
+                        <!-- Your Payroll Details -->
+                        <div class='card' style='padding: 24px;'>
+                            <h3 style='margin-bottom: 20px;'>💼 Your Payroll Details - July 2024</h3>
+                            ${currentUserPayroll ? `
+                                <div style='background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 20px;'>
+                                    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;'>
+                                        <div>
+                                            <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Gross Salary</label>
+                                            <div style='font-size: 1.5rem; font-weight: bold; color: #1f2937;'>${formatCurrency(currentUserPayroll.grossSalary)}</div>
+                                        </div>
+                                        <div>
+                                            <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Net Pay</label>
+                                            <div style='font-size: 1.5rem; font-weight: bold; color: #10b981;'>${formatCurrency(currentUserPayroll.netPay)}</div>
+                                        </div>
+                                    </div>
+
+                                    <div style='border-top: 1px solid #e5e7eb; padding-top: 16px;'>
+                                        <h4 style='margin: 0 0 12px 0; color: #374151;'>Deductions Breakdown</h4>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>Federal Tax (20%)</span>
+                                            <span style='color: #ef4444; font-weight: 500;'>-${formatCurrency(currentUserPayroll.taxDeductions)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>Health Insurance</span>
+                                            <span style='color: #ef4444; font-weight: 500;'>-${formatCurrency(currentUserPayroll.benefits)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>401(k) Contribution (5%)</span>
+                                            <span style='color: #ef4444; font-weight: 500;'>-${formatCurrency(currentUserPayroll.grossSalary * 0.05)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style='display: flex; gap: 12px;'>
+                                    <button onclick='downloadDetailedPayslip()' class='interactive-btn' style='background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; flex: 1;'>
+                                        📄 Download Payslip
+                                    </button>
+                                    <button onclick='viewPayrollHistory()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; flex: 1;'>
+                                        📊 View History
+                                    </button>
+                                </div>
+                            ` : `
+                                <div style='text-align: center; padding: 40px; color: #6b7280;'>
+                                    <div style='font-size: 3rem; margin-bottom: 16px;'>📋</div>
+                                    <p>No payroll data available for current period.</p>
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- Payroll Actions -->
+                        <div class='card' style='padding: 24px;'>
+                            <h3 style='margin-bottom: 20px;'>⚙️ Payroll Management</h3>
+
+                            <div style='background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin-bottom: 20px;'>
+                                <div style='display: flex; align-items: center; gap: 8px; margin-bottom: 8px;'>
+                                    <span style='font-size: 1.2rem;'>⚠️</span>
+                                    <strong style='color: #92400e;'>Current Payroll Period</strong>
+                                </div>
+                                <p style='margin: 0; color: #92400e; font-size: 0.9rem;'>July 1-31, 2024 • Processing deadline: July 31, 2024</p>
+                            </div>
+
+                            <div style='space-y: 12px;'>
+                                <button onclick='processAllPayroll()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 14px 20px; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;'>
+                                    <span>🔄</span> Process All Payroll
+                                </button>
+
+                                <button onclick='generatePayrollReport()' class='interactive-btn' style='background: #10b981; color: white; border: none; padding: 14px 20px; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;'>
+                                    <span>📊</span> Generate Report
+                                </button>
+
+                                <button onclick='exportPayrollData()' class='interactive-btn' style='background: #f59e0b; color: white; border: none; padding: 14px 20px; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;'>
+                                    <span>📤</span> Export Data
+                                </button>
+
+                                <button onclick='payrollSettings()' class='interactive-btn' style='background: #6b7280; color: white; border: none; padding: 14px 20px; border-radius: 8px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;'>
+                                    <span>⚙️</span> Payroll Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employee Payroll Table -->
+                    <div class='card' style='padding: 24px;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;'>
+                            <h3 style='margin: 0;'>👥 Employee Payroll Overview</h3>
+                            <div style='display: flex; gap: 8px;'>
+                                <select style='padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: white;'>
+                                    <option>All Departments</option>
+                                    <option>Engineering</option>
+                                    <option>HR</option>
+                                    <option>Marketing</option>
+                                </select>
+                                <button onclick='refreshPayrollData()' class='interactive-btn' style='background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 6px; cursor: pointer;'>🔄 Refresh</button>
+                            </div>
+                        </div>
+
+                        <div style='overflow-x: auto;'>
+                            <table style='width: 100%; border-collapse: collapse;'>
+                                <thead>
+                                    <tr style='background: #f9fafb; border-bottom: 2px solid #e5e7eb;'>
+                                        <th style='padding: 12px; text-align: left; font-weight: 600; color: #374151;'>Employee</th>
+                                        <th style='padding: 12px; text-align: left; font-weight: 600; color: #374151;'>Department</th>
+                                        <th style='padding: 12px; text-align: right; font-weight: 600; color: #374151;'>Gross Salary</th>
+                                        <th style='padding: 12px; text-align: right; font-weight: 600; color: #374151;'>Deductions</th>
+                                        <th style='padding: 12px; text-align: right; font-weight: 600; color: #374151;'>Net Pay</th>
+                                        <th style='padding: 12px; text-align: center; font-weight: 600; color: #374151;'>Status</th>
+                                        <th style='padding: 12px; text-align: center; font-weight: 600; color: #374151;'>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${HRMS_DATABASE.payroll.map(payroll => {
+                                        const employee = HRMS_DATABASE.employees.find(emp => emp.id === payroll.employeeId);
+                                        const totalDeductions = payroll.taxDeductions + payroll.benefits;
+                                        const statusColor = payroll.status === 'Processed' ? '#10b981' : '#f59e0b';
+
+                                        return `
+                                            <tr style='border-bottom: 1px solid #e5e7eb; transition: background-color 0.2s;' onmouseover='this.style.backgroundColor="#f9fafb"' onmouseout='this.style.backgroundColor="white"'>
+                                                <td style='padding: 12px;'>
+                                                    <div style='display: flex; align-items: center; gap: 8px;'>
+                                                        <img src='${employee.avatar}' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                        <div>
+                                                            <div style='font-weight: 500; color: #1f2937;'>${employee.name}</div>
+                                                            <div style='font-size: 0.8rem; color: #6b7280;'>${employee.position}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style='padding: 12px; color: #6b7280;'>${employee.department}</td>
+                                                <td style='padding: 12px; text-align: right; font-weight: 500;'>${formatCurrency(payroll.grossSalary)}</td>
+                                                <td style='padding: 12px; text-align: right; color: #ef4444;'>-${formatCurrency(totalDeductions)}</td>
+                                                <td style='padding: 12px; text-align: right; font-weight: 600; color: #10b981;'>${formatCurrency(payroll.netPay)}</td>
+                                                <td style='padding: 12px; text-align: center;'>
+                                                    <span style='background: ${statusColor}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;'>${payroll.status}</span>
+                                                </td>
+                                                <td style='padding: 12px; text-align: center;'>
+                                                    <button onclick='viewEmployeePayroll(${employee.id})' style='background: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; margin-right: 4px;'>View</button>
+                                                    <button onclick='downloadEmployeePayslip(${employee.id})' style='background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>Download</button>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Advanced Chat System with Real Message Management
+        let currentChatUser = null;
+        let chatMessages = [...HRMS_DATABASE.messages];
+
+        function loadChat() {
+            document.getElementById('pageTitle').textContent = 'Chat & Messaging';
+            document.getElementById('pageSubtitle').textContent = 'Enterprise messaging system with real-time communication';
+
+            const unreadCount = chatMessages.filter(msg => msg.to === CURRENT_USER.id && !msg.read).length;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <!-- Chat Statistics -->
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;'>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>${unreadCount}</h3>
+                                    <p style='margin: 4px 0 0 0; opacity: 0.9; font-size: 0.9rem;'>Unread Messages</p>
+                                </div>
+                                <div style='font-size: 2rem; opacity: 0.7;'>💬</div>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>${HRMS_DATABASE.employees.filter(emp => emp.id !== CURRENT_USER.id).length}</h3>
+                                    <p style='margin: 4px 0 0 0; opacity: 0.9; font-size: 0.9rem;'>Active Contacts</p>
+                                </div>
+                                <div style='font-size: 2rem; opacity: 0.7;'>👥</div>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 1.8rem; font-weight: bold;'>${chatMessages.length}</h3>
+                                    <p style='margin: 4px 0 0 0; opacity: 0.9; font-size: 0.9rem;'>Total Messages</p>
+                                </div>
+                                <div style='font-size: 2rem; opacity: 0.7;'>📨</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class='card' style='margin-bottom: 24px; padding: 0; overflow: hidden;'>
+                        <div class='chat-container' style='display: grid; grid-template-columns: 320px 1fr; height: 600px;'>
+                            <!-- Enhanced Contact List -->
+                            <div style='border-right: 1px solid #e5e7eb; display: flex; flex-direction: column;'>
+                                <div style='background: #f9fafb; padding: 16px; border-bottom: 1px solid #e5e7eb;'>
+                                    <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;'>
+                                        <h4 style='margin: 0; font-weight: 600;'>Messages</h4>
+                                        <button onclick='startNewChat()' style='background: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;'>+ New</button>
+                                    </div>
+                                    <input type='text' placeholder='Search conversations...' style='width: 100%; padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 0.9rem;'>
+                                </div>
+
+                                <div style='flex: 1; overflow-y: auto;'>
+                                    ${HRMS_DATABASE.employees.filter(emp => emp.id !== CURRENT_USER.id).map(employee => {
+                                        const lastMessage = chatMessages.filter(msg =>
+                                            (msg.from === employee.id && msg.to === CURRENT_USER.id) ||
+                                            (msg.from === CURRENT_USER.id && msg.to === employee.id)
+                                        ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+
+                                        const unreadFromUser = chatMessages.filter(msg =>
+                                            msg.from === employee.id && msg.to === CURRENT_USER.id && !msg.read
+                                        ).length;
+
+                                        const isOnline = Math.random() > 0.3; // Simulate online status
+
+                                        return `
+                                            <div onclick='selectAdvancedChat(${employee.id})' style='padding: 16px; cursor: pointer; border-bottom: 1px solid #f3f4f6; transition: background 0.2s; position: relative;' onmouseover='this.style.background="#f9fafb"' onmouseout='this.style.background="white"'>
+                                                <div style='display: flex; align-items: center; gap: 12px;'>
+                                                    <div style='position: relative;'>
+                                                        <img src='${employee.avatar}' style='width: 48px; height: 48px; border-radius: 50%;'>
+                                                        <div style='position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background: ${isOnline ? '#10b981' : '#6b7280'}; border: 2px solid white;'></div>
+                                                    </div>
+                                                    <div style='flex: 1; min-width: 0;'>
+                                                        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;'>
+                                                            <h5 style='margin: 0; font-size: 0.95rem; font-weight: 600; color: #1f2937;'>${employee.name}</h5>
+                                                            ${lastMessage ? `<span style='font-size: 0.7rem; color: #6b7280;'>${new Date(lastMessage.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>` : ''}
+                                                        </div>
+                                                        <p style='margin: 0; font-size: 0.8rem; color: #6b7280;'>${employee.position}</p>
+                                                        ${lastMessage ? `
+                                                            <p style='margin: 4px 0 0 0; font-size: 0.85rem; color: #4b5563; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>
+                                                                ${lastMessage.from === CURRENT_USER.id ? 'You: ' : ''}${lastMessage.message}
+                                                            </p>
+                                                        ` : `<p style='margin: 4px 0 0 0; font-size: 0.85rem; color: #9ca3af; font-style: italic;'>No messages yet</p>`}
+                                                    </div>
+                                                    ${unreadFromUser > 0 ? `
+                                                        <div class='notification-badge' style='background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold;'>${unreadFromUser}</div>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Chat Window -->
+                            <div id='chatWindow' style='display: flex; flex-direction: column; background: #fafafa;'>
+                                <div style='padding: 20px; text-align: center; color: #6b7280; margin: auto;'>
+                                    <div style='font-size: 4rem; margin-bottom: 16px; opacity: 0.5;'>💬</div>
+                                    <h3 style='margin: 0 0 8px 0; color: #374151;'>Select a conversation</h3>
+                                    <p style='margin: 0; font-size: 0.9rem;'>Choose a colleague from the list to start messaging</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        function loadSocialFeed() {
+            document.getElementById('pageTitle').textContent = 'Social Feed';
+            document.getElementById('pageSubtitle').textContent = 'Share updates and stay connected with your team';
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <section class='card' style='margin-bottom: 24px; padding: 24px;'>
+                        <h2>📱 Social Feed</h2>
+                        <div class='card' style='padding: 20px; margin: 20px 0;'>
+                            <div style='display: flex; gap: 12px; align-items: center; margin-bottom: 16px;'>
+                                <img src='https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                <input id='postInput' type='text' placeholder='What\\'s on your mind, John?' class='form-input' style='flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid #e5e7eb; outline: none;'>
+                                <button onclick='submitPost()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer;'>Post</button>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 20px; margin-bottom: 16px;'>
+                            <div style='display: flex; gap: 12px; margin-bottom: 12px;'>
+                                <img src='https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                <div>
+                                    <h4 style='margin: 0;'>Sarah Wilson</h4>
+                                    <p style='margin: 2px 0 0 0; font-size: 0.8rem; color: #6b7280;'>HR Manager • 2 hours ago</p>
+                                </div>
+                            </div>
+                            <p style='margin-bottom: 12px;'>🎉 Excited to announce our Q3 team building event! Looking forward to seeing everyone there!</p>
+                            <div style='display: flex; gap: 16px; padding-top: 12px; border-top: 1px solid #e5e7eb;'>
+                                <button onclick='likePost(this)' class='interactive-btn' style='background: none; border: none; color: #6b7280; cursor: pointer;'>👍 24 Likes</button>
+                                <button onclick='showNotification("💬 Comments feature coming soon!", "info")' style='background: none; border: none; color: #6b7280; cursor: pointer;'>💬 8 Comments</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        // Advanced Chat Functions
+        function selectAdvancedChat(employeeId) {
+            currentChatUser = HRMS_DATABASE.employees.find(emp => emp.id === employeeId);
+            if (!currentChatUser) return;
+
+            // Mark messages as read
+            chatMessages.forEach(msg => {
+                if (msg.from === employeeId && msg.to === CURRENT_USER.id) {
+                    msg.read = true;
+                }
+            });
+
+            const conversationMessages = chatMessages.filter(msg =>
+                (msg.from === employeeId && msg.to === CURRENT_USER.id) ||
+                (msg.from === CURRENT_USER.id && msg.to === employeeId)
+            ).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            const isOnline = Math.random() > 0.3;
+            const lastSeen = isOnline ? 'Online now' : `Last seen ${Math.floor(Math.random() * 60)} minutes ago`;
+
+            document.getElementById('chatWindow').innerHTML = `
+                <!-- Chat Header -->
+                <div style='background: white; padding: 16px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between;'>
+                    <div style='display: flex; align-items: center; gap: 12px;'>
+                        <div style='position: relative;'>
+                            <img src='${currentChatUser.avatar}' style='width: 48px; height: 48px; border-radius: 50%;'>
+                            <div style='position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background: ${isOnline ? '#10b981' : '#6b7280'}; border: 2px solid white;'></div>
+                        </div>
+                        <div>
+                            <h4 style='margin: 0; font-size: 1.1rem; font-weight: 600; color: #1f2937;'>${currentChatUser.name}</h4>
+                            <p style='margin: 2px 0 0 0; font-size: 0.85rem; color: #6b7280;'>${currentChatUser.position} • ${lastSeen}</p>
+                        </div>
+                    </div>
+                    <div style='display: flex; gap: 8px;'>
+                        <button onclick='startVideoCall()' style='background: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;'>📹 Video</button>
+                        <button onclick='startVoiceCall()' style='background: #6366f1; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;'>📞 Call</button>
+                        <button onclick='showChatInfo()' style='background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;'>ℹ️ Info</button>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div id='chatMessages' style='flex: 1; overflow-y: auto; padding: 20px; background: #fafafa;'>
+                    ${conversationMessages.length === 0 ? `
+                        <div style='text-align: center; padding: 40px; color: #6b7280;'>
+                            <div style='font-size: 3rem; margin-bottom: 16px; opacity: 0.5;'>👋</div>
+                            <p style='margin: 0; font-size: 1.1rem; font-weight: 500; color: #374151;'>Start a conversation with ${currentChatUser.name}</p>
+                            <p style='margin: 8px 0 0 0; font-size: 0.9rem;'>Send a message to begin your conversation</p>
+                        </div>
+                    ` : conversationMessages.map(msg => {
+                        const isFromCurrentUser = msg.from === CURRENT_USER.id;
+                        const messageTime = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                        return `
+                            <div class='message-bubble' style='display: flex; flex-direction: column; gap: 4px; align-items: ${isFromCurrentUser ? 'flex-end' : 'flex-start'}; margin-bottom: 16px;'>
+                                <div style='background: ${isFromCurrentUser ? '#6366f1' : 'white'}; color: ${isFromCurrentUser ? 'white' : '#1f2937'}; padding: 12px 16px; border-radius: 18px; max-width: 70%; box-shadow: 0 1px 2px rgba(0,0,0,0.05); word-wrap: break-word;'>
+                                    <p style='margin: 0; font-size: 0.9rem; line-height: 1.4;'>${msg.message}</p>
+                                </div>
+                                <span style='font-size: 0.7rem; color: #6b7280; margin: 0 8px;'>${messageTime}${isFromCurrentUser ? ' ✓✓' : ''}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- Message Input -->
+                <div style='background: white; padding: 16px; border-top: 1px solid #e5e7eb;'>
+                    <div style='display: flex; gap: 8px; align-items: center;'>
+                        <button onclick='attachFile()' style='background: none; border: none; color: #6b7280; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;' onmouseover='this.style.background="#f3f4f6"' onmouseout='this.style.background="none"' title='Attach file'>
+                            📎
+                        </button>
+                        <button onclick='addEmoji()' style='background: none; border: none; color: #6b7280; cursor: pointer; padding: 8px; border-radius: 50%; transition: background 0.2s;' onmouseover='this.style.background="#f3f4f6"' onmouseout='this.style.background="none"' title='Add emoji'>
+                            😊
+                        </button>
+                        <input id='chatInput' type='text' placeholder='Type your message...' class='form-input' style='flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid #e5e7eb; outline: none; font-size: 0.9rem;' onkeypress='if(event.key==="Enter") sendAdvancedMessage()'>
+                        <button onclick='sendAdvancedMessage()' class='interactive-btn' style='background: #6366f1; color: white; border: none; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem;' title='Send message'>
+                            ➤
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Scroll to bottom
+            setTimeout(() => {
+                const messagesContainer = document.getElementById('chatMessages');
+                if (messagesContainer) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            }, 100);
+        }
+
+        function sendAdvancedMessage() {
+            const input = document.getElementById('chatInput');
+            if (!input || !input.value.trim() || !currentChatUser) {
+                showNotification('Please type a message first!', 'warning');
+                return;
+            }
+
+            const messageText = input.value.trim();
+            const timestamp = new Date().toISOString();
+
+            // Add message to database
+            const newMessage = {
+                id: chatMessages.length + 1,
+                from: CURRENT_USER.id,
+                to: currentChatUser.id,
+                message: messageText,
+                timestamp: timestamp,
+                read: false
+            };
+
+            chatMessages.push(newMessage);
+
+            // Add message to UI
+            const messagesContainer = document.getElementById('chatMessages');
+            if (messagesContainer) {
+                const messageHTML = `
+                    <div class='message-bubble' style='display: flex; flex-direction: column; gap: 4px; align-items: flex-end; margin-bottom: 16px;'>
+                        <div style='background: #6366f1; color: white; padding: 12px 16px; border-radius: 18px; max-width: 70%; box-shadow: 0 1px 2px rgba(0,0,0,0.05); word-wrap: break-word;'>
+                            <p style='margin: 0; font-size: 0.9rem; line-height: 1.4;'>${messageText}</p>
+                        </div>
+                        <span style='font-size: 0.7rem; color: #6b7280; margin: 0 8px;'>Just now ✓</span>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            input.value = '';
+            showNotification('Message sent successfully!', 'success');
+
+            // Simulate response after delay
+            setTimeout(() => {
+                simulateAdvancedResponse();
+            }, 2000 + Math.random() * 3000);
+        }
+
+        function simulateAdvancedResponse() {
+            if (!currentChatUser) return;
+
+            const responses = [
+                "Thanks for reaching out! I'll look into this right away.",
+                "Got your message. Let me get back to you with more details.",
+                "Perfect timing! I was just thinking about this.",
+                "Thanks for the update. This is very helpful.",
+                "I'll review this and send you my feedback shortly.",
+                "Great question! Let me check with the team and get back to you.",
+                "Absolutely! I'll take care of this today.",
+                "Thanks for bringing this to my attention."
+            ];
+
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            const timestamp = new Date().toISOString();
+
+            // Add response to database
+            const responseMessage = {
+                id: chatMessages.length + 1,
+                from: currentChatUser.id,
+                to: CURRENT_USER.id,
+                message: randomResponse,
+                timestamp: timestamp,
+                read: true
+            };
+
+            chatMessages.push(responseMessage);
+
+            // Add response to UI
+            const messagesContainer = document.getElementById('chatMessages');
+            if (messagesContainer) {
+                const responseHTML = `
+                    <div class='message-bubble' style='display: flex; flex-direction: column; gap: 4px; align-items: flex-start; margin-bottom: 16px;'>
+                        <div style='background: white; color: #1f2937; padding: 12px 16px; border-radius: 18px; max-width: 70%; box-shadow: 0 1px 2px rgba(0,0,0,0.05); word-wrap: break-word;'>
+                            <p style='margin: 0; font-size: 0.9rem; line-height: 1.4;'>${randomResponse}</p>
+                        </div>
+                        <span style='font-size: 0.7rem; color: #6b7280; margin: 0 8px;'>Just now</span>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', responseHTML);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            showNotification(`New message from ${currentChatUser.name}`, 'info');
+        }
+
+        function startNewChat() {
+            showNotification('📝 New chat feature - Select a colleague to start messaging', 'info');
+        }
+
+        function startVideoCall() {
+            if (currentChatUser) {
+                showNotification(`📹 Starting video call with ${currentChatUser.name}...`, 'info');
+                setTimeout(() => {
+                    showNotification('📹 Video call feature coming soon!', 'info');
+                }, 1500);
+            }
+        }
+
+        function startVoiceCall() {
+            if (currentChatUser) {
+                showNotification(`📞 Calling ${currentChatUser.name}...`, 'info');
+                setTimeout(() => {
+                    showNotification('📞 Voice call feature coming soon!', 'info');
+                }, 1500);
+            }
+        }
+
+        function showChatInfo() {
+            if (currentChatUser) {
+                showNotification(`ℹ️ ${currentChatUser.name} - ${currentChatUser.department} Department`, 'info');
+                setTimeout(() => {
+                    showNotification(`📧 ${currentChatUser.email} • 📱 ${currentChatUser.phone}`, 'info');
+                }, 1000);
+            }
+        }
+
+        // Employee Management Functions
+        function viewEmployeeProfile(employeeId) {
+            const employee = HRMS_DATABASE.employees.find(emp => emp.id === employeeId);
+            if (!employee) return;
+
+            document.getElementById('pageTitle').textContent = `Employee Profile - ${employee.name}`;
+            document.getElementById('pageSubtitle').textContent = `${employee.position} • ${employee.department} Department`;
+
+            const employeeAttendance = HRMS_DATABASE.attendance.filter(att => att.employeeId === employeeId);
+            const employeePayroll = HRMS_DATABASE.payroll.find(pay => pay.employeeId === employeeId);
+            const employeeLeaves = HRMS_DATABASE.leaveRequests.filter(req => req.employeeId === employeeId);
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <div style='display: grid; grid-template-columns: 1fr 2fr; gap: 24px;'>
+                        <!-- Employee Info Card -->
+                        <div class='card' style='padding: 24px;'>
+                            <div style='text-align: center; margin-bottom: 24px;'>
+                                <img src='${employee.avatar}' style='width: 120px; height: 120px; border-radius: 50%; margin-bottom: 16px;'>
+                                <h2 style='margin: 0; color: #1f2937;'>${employee.name}</h2>
+                                <p style='margin: 8px 0; color: #6b7280; font-size: 1.1rem;'>${employee.position}</p>
+                                <span style='background: #10b981; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;'>${employee.status}</span>
+                            </div>
+
+                            <div style='space-y: 16px;'>
+                                <div style='margin-bottom: 16px;'>
+                                    <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Department</label>
+                                    <div style='font-weight: 600; color: #1f2937; margin-top: 4px;'>${employee.department}</div>
+                                </div>
+
+                                <div style='margin-bottom: 16px;'>
+                                    <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Email</label>
+                                    <div style='color: #6366f1; margin-top: 4px;'>${employee.email}</div>
+                                </div>
+
+                                <div style='margin-bottom: 16px;'>
+                                    <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Phone</label>
+                                    <div style='color: #1f2937; margin-top: 4px;'>${employee.phone}</div>
+                                </div>
+
+                                <div style='margin-bottom: 16px;'>
+                                    <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Hire Date</label>
+                                    <div style='color: #1f2937; margin-top: 4px;'>${formatDate(employee.hireDate)}</div>
+                                </div>
+
+                                <div style='margin-bottom: 16px;'>
+                                    <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Manager</label>
+                                    <div style='color: #1f2937; margin-top: 4px;'>${employee.manager}</div>
+                                </div>
+
+                                <div style='margin-bottom: 24px;'>
+                                    <label style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;'>Annual Salary</label>
+                                    <div style='font-weight: 600; color: #10b981; font-size: 1.2rem; margin-top: 4px;'>${formatCurrency(employee.salary)}</div>
+                                </div>
+
+                                <div style='display: flex; gap: 8px;'>
+                                    <button onclick='editEmployee(${employee.id})' style='background: #6366f1; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; flex: 1;'>Edit Profile</button>
+                                    <button onclick='loadChat(); selectAdvancedChat(${employee.id}); updateActiveNav(document.querySelector("[onclick*=loadChat]"));' style='background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; flex: 1;'>Message</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Employee Details Tabs -->
+                        <div class='card' style='padding: 0; overflow: hidden;'>
+                            <div style='display: flex; border-bottom: 1px solid #e5e7eb;'>
+                                <button onclick='showEmployeeTab("attendance", ${employee.id})' id='tab-attendance' class='employee-tab active' style='background: #f9fafb; border: none; padding: 16px 24px; cursor: pointer; border-bottom: 2px solid #6366f1; font-weight: 600; color: #6366f1;'>Attendance</button>
+                                <button onclick='showEmployeeTab("payroll", ${employee.id})' id='tab-payroll' class='employee-tab' style='background: none; border: none; padding: 16px 24px; cursor: pointer; border-bottom: 2px solid transparent; color: #6b7280;'>Payroll</button>
+                                <button onclick='showEmployeeTab("leaves", ${employee.id})' id='tab-leaves' class='employee-tab' style='background: none; border: none; padding: 16px 24px; cursor: pointer; border-bottom: 2px solid transparent; color: #6b7280;'>Leave History</button>
+                            </div>
+
+                            <div id='employee-tab-content' style='padding: 24px;'>
+                                <!-- Attendance Tab Content -->
+                                <div>
+                                    <h3 style='margin-bottom: 16px;'>📊 Attendance Records</h3>
+                                    ${employeeAttendance.length > 0 ? `
+                                        <div style='overflow-x: auto;'>
+                                            <table style='width: 100%; border-collapse: collapse;'>
+                                                <thead>
+                                                    <tr style='background: #f9fafb;'>
+                                                        <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Date</th>
+                                                        <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Check In</th>
+                                                        <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Check Out</th>
+                                                        <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Hours</th>
+                                                        <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    ${employeeAttendance.map(record => `
+                                                        <tr style='border-bottom: 1px solid #f3f4f6;'>
+                                                            <td style='padding: 12px;'>${formatDate(record.date)}</td>
+                                                            <td style='padding: 12px; color: #10b981; font-weight: 500;'>${record.checkIn}</td>
+                                                            <td style='padding: 12px; color: ${record.checkOut ? '#ef4444' : '#6b7280'}; font-weight: 500;'>${record.checkOut || 'Not yet'}</td>
+                                                            <td style='padding: 12px; font-weight: 600;'>${record.hoursWorked}h</td>
+                                                            <td style='padding: 12px;'>
+                                                                <span style='background: #10b981; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;'>${record.status}</span>
+                                                            </td>
+                                                        </tr>
+                                                    `).join('')}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ` : '<p style="color: #6b7280; text-align: center; padding: 40px;">No attendance records found</p>'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showEmployeeTab(tabName, employeeId) {
+            const employee = HRMS_DATABASE.employees.find(emp => emp.id === employeeId);
+            const employeeAttendance = HRMS_DATABASE.attendance.filter(att => att.employeeId === employeeId);
+            const employeePayroll = HRMS_DATABASE.payroll.find(pay => pay.employeeId === employeeId);
+            const employeeLeaves = HRMS_DATABASE.leaveRequests.filter(req => req.employeeId === employeeId);
+
+            // Update tab styles
+            document.querySelectorAll('.employee-tab').forEach(tab => {
+                tab.style.background = 'none';
+                tab.style.borderBottom = '2px solid transparent';
+                tab.style.color = '#6b7280';
+                tab.style.fontWeight = 'normal';
+            });
+
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.style.background = '#f9fafb';
+            activeTab.style.borderBottom = '2px solid #6366f1';
+            activeTab.style.color = '#6366f1';
+            activeTab.style.fontWeight = '600';
+
+            let content = '';
+
+            switch(tabName) {
+                case 'attendance':
+                    content = `
+                        <h3 style='margin-bottom: 16px;'>📊 Attendance Records</h3>
+                        ${employeeAttendance.length > 0 ? `
+                            <div style='overflow-x: auto;'>
+                                <table style='width: 100%; border-collapse: collapse;'>
+                                    <thead>
+                                        <tr style='background: #f9fafb;'>
+                                            <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Date</th>
+                                            <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Check In</th>
+                                            <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Check Out</th>
+                                            <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Hours</th>
+                                            <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${employeeAttendance.map(record => `
+                                            <tr style='border-bottom: 1px solid #f3f4f6;'>
+                                                <td style='padding: 12px;'>${formatDate(record.date)}</td>
+                                                <td style='padding: 12px; color: #10b981; font-weight: 500;'>${record.checkIn}</td>
+                                                <td style='padding: 12px; color: ${record.checkOut ? '#ef4444' : '#6b7280'}; font-weight: 500;'>${record.checkOut || 'Not yet'}</td>
+                                                <td style='padding: 12px; font-weight: 600;'>${record.hoursWorked}h</td>
+                                                <td style='padding: 12px;'>
+                                                    <span style='background: #10b981; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;'>${record.status}</span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ` : '<p style="color: #6b7280; text-align: center; padding: 40px;">No attendance records found</p>'}
+                    `;
+                    break;
+
+                case 'payroll':
+                    content = `
+                        <h3 style='margin-bottom: 16px;'>💰 Payroll Information</h3>
+                        ${employeePayroll ? `
+                            <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 20px;'>
+                                <div class='card' style='padding: 20px;'>
+                                    <h4 style='margin-bottom: 16px; color: #1f2937;'>Current Month (July 2024)</h4>
+                                    <div style='space-y: 12px;'>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>Gross Salary:</span>
+                                            <span style='font-weight: 600;'>${formatCurrency(employeePayroll.grossSalary)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>Tax Deductions:</span>
+                                            <span style='color: #ef4444; font-weight: 500;'>-${formatCurrency(employeePayroll.taxDeductions)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>Benefits:</span>
+                                            <span style='color: #ef4444; font-weight: 500;'>-${formatCurrency(employeePayroll.benefits)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid #e5e7eb;'>
+                                            <span style='font-weight: 600;'>Net Pay:</span>
+                                            <span style='font-weight: 600; color: #10b981; font-size: 1.1rem;'>${formatCurrency(employeePayroll.netPay)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class='card' style='padding: 20px;'>
+                                    <h4 style='margin-bottom: 16px; color: #1f2937;'>Annual Summary</h4>
+                                    <div style='space-y: 12px;'>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>Annual Salary:</span>
+                                            <span style='font-weight: 600;'>${formatCurrency(employee.salary)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>YTD Gross:</span>
+                                            <span style='font-weight: 600;'>${formatCurrency(employeePayroll.grossSalary * 7)}</span>
+                                        </div>
+                                        <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                            <span style='color: #6b7280;'>YTD Net:</span>
+                                            <span style='font-weight: 600; color: #10b981;'>${formatCurrency(employeePayroll.netPay * 7)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : '<p style="color: #6b7280; text-align: center; padding: 40px;">No payroll data available</p>'}
+                    `;
+                    break;
+
+                case 'leaves':
+                    content = `
+                        <h3 style='margin-bottom: 16px;'>🏖️ Leave History</h3>
+                        ${employeeLeaves.length > 0 ? `
+                            <div style='display: flex; flex-direction: column; gap: 16px;'>
+                                ${employeeLeaves.map(leave => {
+                                    const statusColor = leave.status === 'Approved' ? '#10b981' : leave.status === 'Pending' ? '#f59e0b' : '#ef4444';
+                                    return `
+                                        <div class='card' style='padding: 16px; border-left: 4px solid ${statusColor};'>
+                                            <div style='display: flex; justify-content: space-between; align-items: start;'>
+                                                <div>
+                                                    <h4 style='margin: 0; color: #1f2937;'>${leave.type}</h4>
+                                                    <p style='margin: 4px 0; color: #6b7280;'>${formatDate(leave.startDate)} - ${formatDate(leave.endDate)} (${leave.days} days)</p>
+                                                    <p style='margin: 4px 0; color: #374151;'>${leave.reason}</p>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;'>Applied: ${formatDate(leave.appliedDate)}</p>
+                                                </div>
+                                                <span style='background: ${statusColor}; color: white; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem;'>${leave.status}</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        ` : '<p style="color: #6b7280; text-align: center; padding: 40px;">No leave requests found</p>'}
+                    `;
+                    break;
+            }
+
+            document.getElementById('employee-tab-content').innerHTML = content;
+        }
+
+        // Leave Request Management Functions
+        function approveLeaveRequest(requestId) {
+            const request = HRMS_DATABASE.leaveRequests.find(req => req.id === requestId);
+            if (request) {
+                request.status = 'Approved';
+                showNotification(`✅ Leave request approved for ${HRMS_DATABASE.employees.find(emp => emp.id === request.employeeId).name}`, 'success');
+                loadPendingRequests(); // Refresh the view
+            }
+        }
+
+        function rejectLeaveRequest(requestId) {
+            const request = HRMS_DATABASE.leaveRequests.find(req => req.id === requestId);
+            if (request) {
+                request.status = 'Rejected';
+                showNotification(`❌ Leave request rejected for ${HRMS_DATABASE.employees.find(emp => emp.id === request.employeeId).name}`, 'error');
+                loadPendingRequests(); // Refresh the view
+            }
+        }
+
+        // Employee Management Functions
+        function addNewEmployee() {
+            showNotification('👤 Add New Employee form would open here', 'info');
+        }
+
+        function editEmployee(employeeId) {
+            const employee = HRMS_DATABASE.employees.find(emp => emp.id === employeeId);
+            showNotification(`✏️ Edit form for ${employee.name} would open here`, 'info');
+        }
+
+        function exportEmployeeData() {
+            showNotification('📤 Exporting employee data...', 'info');
+            setTimeout(() => {
+                showNotification(`✅ Employee data exported! ${HRMS_DATABASE.employees.length} records`, 'success');
+            }, 1500);
+        }
+
+        // Advanced Attendance Functions
+        function performCheckIn() {
+            const now = new Date();
+            const checkInTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const today = now.toISOString().split('T')[0];
+
+            // Add new attendance record
+            const newAttendance = {
+                employeeId: CURRENT_USER.id,
+                date: today,
+                checkIn: checkInTime,
+                checkOut: null,
+                status: 'Present',
+                hoursWorked: 0
+            };
+
+            HRMS_DATABASE.attendance.push(newAttendance);
+
+            showNotification(`✅ Checked in successfully at ${checkInTime}!`, 'success');
+            setTimeout(() => {
+                showNotification('🎯 Have a productive day at work!', 'info');
+            }, 1000);
+
+            // Refresh the attendance view
+            loadAttendance();
+        }
+
+        function performCheckOut() {
+            const now = new Date();
+            const checkOutTime = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const today = now.toISOString().split('T')[0];
+
+            // Find today's attendance record
+            const todayAttendance = HRMS_DATABASE.attendance.find(att =>
+                att.employeeId === CURRENT_USER.id && att.date === today
+            );
+
+            if (todayAttendance && !todayAttendance.checkOut) {
+                todayAttendance.checkOut = checkOutTime;
+                todayAttendance.hoursWorked = calculateHoursWorked(todayAttendance.checkIn, checkOutTime);
+
+                showNotification(`✅ Checked out successfully at ${checkOutTime}!`, 'success');
+                setTimeout(() => {
+                    showNotification(`⏰ Total hours worked: ${todayAttendance.hoursWorked} hours`, 'info');
+                }, 1000);
+                setTimeout(() => {
+                    showNotification('🌟 Great work today! See you tomorrow.', 'success');
+                }, 2000);
+
+                // Refresh the attendance view
+                loadAttendance();
+            } else {
+                showNotification('❌ No check-in record found for today', 'error');
+            }
+        }
+
+        function updateCurrentWorkTime(checkInTime) {
+            const updateTime = () => {
+                const now = new Date();
+                const checkIn = new Date(`${now.toDateString()} ${checkInTime}`);
+                const diffMs = now - checkIn;
+                const hours = Math.floor(diffMs / (1000 * 60 * 60));
+                const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                const timeElement = document.getElementById('currentWorkTime');
+                if (timeElement) {
+                    timeElement.textContent = `${hours}h ${minutes}m`;
+                }
+            };
+
+            updateTime();
+            setInterval(updateTime, 60000); // Update every minute
+        }
+
+        function viewAttendanceHistory() {
+            const userAttendance = HRMS_DATABASE.attendance.filter(att => att.employeeId === CURRENT_USER.id);
+            showNotification(`📊 Loading your attendance history (${userAttendance.length} records)...`, 'info');
+            setTimeout(() => {
+                const totalHours = userAttendance.reduce((sum, att) => sum + att.hoursWorked, 0);
+                showNotification(`⏰ Total hours worked: ${totalHours.toFixed(1)} hours`, 'success');
+            }, 1500);
+        }
+
+        function openLeaveRequestForm() {
+            document.getElementById('pageTitle').textContent = 'Request Leave';
+            document.getElementById('pageSubtitle').textContent = 'Submit a new leave request for approval';
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <div class='card' style='padding: 32px; max-width: 600px; margin: 0 auto;'>
+                        <h2 style='margin-bottom: 24px; text-align: center;'>📝 Leave Request Form</h2>
+
+                        <form id='leaveRequestForm' onsubmit='submitLeaveRequest(event)'>
+                            <div style='margin-bottom: 20px;'>
+                                <label style='display: block; margin-bottom: 8px; font-weight: 600; color: #374151;'>Leave Type *</label>
+                                <select id='leaveType' required style='width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 1rem;'>
+                                    <option value=''>Select leave type...</option>
+                                    <option value='Annual Leave'>Annual Leave</option>
+                                    <option value='Sick Leave'>Sick Leave</option>
+                                    <option value='Personal Leave'>Personal Leave</option>
+                                    <option value='Emergency Leave'>Emergency Leave</option>
+                                </select>
+                            </div>
+
+                            <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;'>
+                                <div>
+                                    <label style='display: block; margin-bottom: 8px; font-weight: 600; color: #374151;'>Start Date *</label>
+                                    <input type='date' id='startDate' required style='width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 1rem;'>
+                                </div>
+                                <div>
+                                    <label style='display: block; margin-bottom: 8px; font-weight: 600; color: #374151;'>End Date *</label>
+                                    <input type='date' id='endDate' required style='width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 1rem;'>
+                                </div>
+                            </div>
+
+                            <div style='margin-bottom: 20px;'>
+                                <label style='display: block; margin-bottom: 8px; font-weight: 600; color: #374151;'>Reason *</label>
+                                <textarea id='leaveReason' required placeholder='Please provide a detailed reason for your leave request...' style='width: 100%; height: 120px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 1rem; resize: vertical;'></textarea>
+                            </div>
+
+                            <div style='margin-bottom: 24px;'>
+                                <label style='display: block; margin-bottom: 8px; font-weight: 600; color: #374151;'>Emergency Contact (Optional)</label>
+                                <input type='text' id='emergencyContact' placeholder='Contact information during leave' style='width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 1rem;'>
+                            </div>
+
+                            <div style='background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin-bottom: 24px;'>
+                                <h4 style='margin: 0 0 8px 0; color: #1e40af;'>📋 Leave Policy Reminder</h4>
+                                <ul style='margin: 0; padding-left: 20px; color: #1e40af; font-size: 0.9rem;'>
+                                    <li>Annual leave requests should be submitted at least 2 weeks in advance</li>
+                                    <li>Sick leave can be requested on the same day if necessary</li>
+                                    <li>Emergency leave requires manager approval within 24 hours</li>
+                                </ul>
+                            </div>
+
+                            <div style='display: flex; gap: 12px;'>
+                                <button type='button' onclick='loadAttendance(); updateActiveNav(document.querySelector("[onclick*=loadAttendance]"));' style='background: #6b7280; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; flex: 1;'>Cancel</button>
+                                <button type='submit' style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; flex: 2; font-weight: 600;'>Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitLeaveRequest(event) {
+            event.preventDefault();
+
+            const leaveType = document.getElementById('leaveType').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const reason = document.getElementById('leaveReason').value;
+            const emergencyContact = document.getElementById('emergencyContact').value;
+
+            if (!leaveType || !startDate || !endDate || !reason) {
+                showNotification('❌ Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Calculate number of days
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const timeDiff = end.getTime() - start.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+
+            if (daysDiff <= 0) {
+                showNotification('❌ End date must be after start date', 'error');
+                return;
+            }
+
+            // Create new leave request
+            const newLeaveRequest = {
+                id: HRMS_DATABASE.leaveRequests.length + 1,
+                employeeId: CURRENT_USER.id,
+                type: leaveType,
+                startDate: startDate,
+                endDate: endDate,
+                days: daysDiff,
+                reason: reason,
+                status: 'Pending',
+                appliedDate: new Date().toISOString().split('T')[0],
+                approver: CURRENT_USER.manager,
+                emergencyContact: emergencyContact
+            };
+
+            HRMS_DATABASE.leaveRequests.push(newLeaveRequest);
+
+            showNotification('📝 Leave request submitted successfully!', 'success');
+            setTimeout(() => {
+                showNotification(`📅 ${daysDiff} day${daysDiff > 1 ? 's' : ''} of ${leaveType} requested`, 'info');
+            }, 1000);
+            setTimeout(() => {
+                showNotification('👨‍💼 Your manager will be notified for approval', 'info');
+            }, 2000);
+
+            // Redirect back to attendance page
+            setTimeout(() => {
+                loadAttendance();
+                updateActiveNav(document.querySelector('[onclick*=loadAttendance]'));
+            }, 3000);
+        }
+
+        function cancelLeaveRequest(requestId) {
+            if (confirm('Are you sure you want to cancel this leave request?')) {
+                const requestIndex = HRMS_DATABASE.leaveRequests.findIndex(req => req.id === requestId);
+                if (requestIndex !== -1) {
+                    HRMS_DATABASE.leaveRequests.splice(requestIndex, 1);
+                    showNotification('✅ Leave request cancelled successfully', 'success');
+                    loadAttendance(); // Refresh the view
+                }
+            }
+        }
+
+        function addEmoji() {
+            const input = document.getElementById('chatInput');
+            if (input) {
+                const emojis = ['😊', '👍', '❤️', '😂', '🎉', '👏', '🔥', '💯'];
+                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                input.value += randomEmoji;
+                input.focus();
+            }
+        }
+
+        function selectChat(name) {
+            showNotification('💬 Opening chat with ' + name, 'info');
+        }
+
+        // Advanced Payroll Functions
+        function processAllPayroll() {
+            if (confirm('⚠️ This will process payroll for all employees. This action cannot be undone. Continue?')) {
+                showNotification('🔄 Initiating payroll processing...', 'info');
+
+                let processed = 0;
+                const total = HRMS_DATABASE.employees.length;
+
+                const processInterval = setInterval(() => {
+                    processed++;
+                    showNotification(`⏳ Processing employee ${processed}/${total}...`, 'info');
+
+                    if (processed >= total) {
+                        clearInterval(processInterval);
+                        setTimeout(() => {
+                            // Update payroll status in database
+                            HRMS_DATABASE.payroll.forEach(payroll => {
+                                if (payroll.status === 'Processing') {
+                                    payroll.status = 'Processed';
+                                }
+                            });
+                            showNotification('✅ Payroll processing completed! All employees have been paid.', 'success');
+                            setTimeout(() => {
+                                showNotification('📧 Payslip notifications sent to all employees', 'info');
+                            }, 1000);
+                        }, 1000);
+                    }
+                }, 500);
+            }
+        }
+
+        function downloadDetailedPayslip() {
+            const userPayroll = HRMS_DATABASE.payroll.find(pay => pay.employeeId === CURRENT_USER.id);
+            if (!userPayroll) {
+                showNotification('❌ No payroll data found for current period', 'error');
+                return;
+            }
+
+            showNotification('📄 Generating detailed payslip...', 'info');
+
+            setTimeout(() => {
+                const payslipData = {
+                    employee: CURRENT_USER.name,
+                    period: 'July 2024',
+                    grossSalary: userPayroll.grossSalary,
+                    taxDeductions: userPayroll.taxDeductions,
+                    benefits: userPayroll.benefits,
+                    netPay: userPayroll.netPay,
+                    generatedDate: new Date().toLocaleDateString()
+                };
+
+                showNotification('✅ Payslip downloaded successfully!', 'success');
+                setTimeout(() => {
+                    showNotification(`💰 Net Pay: ${formatCurrency(payslipData.netPay)} deposited to your account`, 'info');
+                }, 1000);
+            }, 2000);
+        }
+
+        function generatePayrollReport() {
+            showNotification('📊 Generating comprehensive payroll report...', 'info');
+
+            setTimeout(() => {
+                const totalGross = HRMS_DATABASE.payroll.reduce((sum, pay) => sum + pay.grossSalary, 0);
+                const totalNet = HRMS_DATABASE.payroll.reduce((sum, pay) => sum + pay.netPay, 0);
+                const totalTax = HRMS_DATABASE.payroll.reduce((sum, pay) => sum + pay.taxDeductions, 0);
+
+                showNotification('📈 Report generated successfully!', 'success');
+                setTimeout(() => {
+                    showNotification(`📊 Summary: Gross: ${formatCurrency(totalGross)}, Net: ${formatCurrency(totalNet)}, Tax: ${formatCurrency(totalTax)}`, 'info');
+                }, 1000);
+            }, 2500);
+        }
+
+        function exportPayrollData() {
+            showNotification('📤 Preparing payroll data export...', 'info');
+
+            setTimeout(() => {
+                const exportData = HRMS_DATABASE.payroll.map(payroll => {
+                    const employee = HRMS_DATABASE.employees.find(emp => emp.id === payroll.employeeId);
+                    return {
+                        employeeName: employee.name,
+                        department: employee.department,
+                        grossSalary: payroll.grossSalary,
+                        netPay: payroll.netPay,
+                        status: payroll.status
+                    };
+                });
+
+                showNotification('✅ Payroll data exported to CSV format!', 'success');
+                setTimeout(() => {
+                    showNotification(`📁 ${exportData.length} employee records exported`, 'info');
+                }, 1000);
+            }, 1500);
+        }
+
+        function payrollSettings() {
+            showNotification('⚙️ Opening payroll configuration...', 'info');
+            setTimeout(() => {
+                showNotification('🔧 Payroll settings: Tax rates, benefit deductions, pay schedules', 'info');
+            }, 1000);
+        }
+
+        function viewPayrollHistory() {
+            showNotification('📊 Loading payroll history...', 'info');
+            setTimeout(() => {
+                showNotification('📈 Showing last 12 months of payroll data', 'success');
+            }, 1500);
+        }
+
+        function refreshPayrollData() {
+            showNotification('🔄 Refreshing payroll data...', 'info');
+            setTimeout(() => {
+                showNotification('✅ Payroll data updated successfully!', 'success');
+            }, 1000);
+        }
+
+        function viewEmployeePayroll(employeeId) {
+            const employee = HRMS_DATABASE.employees.find(emp => emp.id === employeeId);
+            const payroll = HRMS_DATABASE.payroll.find(pay => pay.employeeId === employeeId);
+
+            if (employee && payroll) {
+                showNotification(`👤 Loading payroll details for ${employee.name}...`, 'info');
+                setTimeout(() => {
+                    showNotification(`💰 ${employee.name}: ${formatCurrency(payroll.netPay)} net pay`, 'success');
+                }, 1000);
+            }
+        }
+
+        function downloadEmployeePayslip(employeeId) {
+            const employee = HRMS_DATABASE.employees.find(emp => emp.id === employeeId);
+            showNotification(`📄 Generating payslip for ${employee.name}...`, 'info');
+            setTimeout(() => {
+                showNotification(`✅ ${employee.name}'s payslip downloaded successfully!`, 'success');
+            }, 1500);
+        }
+
+        function submitPost() {
+            const input = document.getElementById('postInput');
+            if (input && input.value.trim()) {
+                showNotification('📱 Post shared successfully! Your colleagues will see it in their feed.', 'success');
+                input.value = '';
+            } else {
+                showNotification('Please write something before posting!', 'warning');
+            }
+        }
+
+        function likePost(button) {
+            showNotification('👍 Post liked!', 'success');
+            if (button) {
+                button.style.color = '#6366f1';
+                button.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+
+        // Advanced Attendance & Leave Management
+        function loadAttendance() {
+            document.getElementById('pageTitle').textContent = 'Attendance & Leave Management';
+            document.getElementById('pageSubtitle').textContent = 'Comprehensive attendance tracking and leave management system';
+
+            const currentUserAttendance = HRMS_DATABASE.attendance.filter(att => att.employeeId === CURRENT_USER.id);
+            const todayAttendance = currentUserAttendance.find(att => att.date === '2024-07-21');
+            const currentUserLeaves = HRMS_DATABASE.leaveRequests.filter(req => req.employeeId === CURRENT_USER.id);
+
+            // Calculate leave balances
+            const usedAnnualLeave = currentUserLeaves.filter(req => req.type === 'Annual Leave' && req.status === 'Approved').reduce((sum, req) => sum + req.days, 0);
+            const usedSickLeave = currentUserLeaves.filter(req => req.type === 'Sick Leave' && req.status === 'Approved').reduce((sum, req) => sum + req.days, 0);
+            const usedPersonalLeave = currentUserLeaves.filter(req => req.type === 'Personal Leave' && req.status === 'Approved').reduce((sum, req) => sum + req.days, 0);
+
+            const annualLeaveBalance = 20 - usedAnnualLeave;
+            const sickLeaveBalance = 10 - usedSickLeave;
+            const personalLeaveBalance = 5 - usedPersonalLeave;
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <!-- Attendance Overview Cards -->
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 32px;'>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 2rem;'>${currentUserAttendance.length}</h3>
+                                    <p style='margin: 8px 0 0 0; opacity: 0.9;'>Days Present</p>
+                                </div>
+                                <div style='font-size: 2.5rem; opacity: 0.7;'>✅</div>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 2rem;'>${currentUserAttendance.reduce((sum, att) => sum + att.hoursWorked, 0).toFixed(1)}h</h3>
+                                    <p style='margin: 8px 0 0 0; opacity: 0.9;'>Total Hours</p>
+                                </div>
+                                <div style='font-size: 2.5rem; opacity: 0.7;'>⏰</div>
+                            </div>
+                        </div>
+
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <div style='display: flex; justify-content: space-between; align-items: center;'>
+                                <div>
+                                    <h3 style='margin: 0; font-size: 2rem;'>${currentUserLeaves.filter(req => req.status === 'Pending').length}</h3>
+                                    <p style='margin: 8px 0 0 0; opacity: 0.9;'>Pending Requests</p>
+                                </div>
+                                <div style='font-size: 2.5rem; opacity: 0.7;'>📋</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;'>
+                        <!-- Today's Attendance -->
+                        <div class='card' style='padding: 24px;'>
+                            <h3 style='margin-bottom: 20px;'>📅 Today's Attendance</h3>
+                            ${todayAttendance ? `
+                                <div style='background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin-bottom: 20px;'>
+                                    <div style='display: flex; align-items: center; gap: 8px; margin-bottom: 16px;'>
+                                        <span style='font-size: 1.5rem;'>✅</span>
+                                        <h4 style='margin: 0; color: #15803d;'>Checked In</h4>
+                                    </div>
+
+                                    <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;'>
+                                        <div>
+                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Check-in Time</span>
+                                            <div style='font-size: 1.2rem; font-weight: bold; color: #10b981;'>${todayAttendance.checkIn}</div>
+                                        </div>
+                                        <div>
+                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Status</span>
+                                            <div style='font-weight: 600; color: #15803d;'>${todayAttendance.status}</div>
+                                        </div>
+                                    </div>
+
+                                    ${todayAttendance.checkOut ? `
+                                        <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;'>
+                                            <div>
+                                                <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Check-out Time</span>
+                                                <div style='font-size: 1.2rem; font-weight: bold; color: #ef4444;'>${todayAttendance.checkOut}</div>
+                                            </div>
+                                            <div>
+                                                <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Hours Worked</span>
+                                                <div style='font-weight: 600; color: #1f2937;'>${todayAttendance.hoursWorked}h</div>
+                                            </div>
+                                        </div>
+                                        <button onclick='viewAttendanceHistory()' style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%;'>View History</button>
+                                    ` : `
+                                        <div style='margin-bottom: 16px;'>
+                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Current Session</span>
+                                            <div id='currentWorkTime' style='font-size: 1.2rem; font-weight: bold; color: #1f2937;'>Calculating...</div>
+                                        </div>
+                                        <button onclick='performCheckOut()' style='background: #ef4444; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%;'>🔴 Check Out</button>
+                                    `}
+                                </div>
+                            ` : `
+                                <div style='background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center;'>
+                                    <div style='font-size: 3rem; margin-bottom: 16px;'>⏰</div>
+                                    <h4 style='margin: 0 0 8px 0; color: #92400e;'>Not Checked In</h4>
+                                    <p style='margin: 0 0 16px 0; color: #92400e; font-size: 0.9rem;'>Start your work day by checking in</p>
+                                    <button onclick='performCheckIn()' style='background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600;'>🟢 Check In Now</button>
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- Leave Balance -->
+                        <div class='card' style='padding: 24px;'>
+                            <h3 style='margin-bottom: 20px;'>🏖️ Leave Balance</h3>
+
+                            <div style='space-y: 16px;'>
+                                <div style='display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f0f9ff; border-radius: 8px; margin-bottom: 12px;'>
+                                    <div>
+                                        <span style='font-weight: 600; color: #1e40af;'>Annual Leave</span>
+                                        <div style='font-size: 0.8rem; color: #6b7280;'>Vacation days</div>
+                                    </div>
+                                    <div style='text-align: right;'>
+                                        <div style='font-size: 1.5rem; font-weight: bold; color: #1e40af;'>${annualLeaveBalance}</div>
+                                        <div style='font-size: 0.8rem; color: #6b7280;'>days left</div>
+                                    </div>
+                                </div>
+
+                                <div style='display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f0fdf4; border-radius: 8px; margin-bottom: 12px;'>
+                                    <div>
+                                        <span style='font-weight: 600; color: #15803d;'>Sick Leave</span>
+                                        <div style='font-size: 0.8rem; color: #6b7280;'>Medical leave</div>
+                                    </div>
+                                    <div style='text-align: right;'>
+                                        <div style='font-size: 1.5rem; font-weight: bold; color: #15803d;'>${sickLeaveBalance}</div>
+                                        <div style='font-size: 0.8rem; color: #6b7280;'>days left</div>
+                                    </div>
+                                </div>
+
+                                <div style='display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #fef3c7; border-radius: 8px; margin-bottom: 20px;'>
+                                    <div>
+                                        <span style='font-weight: 600; color: #92400e;'>Personal Leave</span>
+                                        <div style='font-size: 0.8rem; color: #6b7280;'>Personal matters</div>
+                                    </div>
+                                    <div style='text-align: right;'>
+                                        <div style='font-size: 1.5rem; font-weight: bold; color: #92400e;'>${personalLeaveBalance}</div>
+                                        <div style='font-size: 0.8rem; color: #6b7280;'>days left</div>
+                                    </div>
+                                </div>
+
+                                <button onclick='openLeaveRequestForm()' style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: 600;'>📝 Request Leave</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leave Requests History -->
+                    <div class='card' style='padding: 24px;'>
+                        <h3 style='margin-bottom: 20px;'>📋 Your Leave Requests</h3>
+                        ${currentUserLeaves.length > 0 ? `
+                            <div style='display: flex; flex-direction: column; gap: 16px;'>
+                                ${currentUserLeaves.map(leave => {
+                                    const statusColor = leave.status === 'Approved' ? '#10b981' : leave.status === 'Pending' ? '#f59e0b' : '#ef4444';
+                                    return `
+                                        <div class='card' style='padding: 20px; border-left: 4px solid ${statusColor};'>
+                                            <div style='display: flex; justify-content: space-between; align-items: start;'>
+                                                <div style='flex: 1;'>
+                                                    <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 8px;'>
+                                                        <h4 style='margin: 0; color: #1f2937;'>${leave.type}</h4>
+                                                        <span style='background: ${statusColor}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;'>${leave.status}</span>
+                                                    </div>
+
+                                                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 12px;'>
+                                                        <div>
+                                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Duration</span>
+                                                            <div style='font-weight: 600;'>${leave.days} day${leave.days > 1 ? 's' : ''}</div>
+                                                        </div>
+                                                        <div>
+                                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Start Date</span>
+                                                            <div style='font-weight: 600;'>${formatDate(leave.startDate)}</div>
+                                                        </div>
+                                                        <div>
+                                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>End Date</span>
+                                                            <div style='font-weight: 600;'>${formatDate(leave.endDate)}</div>
+                                                        </div>
+                                                        <div>
+                                                            <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Applied</span>
+                                                            <div style='font-weight: 600;'>${formatDate(leave.appliedDate)}</div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <span style='font-size: 0.8rem; color: #6b7280; text-transform: uppercase;'>Reason</span>
+                                                        <div style='color: #374151; margin-top: 4px;'>${leave.reason}</div>
+                                                    </div>
+                                                </div>
+
+                                                ${leave.status === 'Pending' ? `
+                                                    <button onclick='cancelLeaveRequest(${leave.id})' style='background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-left: 16px;'>Cancel</button>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        ` : `
+                            <div style='text-align: center; padding: 40px; color: #6b7280;'>
+                                <div style='font-size: 3rem; margin-bottom: 16px; opacity: 0.5;'>📋</div>
+                                <p style='margin: 0; font-size: 1.1rem;'>No leave requests found</p>
+                                <p style='margin: 8px 0 0 0; font-size: 0.9rem;'>Click "Request Leave" to submit your first request</p>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+
+            // Update current work time if checked in
+            if (todayAttendance && !todayAttendance.checkOut) {
+                updateCurrentWorkTime(todayAttendance.checkIn);
+            }
+        }
+
+        function loadAnnouncements() {
+            document.getElementById('pageTitle').textContent = 'Company Announcements';
+            document.getElementById('pageSubtitle').textContent = 'Stay updated with company news, policies, and important notices';
+
+            const priorityColors = {
+                'High': '#ef4444',
+                'Medium': '#f59e0b',
+                'Low': '#10b981'
+            };
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <!-- Announcement Stats -->
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;'>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 1.8rem;'>${HRMS_DATABASE.announcements.filter(ann => ann.priority === 'High').length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>High Priority</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 1.8rem;'>${HRMS_DATABASE.announcements.filter(ann => ann.priority === 'Medium').length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Medium Priority</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 1.8rem;'>${HRMS_DATABASE.announcements.length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Total Announcements</p>
+                        </div>
+                    </div>
+
+                    <div class='card' style='padding: 24px;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;'>
+                            <h2 style='margin: 0;'>📢 All Announcements</h2>
+                            <div style='display: flex; gap: 8px;'>
+                                <select onchange='filterAnnouncements(this.value)' style='padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 6px;'>
+                                    <option value='all'>All Priorities</option>
+                                    <option value='High'>High Priority</option>
+                                    <option value='Medium'>Medium Priority</option>
+                                    <option value='Low'>Low Priority</option>
+                                </select>
+                                <button onclick='createAnnouncement()' style='background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;'>+ New</button>
+                            </div>
+                        </div>
+
+                        <div id='announcementsList'>
+                            ${HRMS_DATABASE.announcements.map(announcement => `
+                                <div class='card activity-item announcement-item' data-priority='${announcement.priority}' style='padding: 24px; margin-bottom: 16px; border-left: 4px solid ${priorityColors[announcement.priority]}; transition: all 0.3s ease;'>
+                                    <div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;'>
+                                        <div style='flex: 1;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 8px;'>
+                                                <h3 style='margin: 0; color: #1f2937; font-size: 1.2rem;'>${announcement.title}</h3>
+                                                <span style='background: ${priorityColors[announcement.priority]}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;'>${announcement.priority}</span>
+                                            </div>
+                                            <p style='margin: 0; color: #374151; line-height: 1.6;'>${announcement.content}</p>
+                                        </div>
+                                        <div style='display: flex; flex-direction: column; align-items: end; gap: 8px; margin-left: 16px;'>
+                                            <button onclick='viewAnnouncementDetails(${announcement.id})' style='background: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>View Details</button>
+                                            <button onclick='markAsRead(${announcement.id})' style='background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>Mark Read</button>
+                                        </div>
+                                    </div>
+
+                                    <div style='display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #e5e7eb;'>
+                                        <div style='display: flex; align-items: center; gap: 16px;'>
+                                            <span style='font-size: 0.85rem; color: #6b7280;'>📅 ${formatDate(announcement.date)}</span>
+                                            <span style='font-size: 0.85rem; color: #6b7280;'>👤 ${announcement.author}</span>
+                                        </div>
+                                        <div style='display: flex; gap: 8px;'>
+                                            <button onclick='shareAnnouncement(${announcement.id})' style='background: none; border: 1px solid #e5e7eb; color: #6b7280; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>🔗 Share</button>
+                                            <button onclick='saveAnnouncement(${announcement.id})' style='background: none; border: 1px solid #e5e7eb; color: #6b7280; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;'>📌 Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadEvents() {
+            document.getElementById('pageTitle').textContent = 'Events Calendar';
+            document.getElementById('pageSubtitle').textContent = 'Company events, meetings, training sessions, and important dates';
+
+            // Extended events database
+            const events = [
+                { id: 1, title: 'Team Building Event', date: '2024-07-28', time: '10:00 AM - 4:00 PM', location: 'Adventure Park', type: 'Team Building', description: 'Adventure park activities and team bonding exercises', attendees: 45, capacity: 50, status: 'Open' },
+                { id: 2, title: 'Q3 All-Hands Meeting', date: '2024-08-02', time: '3:00 PM - 5:00 PM', location: 'Main Conference Room', type: 'Meeting', description: 'Quarterly business review and company updates', attendees: 156, capacity: 200, status: 'Mandatory' },
+                { id: 3, title: 'Leadership Training Workshop', date: '2024-08-10', time: '9:00 AM - 12:00 PM', location: 'Training Room A', type: 'Training', description: 'Management skills and leadership development', attendees: 12, capacity: 20, status: 'Open' },
+                { id: 4, title: 'Company Picnic', date: '2024-08-15', time: '11:00 AM - 6:00 PM', location: 'Central Park', type: 'Social', description: 'Annual company picnic with families welcome', attendees: 89, capacity: 300, status: 'Open' },
+                { id: 5, title: 'Tech Talk: AI in Workplace', date: '2024-08-20', time: '2:00 PM - 3:30 PM', location: 'Virtual/Zoom', type: 'Learning', description: 'Guest speaker on AI implementation strategies', attendees: 67, capacity: 100, status: 'Open' }
+            ];
+
+            const eventTypeColors = {
+                'Team Building': '#10b981',
+                'Meeting': '#6366f1',
+                'Training': '#f59e0b',
+                'Social': '#8b5cf6',
+                'Learning': '#06b6d4'
+            };
+
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <!-- Event Stats -->
+                    <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;'>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 1.8rem;'>${events.length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Upcoming Events</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 1.8rem;'>${events.reduce((sum, event) => sum + event.attendees, 0)}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Total Attendees</p>
+                        </div>
+                        <div class='card' style='padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;'>
+                            <h3 style='margin: 0; font-size: 1.8rem;'>${events.filter(event => event.status === 'Open').length}</h3>
+                            <p style='margin: 8px 0 0 0; opacity: 0.9;'>Open for Registration</p>
+                        </div>
+                    </div>
+
+                    <div class='card' style='padding: 24px;'>
+                        <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;'>
+                            <h2 style='margin: 0;'>📅 Event Calendar</h2>
+                            <div style='display: flex; gap: 8px;'>
+                                <select onchange='filterEvents(this.value)' style='padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 6px;'>
+                                    <option value='all'>All Events</option>
+                                    <option value='Team Building'>Team Building</option>
+                                    <option value='Meeting'>Meetings</option>
+                                    <option value='Training'>Training</option>
+                                    <option value='Social'>Social</option>
+                                    <option value='Learning'>Learning</option>
+                                </select>
+                                <button onclick='createEvent()' style='background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;'>+ Create Event</button>
+                            </div>
+                        </div>
+
+                        <div id='eventsList'>
+                            ${events.map(event => {
+                                const eventDate = new Date(event.date);
+                                const day = eventDate.getDate();
+                                const month = eventDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+                                const attendanceRate = Math.round((event.attendees / event.capacity) * 100);
+
+                                return `
+                                    <div class='card activity-item event-item' data-type='${event.type}' style='padding: 24px; margin-bottom: 16px; transition: all 0.3s ease;'>
+                                        <div style='display: flex; gap: 20px;'>
+                                            <!-- Date Badge -->
+                                            <div style='background: ${eventTypeColors[event.type]}; color: white; padding: 16px; border-radius: 12px; text-align: center; min-width: 80px; display: flex; flex-direction: column; justify-content: center;'>
+                                                <div style='font-size: 1.5rem; font-weight: bold; line-height: 1;'>${day}</div>
+                                                <div style='font-size: 0.8rem; margin-top: 4px; opacity: 0.9;'>${month}</div>
+                                            </div>
+
+                                            <!-- Event Details -->
+                                            <div style='flex: 1;'>
+                                                <div style='display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;'>
+                                                    <div>
+                                                        <h3 style='margin: 0 0 8px 0; color: #1f2937; font-size: 1.3rem;'>${event.title}</h3>
+                                                        <div style='display: flex; align-items: center; gap: 16px; margin-bottom: 8px;'>
+                                                            <span style='background: ${eventTypeColors[event.type]}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 500;'>${event.type}</span>
+                                                            <span style='background: ${event.status === 'Open' ? '#10b981' : event.status === 'Mandatory' ? '#ef4444' : '#6b7280'}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem;'>${event.status}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div style='display: flex; gap: 8px;'>
+                                                        <button onclick='registerForEvent(${event.id})' style='background: #6366f1; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;'>${event.status === 'Mandatory' ? 'Required' : 'Register'}</button>
+                                                        <button onclick='viewEventDetails(${event.id})' style='background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;'>Details</button>
+                                                    </div>
+                                                </div>
+
+                                                <p style='margin: 0 0 12px 0; color: #6b7280; line-height: 1.5;'>${event.description}</p>
+
+                                                <div style='display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 12px;'>
+                                                    <div style='display: flex; align-items: center; gap: 8px;'>
+                                                        <span style='color: #6366f1; font-size: 1.1rem;'>🕒</span>
+                                                        <span style='color: #374151; font-weight: 500;'>${event.time}</span>
+                                                    </div>
+                                                    <div style='display: flex; align-items: center; gap: 8px;'>
+                                                        <span style='color: #10b981; font-size: 1.1rem;'>📍</span>
+                                                        <span style='color: #374151; font-weight: 500;'>${event.location}</span>
+                                                    </div>
+                                                    <div style='display: flex; align-items: center; gap: 8px;'>
+                                                        <span style='color: #f59e0b; font-size: 1.1rem;'>👥</span>
+                                                        <span style='color: #374151; font-weight: 500;'>${event.attendees}/${event.capacity} attendees</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Attendance Progress Bar -->
+                                                <div style='margin-top: 12px;'>
+                                                    <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;'>
+                                                        <span style='font-size: 0.8rem; color: #6b7280;'>Registration Progress</span>
+                                                        <span style='font-size: 0.8rem; color: #6b7280;'>${attendanceRate}%</span>
+                                                    </div>
+                                                    <div class='progress-bar' style='height: 6px;'>
+                                                        <div class='progress-fill' style='width: ${attendanceRate}%; background: ${eventTypeColors[event.type]};'></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadPolls() {
+            document.getElementById('pageTitle').textContent = 'Polls & Surveys';
+            document.getElementById('pageSubtitle').textContent = 'Participate in company polls and share feedback';
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <section class='card' style='margin-bottom: 24px; padding: 24px;'>
+                        <h2>📊 Active Polls & Surveys</h2>
+                        <div class='card' style='padding: 20px; margin-top: 24px;'>
+                            <h3>What should be our next team building activity?</h3>
+                            <div style='margin: 16px 0;'>
+                                <div style='margin-bottom: 8px;'>
+                                    <label style='display: flex; align-items: center; gap: 8px; cursor: pointer;'>
+                                        <input type='radio' name='poll1' value='bowling'>
+                                        <span>🎳 Bowling Night</span>
+                                    </label>
+                                </div>
+                                <div style='margin-bottom: 8px;'>
+                                    <label style='display: flex; align-items: center; gap: 8px; cursor: pointer;'>
+                                        <input type='radio' name='poll1' value='escape'>
+                                        <span>🔍 Escape Room</span>
+                                    </label>
+                                </div>
+                                <div style='margin-bottom: 16px;'>
+                                    <label style='display: flex; align-items: center; gap: 8px; cursor: pointer;'>
+                                        <input type='radio' name='poll1' value='cooking'>
+                                        <span>👨‍🍳 Cooking Class</span>
+                                    </label>
+                                </div>
+                                <button onclick='submitPoll()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;'>Submit Vote</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        function loadSuggestions() {
+            document.getElementById('pageTitle').textContent = 'Suggestion Box';
+            document.getElementById('pageSubtitle').textContent = 'Share your ideas and feedback';
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <section class='card' style='margin-bottom: 24px; padding: 24px;'>
+                        <h2>💡 Suggestion Box</h2>
+                        <div class='card' style='padding: 20px; margin-top: 24px;'>
+                            <h3>Submit a New Suggestion</h3>
+                            <div style='margin-top: 16px;'>
+                                <textarea id='suggestionText' placeholder='Share your ideas for improving our workplace...' class='form-input' style='width: 100%; height: 100px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; resize: vertical;'></textarea>
+                                <button onclick='submitSuggestion()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin-top: 12px;'>Submit Suggestion</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        function loadRecognition() {
+            document.getElementById('pageTitle').textContent = 'Recognition';
+            document.getElementById('pageSubtitle').textContent = 'Recognize and celebrate team achievements';
+            document.getElementById('contentArea').innerHTML = `
+                <div class='component-content'>
+                    <section class='card' style='margin-bottom: 24px; padding: 24px;'>
+                        <h2>🏆 Employee Recognition</h2>
+                        <div class='card' style='padding: 20px; margin-top: 24px;'>
+                            <h3>Give Recognition</h3>
+                            <div style='margin-top: 16px;'>
+                                <select id='employeeSelect' class='form-input' style='width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 12px;'>
+                                    <option>Select an employee...</option>
+                                    <option>Sarah Wilson</option>
+                                    <option>Michael Brown</option>
+                                    <option>Emily Davis</option>
+                                </select>
+                                <textarea id='recognitionText' placeholder='Describe their achievement...' class='form-input' style='width: 100%; height: 80px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; resize: vertical; margin-bottom: 12px;'></textarea>
+                                <button onclick='sendRecognition()' class='interactive-btn' style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;'>Send Recognition</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        // Additional Interactive Functions
+        function checkOut() {
+            const now = new Date();
+            const time = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            if (confirm('Are you sure you want to check out?')) {
+                showNotification('✅ Checked out at ' + time + '! Have a great day!', 'success');
+            }
+        }
+
+        function requestLeave() {
+            const leaveType = prompt('What type of leave would you like to request?\\n1. Annual Leave\\n2. Sick Leave\\n3. Personal Leave\\n\\nEnter 1, 2, or 3:');
+            if (leaveType) {
+                const types = {'1': 'Annual Leave', '2': 'Sick Leave', '3': 'Personal Leave'};
+                const selectedType = types[leaveType] || 'Leave';
+                showNotification('📝 ' + selectedType + ' request submitted for approval!', 'success');
+            }
+        }
+
+        function submitPoll() {
+            const selected = document.querySelector('input[name="poll1"]:checked');
+            if (selected) {
+                showNotification('🗳️ Vote submitted for: ' + selected.nextElementSibling.textContent, 'success');
+            } else {
+                showNotification('Please select an option before voting!', 'warning');
+            }
+        }
+
+        function submitSuggestion() {
+            const textarea = document.getElementById('suggestionText');
+            if (textarea && textarea.value.trim()) {
+                showNotification('💡 Suggestion submitted successfully! Management will review it soon.', 'success');
+                textarea.value = '';
+            } else {
+                showNotification('Please write your suggestion before submitting!', 'warning');
+            }
+        }
+
+        function sendRecognition() {
+            const employee = document.getElementById('employeeSelect');
+            const description = document.getElementById('recognitionText');
+
+            if (employee && employee.value !== 'Select an employee...') {
+                if (description && description.value.trim()) {
+                    showNotification('🏆 Recognition sent to ' + employee.value + '!', 'success');
+                    employee.selectedIndex = 0;
+                    description.value = '';
+                } else {
+                    showNotification('Please describe their achievement!', 'warning');
+                }
+            } else {
+                showNotification('Please select an employee to recognize!', 'warning');
+            }
+        }
+
+        // Enhanced Header Functions
+        function showNotifications() {
+            showNotification('🔔 You have 5 new notifications!', 'info');
+            setTimeout(() => {
+                showNotification('📅 Team meeting in 30 minutes', 'info');
+            }, 1000);
+            setTimeout(() => {
+                showNotification('💰 Payslip ready for download', 'info');
+            }, 2000);
+        }
+
+        function showSearch() {
+            const query = prompt('🔍 Search for employees, documents, or information:');
+            if (query) {
+                showNotification('🔍 Searching for "' + query + '"...', 'info');
+                setTimeout(() => {
+                    showNotification('Found 3 results for "' + query + '"', 'success');
+                }, 1500);
+            }
+        }
+
+        function showSettings() {
+            showNotification('⚙️ Settings menu opened!', 'info');
+            setTimeout(() => {
+                showNotification('6 settings categories available', 'info');
+            }, 1000);
+        }
+
+        // Initialize dashboard on load
+        window.onload = function() {
+            loadDashboard();
+        };
+    </script>
+</body>
+</html>

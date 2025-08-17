@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>📸 Photo Gallery</h1>
+            <p>Share memories and moments from company events and activities</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Upload Section -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>📤 Upload Photos</h2>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="albumSelect" class="form-label">Select Album</label>
+                    <select id="albumSelect" class="form-input">
+                        <option value="team-events">🎉 Team Events</option>
+                        <option value="office-life">🏢 Office Life</option>
+                        <option value="celebrations">🎊 Celebrations</option>
+                        <option value="training">📚 Training Sessions</option>
+                        <option value="outings">🌳 Company Outings</option>
+                        <option value="achievements">🏆 Achievements</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="photoTitle" class="form-label">Photo Title</label>
+                    <input type="text" id="photoTitle" class="form-input" placeholder="Enter a title for your photo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="photoDescription" class="form-label">Description</label>
+                    <textarea id="photoDescription" class="form-input" rows="2" placeholder="Add a description or caption"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="photoUpload" class="form-label">Select Photos</label>
+                    <input type="file" id="photoUpload" class="form-input" multiple accept="image/*">
+                    <p style="color: var(--gray-500); font-size: var(--font-size-sm); margin-top: var(--spacing-1);">
+                        You can select multiple photos. Supported formats: JPG, PNG, GIF
+                    </p>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">📸 Upload Photos</button>
+            </form>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap; align-items: end;">
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label for="searchPhotos" class="form-label">Search Photos</label>
+                    <input type="text" id="searchPhotos" class="form-input" placeholder="Search by title or description">
+                </div>
+                <div class="form-group">
+                    <label for="filterAlbum" class="form-label">Filter by Album</label>
+                    <select id="filterAlbum" class="form-input">
+                        <option value="">All Albums</option>
+                        <option value="team-events">🎉 Team Events</option>
+                        <option value="office-life">🏢 Office Life</option>
+                        <option value="celebrations">🎊 Celebrations</option>
+                        <option value="training">📚 Training Sessions</option>
+                        <option value="outings">🌳 Company Outings</option>
+                        <option value="achievements">🏆 Achievements</option>
+                    </select>
+                </div>
+                <button onclick="filterPhotos()" class="btn btn-primary">🔍 Filter</button>
+            </div>
+        </section>
+
+        <!-- Photo Gallery Grid -->
+        <div id="photoGallery" class="gallery-grid">
+            <!-- Photos will be loaded here -->
+        </div>
+    </main>
+
+    <!-- Photo Modal -->
+    <div id="photoModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90vw;">
+            <span class="close" onclick="closePhotoModal()">&times;</span>
+            <div id="photoModalContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample photo data
+        let photos = [
+            {
+                id: 1,
+                title: "Annual Company Picnic 2024",
+                description: "Great day out with the entire team at Central Park",
+                album: "team-events",
+                uploadedBy: "Jane Smith",
+                uploadDate: "2024-01-15",
+                likes: 24,
+                comments: 8,
+                thumbnail: "🏞️",
+                userLiked: false
+            },
+            {
+                id: 2,
+                title: "New Office Opening",
+                description: "Celebrating the opening of our new downtown office",
+                album: "office-life",
+                uploadedBy: "Mike Johnson",
+                uploadDate: "2024-01-12",
+                likes: 18,
+                comments: 5,
+                thumbnail: "🏢",
+                userLiked: true
+            },
+            {
+                id: 3,
+                title: "Employee of the Month Celebration",
+                description: "Congratulating John on his outstanding performance",
+                album: "celebrations",
+                uploadedBy: "HR Team",
+                uploadDate: "2024-01-10",
+                likes: 31,
+                comments: 12,
+                thumbnail: "🎉",
+                userLiked: false
+            },
+            {
+                id: 4,
+                title: "Team Building Workshop",
+                description: "Learning and growing together as a team",
+                album: "training",
+                uploadedBy: "Sarah Wilson",
+                uploadDate: "2024-01-08",
+                likes: 15,
+                comments: 6,
+                thumbnail: "👥",
+                userLiked: false
+            },
+            {
+                id: 5,
+                title: "Holiday Party 2023",
+                description: "End of year celebration with amazing food and music",
+                album: "celebrations",
+                uploadedBy: "Events Team",
+                uploadDate: "2023-12-20",
+                likes: 45,
+                comments: 20,
+                thumbnail: "🎊",
+                userLiked: true
+            },
+            {
+                id: 6,
+                title: "Hiking Trip",
+                description: "Weekend adventure with the outdoor enthusiasts group",
+                album: "outings",
+                uploadedBy: "David Brown",
+                uploadDate: "2024-01-05",
+                likes: 22,
+                comments: 9,
+                thumbnail: "🥾",
+                userLiked: false
+            },
+            {
+                id: 7,
+                title: "Product Launch Success",
+                description: "Celebrating the successful launch of our new product",
+                album: "achievements",
+                uploadedBy: "Product Team",
+                uploadDate: "2024-01-03",
+                likes: 38,
+                comments: 15,
+                thumbnail: "🚀",
+                userLiked: false
+            },
+            {
+                id: 8,
+                title: "Coffee Corner Moments",
+                description: "Casual conversations and connections over coffee",
+                album: "office-life",
+                uploadedBy: "Lisa Davis",
+                uploadDate: "2024-01-02",
+                likes: 12,
+                comments: 4,
+                thumbnail: "☕",
+                userLiked: false
+            }
+        ];
+
+        function getAlbumIcon(album) {
+            const icons = {
+                "team-events": "🎉",
+                "office-life": "🏢",
+                "celebrations": "🎊",
+                "training": "📚",
+                "outings": "🌳",
+                "achievements": "🏆"
+            };
+            return icons[album] || "📸";
+        }
+
+        function loadPhotos(photosToShow = photos) {
+            const gallery = document.getElementById('photoGallery');
+            
+            if (photosToShow.length === 0) {
+                gallery.innerHTML = '<div class="no-results" style="grid-column: 1 / -1;">No photos found.</div>';
+                return;
+            }
+            
+            const photoCards = photosToShow.map(photo => `
+                <div class="gallery-item animate-fade-in" onclick="openPhotoModal(${photo.id})">
+                    <div style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--gray-100), var(--gray-200));">
+                        <div style="font-size: 4rem; margin-bottom: var(--spacing-2);">${photo.thumbnail}</div>
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; padding: var(--spacing-3); text-align: center;">
+                            <h4 style="font-size: var(--font-size-sm); margin-bottom: var(--spacing-1);">${photo.title}</h4>
+                            <div style="display: flex; justify-content: center; gap: var(--spacing-3); font-size: var(--font-size-xs);">
+                                <span>👍 ${photo.likes}</span>
+                                <span>💬 ${photo.comments}</span>
+                            </div>
+                        </div>
+                        <div style="position: absolute; top: var(--spacing-2); right: var(--spacing-2); background: rgba(0,0,0,0.7); color: white; padding: var(--spacing-1) var(--spacing-2); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+                            ${getAlbumIcon(photo.album)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            gallery.innerHTML = photoCards;
+        }
+
+        function filterPhotos() {
+            const searchTerm = document.getElementById('searchPhotos').value.toLowerCase();
+            const album = document.getElementById('filterAlbum').value;
+            
+            let filtered = photos;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(photo => 
+                    photo.title.toLowerCase().includes(searchTerm) ||
+                    photo.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (album) {
+                filtered = filtered.filter(photo => photo.album === album);
+            }
+            
+            // Sort by upload date (newest first)
+            filtered.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            
+            loadPhotos(filtered);
+        }
+
+        function openPhotoModal(photoId) {
+            const photo = photos.find(p => p.id === photoId);
+            const modal = document.getElementById('photoModal');
+            const content = document.getElementById('photoModalContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 15rem; margin-bottom: var(--spacing-4);">${photo.thumbnail}</div>
+                    <h2 style="margin-bottom: var(--spacing-2);">${photo.title}</h2>
+                    <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">${photo.description}</p>
+                    
+                    <div style="display: flex; justify-content: center; gap: var(--spacing-6); margin-bottom: var(--spacing-6); color: var(--gray-500);">
+                        <span>📅 ${new Date(photo.uploadDate).toLocaleDateString()}</span>
+                        <span>👤 ${photo.uploadedBy}</span>
+                        <span>${getAlbumIcon(photo.album)} ${photo.album.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; gap: var(--spacing-4);">
+                        <button class="btn ${photo.userLiked ? 'btn-primary' : 'btn-secondary'}" onclick="likePhoto(${photo.id})">
+                            👍 ${photo.likes} ${photo.userLiked ? '(Liked)' : ''}
+                        </button>
+                        <button class="btn btn-secondary" onclick="commentPhoto(${photo.id})">
+                            💬 ${photo.comments} Comments
+                        </button>
+                        <button class="btn btn-secondary" onclick="sharePhoto(${photo.id})">
+                            📤 Share
+                        </button>
+                        <button class="btn btn-secondary" onclick="downloadPhoto(${photo.id})">
+                            📥 Download
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closePhotoModal() {
+            document.getElementById('photoModal').style.display = 'none';
+        }
+
+        function likePhoto(photoId) {
+            const photo = photos.find(p => p.id === photoId);
+            if (photo) {
+                if (photo.userLiked) {
+                    photo.likes--;
+                    photo.userLiked = false;
+                } else {
+                    photo.likes++;
+                    photo.userLiked = true;
+                }
+                loadPhotos();
+                // Update modal if open
+                if (document.getElementById('photoModal').style.display === 'block') {
+                    openPhotoModal(photoId);
+                }
+            }
+        }
+
+        function commentPhoto(photoId) {
+            alert(`Opening comments for photo ${photoId}...`);
+        }
+
+        function sharePhoto(photoId) {
+            alert(`Sharing photo ${photoId}...`);
+        }
+
+        function downloadPhoto(photoId) {
+            alert(`Downloading photo ${photoId}...`);
+        }
+
+        // Handle upload form submission
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const album = document.getElementById('albumSelect').value;
+            const title = document.getElementById('photoTitle').value || 'Untitled Photo';
+            const description = document.getElementById('photoDescription').value || 'No description';
+            const files = document.getElementById('photoUpload').files;
+            
+            if (files.length === 0) {
+                alert('Please select at least one photo to upload.');
+                return;
+            }
+            
+            // Simulate upload for each file
+            for (let i = 0; i < files.length; i++) {
+                const newPhoto = {
+                    id: photos.length + i + 1,
+                    title: files.length > 1 ? `${title} (${i + 1})` : title,
+                    description: description,
+                    album: album,
+                    uploadedBy: "Current User",
+                    uploadDate: new Date().toISOString().split('T')[0],
+                    likes: 0,
+                    comments: 0,
+                    thumbnail: "📷",
+                    userLiked: false
+                };
+                
+                photos.unshift(newPhoto);
+            }
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success';
+            alertDiv.textContent = `${files.length} photo(s) uploaded successfully!`;
+            this.parentNode.insertBefore(alertDiv, this);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+            
+            this.reset();
+            loadPhotos();
+        });
+
+        // Load photos on page load
+        window.addEventListener('load', () => {
+            loadPhotos();
+        });
+
+        // Add search functionality
+        document.getElementById('searchPhotos').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterPhotos();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('photoModal');
+            if (e.target === modal) {
+                closePhotoModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS Social Connect - Dashboard</title>
+    <link rel="stylesheet" href="main-dashboard.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">🏢</span>
+                    <h1>HRMS Connect</h1>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar (Ctrl+B)">
+                    <span class="toggle-icon">☰</span>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Core HR</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item active" onclick="console.log('Loading dashboard...'); try { loadDashboardContent(); } catch(e) { location.reload(); }">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-text">Dashboard</span>
+                        </li>
+
+                        <li class="nav-item" onclick="document.getElementById('contentArea').innerHTML = `
+                        <div class='component-content'>
+                            <section class='card' style='margin-bottom: 24px;'>
+                                <h2>💰 Payroll Management</h2>
+                                <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;'>
+                                    <div class='card' style='padding: 24px;'>
+                                        <h3>Current Payroll Period</h3>
+                                        <div style='margin-top: 16px;'>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                                <span>Period:</span>
+                                                <strong>July 1-31, 2024</strong>
+                                            </div>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                                <span>Status:</span>
+                                                <span style='background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;'>Active</span>
+                                            </div>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                                <span>Pay Date:</span>
+                                                <strong>August 5, 2024</strong>
+                                            </div>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 16px;'>
+                                                <span>Total Employees:</span>
+                                                <strong>156</strong>
+                                            </div>
+                                            <button style='background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%;'>Process Payroll</button>
+                                        </div>
+                                    </div>
+                                    <div class='card' style='padding: 24px;'>
+                                        <h3>Your Payroll Summary</h3>
+                                        <div style='margin-top: 16px;'>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                                <span>Gross Salary:</span>
+                                                <strong>$8,500.00</strong>
+                                            </div>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                                <span>Tax Deductions:</span>
+                                                <span style='color: #ef4444;'>-$1,700.00</span>
+                                            </div>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 8px;'>
+                                                <span>Benefits:</span>
+                                                <span style='color: #ef4444;'>-$450.00</span>
+                                            </div>
+                                            <div style='display: flex; justify-content: space-between; margin-bottom: 16px; padding-top: 8px; border-top: 1px solid #e5e7eb;'>
+                                                <span><strong>Net Pay:</strong></span>
+                                                <strong style='color: #10b981;'>$6,350.00</strong>
+                                            </div>
+                                            <button style='background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; width: 100%;'>Download Payslip</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='card' style='margin-top: 24px; padding: 24px;'>
+                                    <h3>Employee Payroll List</h3>
+                                    <div style='overflow-x: auto; margin-top: 16px;'>
+                                        <table style='width: 100%; border-collapse: collapse;'>
+                                            <thead>
+                                                <tr style='background: #f9fafb;'>
+                                                    <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Employee</th>
+                                                    <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Department</th>
+                                                    <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Gross Salary</th>
+                                                    <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Net Pay</th>
+                                                    <th style='padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb;'>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                                        <div style='display: flex; align-items: center; gap: 8px;'>
+                                                            <img src='https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=32' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                            <span>Sarah Wilson</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>HR</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>$9,200.00</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>$6,850.00</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                                        <span style='background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;'>Processed</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                                        <div style='display: flex; align-items: center; gap: 8px;'>
+                                                            <img src='https://ui-avatars.com/api/?name=Michael+Brown&background=6366f1&color=fff&size=32' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                            <span>Michael Brown</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>Engineering</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>$11,500.00</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>$8,200.00</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                                        <span style='background: #f59e0b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;'>Pending</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                                        <div style='display: flex; align-items: center; gap: 8px;'>
+                                                            <img src='https://ui-avatars.com/api/?name=Emily+Davis&background=6366f1&color=fff&size=32' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                            <span>Emily Davis</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>Marketing</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>$7,800.00</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>$5,950.00</td>
+                                                    <td style='padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                                        <span style='background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;'>Processed</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>`">
+                            <span class="nav-icon">💰</span>
+                            <span class="nav-text">Payroll Management</span>
+                        </li>
+                        <li class="nav-item" onclick="console.log('Loading attendance...'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:orange;color:white;text-align:center;font-size:24px;&quot;>ATTENDANCE & LEAVE COMPONENT</div>';">
+                            <span class="nav-icon">⏰</span>
+                            <span class="nav-text">Attendance & Leave</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Communication</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item" onclick="document.getElementById('contentArea').innerHTML = `
+                        <div class='component-content'>
+                            <section class='card' style='margin-bottom: 24px;'>
+                                <h2>💬 Chat & Messaging</h2>
+                                <div class='chat-container' style='display: grid; grid-template-columns: minmax(250px, 300px) 1fr; gap: 16px; height: 500px; margin-top: 16px;'>
+                                    <!-- Chat List -->
+                                    <div style='border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; min-width: 0;'>
+                                        <div style='background: #f9fafb; padding: 12px; border-bottom: 1px solid #e5e7eb;'>
+                                            <h4 style='margin: 0; font-size: 1rem;'>Recent Chats</h4>
+                                        </div>
+                                        <div id='chatList' style='overflow-y: auto; height: calc(100% - 60px);'>
+                                            <div class='chat-item' style='padding: 12px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px; cursor: pointer;'>
+                                                <div style='position: relative;'>
+                                                    <img src='https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                                    <div style='position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #10b981; border: 2px solid white;'></div>
+                                                </div>
+                                                <div style='flex: 1; min-width: 0;'>
+                                                    <h5 style='margin: 0; font-size: 0.9rem;'>Sarah Wilson</h5>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>Let me know if you need anything else!</p>
+                                                </div>
+                                                <div style='display: flex; flex-direction: column; align-items: flex-end;'>
+                                                    <span style='font-size: 0.7rem; color: #6b7280;'>10:45 AM</span>
+                                                    <span style='background: #6366f1; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; margin-top: 4px;'>2</span>
+                                                </div>
+                                            </div>
+                                            <div class='chat-item' style='padding: 12px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px; cursor: pointer;'>
+                                                <div style='position: relative;'>
+                                                    <img src='https://ui-avatars.com/api/?name=Michael+Brown&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                                    <div style='position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #6b7280; border: 2px solid white;'></div>
+                                                </div>
+                                                <div style='flex: 1; min-width: 0;'>
+                                                    <h5 style='margin: 0; font-size: 0.9rem;'>Michael Brown</h5>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>I'll send the report by EOD</p>
+                                                </div>
+                                                <div style='display: flex; flex-direction: column; align-items: flex-end;'>
+                                                    <span style='font-size: 0.7rem; color: #6b7280;'>Yesterday</span>
+                                                </div>
+                                            </div>
+                                            <div class='chat-item' style='padding: 12px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; gap: 12px; cursor: pointer;'>
+                                                <div style='position: relative;'>
+                                                    <img src='https://ui-avatars.com/api/?name=Emily+Davis&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                                    <div style='position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; border: 2px solid white;'></div>
+                                                </div>
+                                                <div style='flex: 1; min-width: 0;'>
+                                                    <h5 style='margin: 0; font-size: 0.9rem;'>Emily Davis</h5>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>Thanks for your help with the project!</p>
+                                                </div>
+                                                <div style='display: flex; flex-direction: column; align-items: flex-end;'>
+                                                    <span style='font-size: 0.7rem; color: #6b7280;'>Yesterday</span>
+                                                    <span style='background: #6366f1; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; margin-top: 4px;'>1</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chat Window -->
+                                    <div style='border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0;'>
+                                        <div id='chatHeader' style='background: #f9fafb; padding: 12px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; flex: 1;'>
+                                                <div style='position: relative;'>
+                                                    <img src='https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                                    <div style='position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; background: #10b981; border: 2px solid white;'></div>
+                                                </div>
+                                                <div style='flex: 1; min-width: 0;'>
+                                                    <h4 style='margin: 0; font-size: 1.1rem; font-weight: 600;'>Sarah Wilson</h4>
+                                                    <p style='margin: 2px 0 0 0; font-size: 0.85rem; color: #4b5563;'>HR Manager • Human Resources</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id='chatMessages' style='flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #f9fafb;'>
+                                            <div class='message-group' style='display: flex; flex-direction: column; gap: 4px; align-self: flex-start; max-width: 80%;'>
+                                                <div class='message' style='background: white; padding: 12px; border-radius: 16px; border-top-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                                    <p style='margin: 0; font-size: 0.9rem;'>Hi John! I wanted to follow up on the Q4 performance review process.</p>
+                                                </div>
+                                                <div class='message' style='background: white; padding: 12px; border-radius: 16px; border-top-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                                    <p style='margin: 0; font-size: 0.9rem;'>Could you please submit your self-assessment by Friday?</p>
+                                                </div>
+                                                <span style='font-size: 0.7rem; color: #6b7280; margin-left: 8px;'>10:30 AM</span>
+                                            </div>
+                                            <div class='message-group' style='display: flex; flex-direction: column; gap: 4px; align-self: flex-end; max-width: 80%;'>
+                                                <div class='message' style='background: #6366f1; color: white; padding: 12px; border-radius: 16px; border-top-right-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                                    <p style='margin: 0; font-size: 0.9rem;'>Hi Sarah! Thanks for the reminder.</p>
+                                                </div>
+                                                <div class='message' style='background: #6366f1; color: white; padding: 12px; border-radius: 16px; border-top-right-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                                    <p style='margin: 0; font-size: 0.9rem;'>I'll complete it by tomorrow. Is there a specific template I should use?</p>
+                                                </div>
+                                                <span style='font-size: 0.7rem; color: #6b7280; margin-right: 8px; align-self: flex-end;'>10:32 AM</span>
+                                            </div>
+                                            <div class='message-group' style='display: flex; flex-direction: column; gap: 4px; align-self: flex-start; max-width: 80%;'>
+                                                <div class='message' style='background: white; padding: 12px; border-radius: 16px; border-top-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                                    <p style='margin: 0; font-size: 0.9rem;'>Yes, I'll send you the template right away. Check your email in a few minutes.</p>
+                                                </div>
+                                                <div class='message' style='background: white; padding: 12px; border-radius: 16px; border-top-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'>
+                                                    <p style='margin: 0; font-size: 0.9rem;'>Let me know if you need anything else!</p>
+                                                </div>
+                                                <span style='font-size: 0.7rem; color: #6b7280; margin-left: 8px;'>10:45 AM</span>
+                                            </div>
+                                        </div>
+                                        <div style='padding: 16px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px;'>
+                                            <input id='messageInput' type='text' placeholder='Type a message...' style='flex: 1; padding: 10px 16px; border-radius: 24px; border: 1px solid #e5e7eb; outline: none;'>
+                                            <button id='sendBtn' style='background: #6366f1; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;'>
+                                                <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+                                                    <line x1='22' y1='2' x2='11' y2='13'></line>
+                                                    <polygon points='22 2 15 22 11 13 2 9 22 2'></polygon>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>`">
+                            <span class="nav-icon">💬</span>
+                            <span class="nav-text">Chat & Messaging</span>
+                            <span class="nav-badge">3</span>
+                        </li>
+                        <li class="nav-item" onclick="document.getElementById('contentArea').innerHTML = `
+                        <div class='component-content'>
+                            <section class='card' style='margin-bottom: 24px;'>
+                                <h2>📱 Social Feed</h2>
+                                <div style='display: grid; grid-template-columns: 1fr 300px; gap: 24px; margin-top: 24px;'>
+                                    <div>
+                                        <!-- New Post -->
+                                        <div class='card' style='padding: 24px; margin-bottom: 24px;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 16px;'>
+                                                <img src='https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff&size=40' style='width: 40px; height: 40px; border-radius: 50%;'>
+                                                <input type='text' placeholder='What\\'s on your mind, John?' style='flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid #e5e7eb; outline: none;'>
+                                            </div>
+                                            <div style='display: flex; gap: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;'>
+                                                <button style='background: none; border: none; color: #6366f1; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>📷</span> Photo
+                                                </button>
+                                                <button style='background: none; border: none; color: #6366f1; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>🎥</span> Video
+                                                </button>
+                                                <button style='background: none; border: none; color: #6366f1; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>📊</span> Poll
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Posts -->
+                                        <div class='card' style='padding: 24px; margin-bottom: 24px;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 16px;'>
+                                                <img src='https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=50' style='width: 50px; height: 50px; border-radius: 50%;'>
+                                                <div>
+                                                    <h4 style='margin: 0; font-size: 1rem;'>Sarah Wilson</h4>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;'>HR Manager • 2 hours ago</p>
+                                                </div>
+                                            </div>
+                                            <p style='margin-bottom: 16px; line-height: 1.6;'>🎉 Excited to announce our Q3 team building event! We\\'ll be having a fun day at the local adventure park next Friday. Looking forward to seeing everyone there! #TeamBuilding #CompanyCulture</p>
+                                            <img src='https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500&h=300&fit=crop' style='width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 16px;'>
+                                            <div style='display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;'>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>👍</span> 24 Likes
+                                                </button>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>💬</span> 8 Comments
+                                                </button>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>🔄</span> Share
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class='card' style='padding: 24px; margin-bottom: 24px;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 16px;'>
+                                                <img src='https://ui-avatars.com/api/?name=Michael+Brown&background=6366f1&color=fff&size=50' style='width: 50px; height: 50px; border-radius: 50%;'>
+                                                <div>
+                                                    <h4 style='margin: 0; font-size: 1rem;'>Michael Brown</h4>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;'>Senior Developer • 4 hours ago</p>
+                                                </div>
+                                            </div>
+                                            <p style='margin-bottom: 16px; line-height: 1.6;'>Just finished implementing the new user authentication system! 🚀 The team worked incredibly hard on this feature. Special thanks to Emily and David for their amazing contributions. #Development #Teamwork</p>
+                                            <div style='display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;'>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>👍</span> 18 Likes
+                                                </button>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>💬</span> 5 Comments
+                                                </button>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>🔄</span> Share
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class='card' style='padding: 24px; margin-bottom: 24px;'>
+                                            <div style='display: flex; align-items: center; gap: 12px; margin-bottom: 16px;'>
+                                                <img src='https://ui-avatars.com/api/?name=Emily+Davis&background=6366f1&color=fff&size=50' style='width: 50px; height: 50px; border-radius: 50%;'>
+                                                <div>
+                                                    <h4 style='margin: 0; font-size: 1rem;'>Emily Davis</h4>
+                                                    <p style='margin: 4px 0 0 0; font-size: 0.8rem; color: #6b7280;'>Marketing Specialist • 6 hours ago</p>
+                                                </div>
+                                            </div>
+                                            <p style='margin-bottom: 16px; line-height: 1.6;'>📈 Our latest marketing campaign exceeded expectations! We achieved a 150% increase in engagement compared to last quarter. Proud of what we\\'ve accomplished as a team! #Marketing #Success</p>
+                                            <div style='display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;'>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>👍</span> 32 Likes
+                                                </button>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>💬</span> 12 Comments
+                                                </button>
+                                                <button style='background: none; border: none; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 8px;'>
+                                                    <span>🔄</span> Share
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sidebar -->
+                                    <div>
+                                        <div class='card' style='padding: 20px; margin-bottom: 24px;'>
+                                            <h3 style='margin-bottom: 16px;'>Trending Topics</h3>
+                                            <div style='display: flex; flex-direction: column; gap: 8px;'>
+                                                <span style='background: #f3f4f6; padding: 8px 12px; border-radius: 16px; font-size: 0.9rem;'>#TeamBuilding</span>
+                                                <span style='background: #f3f4f6; padding: 8px 12px; border-radius: 16px; font-size: 0.9rem;'>#Development</span>
+                                                <span style='background: #f3f4f6; padding: 8px 12px; border-radius: 16px; font-size: 0.9rem;'>#Marketing</span>
+                                                <span style='background: #f3f4f6; padding: 8px 12px; border-radius: 16px; font-size: 0.9rem;'>#Success</span>
+                                            </div>
+                                        </div>
+
+                                        <div class='card' style='padding: 20px;'>
+                                            <h3 style='margin-bottom: 16px;'>Active Users</h3>
+                                            <div style='display: flex; flex-direction: column; gap: 12px;'>
+                                                <div style='display: flex; align-items: center; gap: 8px;'>
+                                                    <div style='position: relative;'>
+                                                        <img src='https://ui-avatars.com/api/?name=Sarah+Wilson&background=6366f1&color=fff&size=32' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                        <div style='position: absolute; bottom: 0; right: 0; width: 8px; height: 8px; border-radius: 50%; background: #10b981; border: 2px solid white;'></div>
+                                                    </div>
+                                                    <span style='font-size: 0.9rem;'>Sarah Wilson</span>
+                                                </div>
+                                                <div style='display: flex; align-items: center; gap: 8px;'>
+                                                    <div style='position: relative;'>
+                                                        <img src='https://ui-avatars.com/api/?name=Michael+Brown&background=6366f1&color=fff&size=32' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                        <div style='position: absolute; bottom: 0; right: 0; width: 8px; height: 8px; border-radius: 50%; background: #10b981; border: 2px solid white;'></div>
+                                                    </div>
+                                                    <span style='font-size: 0.9rem;'>Michael Brown</span>
+                                                </div>
+                                                <div style='display: flex; align-items: center; gap: 8px;'>
+                                                    <div style='position: relative;'>
+                                                        <img src='https://ui-avatars.com/api/?name=Emily+Davis&background=6366f1&color=fff&size=32' style='width: 32px; height: 32px; border-radius: 50%;'>
+                                                        <div style='position: absolute; bottom: 0; right: 0; width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; border: 2px solid white;'></div>
+                                                    </div>
+                                                    <span style='font-size: 0.9rem;'>Emily Davis</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>`">
+                            <span class="nav-icon">📱</span>
+                            <span class="nav-text">Social Feed</span>
+                        </li>
+                        <li class="nav-item" onclick="console.log('Announcements clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:red;color:white;text-align:center;font-size:24px;&quot;>ANNOUNCEMENTS COMPONENT</div>';">
+                            <span class="nav-icon">📢</span>
+                            <span class="nav-text">Announcements</span>
+                            <span class="nav-badge">2</span>
+                        </li>
+                        <li class="nav-item" onclick="console.log('Events clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:navy;color:white;text-align:center;font-size:24px;&quot;>EVENTS CALENDAR</div>';">
+                            <span class="nav-icon">📅</span>
+                            <span class="nav-text">Events Calendar</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="nav-section">
+                    <h3 class="nav-section-title">Engagement</h3>
+                    <ul class="nav-list">
+                        <li class="nav-item" onclick="console.log('Polls clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:indigo;color:white;text-align:center;font-size:24px;&quot;>POLLS & SURVEYS</div>';">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Polls & Surveys</span>
+                        </li>
+                        <li class="nav-item" onclick="console.log('Suggestions clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:pink;color:black;text-align:center;font-size:24px;&quot;>SUGGESTION BOX</div>';">
+                            <span class="nav-icon">💡</span>
+                            <span class="nav-text">Suggestion Box</span>
+                        </li>
+                        <li class="nav-item" onclick="console.log('Recognition clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:gold;color:black;text-align:center;font-size:24px;&quot;>RECOGNITION SYSTEM</div>';">
+                            <span class="nav-icon">🏆</span>
+                            <span class="nav-text">Recognition</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User" class="user-avatar">
+                    <div class="user-info">
+                        <span class="user-name">John Doe</span>
+                        <span class="user-role">Software Engineer</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <span class="logout-icon">🚪</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageSubtitle">Welcome back, John! Here's what's happening today.</p>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="action-btn" onclick="showNotifications()">
+                            <span class="action-icon">🔔</span>
+                            <span class="action-badge">5</span>
+                        </button>
+                        <button class="action-btn" onclick="showSearch()">
+                            <span class="action-icon">🔍</span>
+                        </button>
+                        <button class="action-btn" onclick="showSettings()">
+                            <span class="action-icon">⚙️</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-area" id="contentArea">
+                <!-- Default Dashboard Content -->
+                <div class="dashboard-overview">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-content">
+                                <h3>127</h3>
+                                <p>Total Employees</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💬</div>
+                            <div class="stat-content">
+                                <h3>24</h3>
+                                <p>Active Chats</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <div class="stat-content">
+                                <h3>47</h3>
+                                <p>Recognitions</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-content">
+                                <h3>8</h3>
+                                <p>Upcoming Events</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-widgets">
+                        <div class="widget">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=32&h=32&fit=crop&crop=face" alt="User" class="activity-avatar">
+                                    <div class="activity-content">
+                                        <p><strong>Sarah Wilson</strong> received recognition</p>
+                                        <span class="activity-time">2 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=32&h=32&fit=crop&crop=face" alt="User" class="activity-avatar">
+                                    <div class="activity-content">
+                                        <p><strong>Mike Johnson</strong> posted in social feed</p>
+                                        <span class="activity-time">5 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=32&h=32&fit=crop&crop=face" alt="User" class="activity-avatar">
+                                    <div class="activity-content">
+                                        <p><strong>Jane Smith</strong> created new poll</p>
+                                        <span class="activity-time">10 minutes ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="widget">
+                            <h3>Quick Actions</h3>
+                            <div class="quick-actions">
+                                <button class="quick-action" onclick="console.log('Add Employee clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:teal;color:white;text-align:center;font-size:24px;&quot;>ADD EMPLOYEE FORM</div>';">
+                                    <span class="action-icon">➕</span>
+                                    <span>Add Employee</span>
+                                </button>
+                                <button class="quick-action" onclick="console.log('Start Chat clicked'); try { document.getElementById('contentArea').innerHTML = getChatContent(); initializeChat(); } catch(e) { document.getElementById('contentArea').innerHTML = '<div style=&quot;padding:40px;background:green;color:white;text-align:center;&quot;>Chat Loading...</div>'; }">
+                                    <span class="action-icon">💬</span>
+                                    <span>Start Chat</span>
+                                </button>
+                                <button class="quick-action" onclick="console.log('Recognition clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:gold;color:black;text-align:center;font-size:24px;&quot;>RECOGNITION SYSTEM</div>';">
+                                    <span class="action-icon">🏆</span>
+                                    <span>Give Recognition</span>
+                                </button>
+                                <button class="quick-action" onclick="console.log('Announcements clicked'); document.getElementById('contentArea').innerHTML='<div style=&quot;padding:40px;background:red;color:white;text-align:center;font-size:24px;&quot;>ANNOUNCEMENTS</div>';">
+                                    <span class="action-icon">📢</span>
+                                    <span>New Announcement</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+    
+    <script src="main-dashboard.js"></script>
+</body>
+</html>

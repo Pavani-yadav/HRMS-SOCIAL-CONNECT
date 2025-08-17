@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance & Leave - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+</head>
+<body>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Attendance Status Header -->
+        <section class="card" style="margin-bottom: var(--spacing-6); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <div style="text-align: center;">
+                <h2 style="color: white; margin-bottom: var(--spacing-4);">📅 Attendance & Leave Management</h2>
+                <div id="currentTime" style="font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-2);">
+                    Loading...
+                </div>
+                <div id="currentDate" style="font-size: 1.2rem; opacity: 0.9; margin-bottom: var(--spacing-4);">
+                    Loading...
+                </div>
+                <div style="display: flex; gap: var(--spacing-4); justify-content: center; flex-wrap: wrap;">
+                    <button id="checkInBtn" class="btn btn-success" onclick="checkIn()" style="background: #10b981; border: none;">
+                        <span>🟢</span> Check In
+                    </button>
+                    <button id="checkOutBtn" class="btn btn-danger" onclick="checkOut()" style="background: #ef4444; border: none;" disabled>
+                        <span>🔴</span> Check Out
+                    </button>
+                    <button class="btn btn-secondary" onclick="requestLeave()" style="background: #f59e0b; border: none;">
+                        <span>🏖️</span> Request Leave
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Summary -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>📊 Today's Summary</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                <div class="summary-item">
+                    <div class="summary-icon">🕐</div>
+                    <div class="summary-content">
+                        <h3 id="checkInTime">--:--</h3>
+                        <p>Check In Time</p>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">🕕</div>
+                    <div class="summary-content">
+                        <h3 id="checkOutTime">--:--</h3>
+                        <p>Check Out Time</p>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">⏱️</div>
+                    <div class="summary-content">
+                        <h3 id="totalHours">0h 0m</h3>
+                        <p>Total Hours</p>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">🏖️</div>
+                    <div class="summary-content">
+                        <h3 id="leaveBalance">15</h3>
+                        <p>Leave Balance</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leave Request Form -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>🏖️ Request Leave</h2>
+            <form id="leaveRequestForm" style="margin-top: var(--spacing-4);">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-4);">
+                    <div class="form-group">
+                        <label for="leaveType" class="form-label">Leave Type</label>
+                        <select id="leaveType" class="form-input" required>
+                            <option value="">Select leave type</option>
+                            <option value="annual">🏖️ Annual Leave</option>
+                            <option value="sick">🤒 Sick Leave</option>
+                            <option value="personal">👤 Personal Leave</option>
+                            <option value="emergency">🚨 Emergency Leave</option>
+                            <option value="maternity">👶 Maternity Leave</option>
+                            <option value="paternity">👨‍👶 Paternity Leave</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" id="endDate" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalDays" class="form-label">Total Days</label>
+                        <input type="number" id="totalDays" class="form-input" readonly>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: var(--spacing-4);">
+                    <label for="leaveReason" class="form-label">Reason</label>
+                    <textarea id="leaveReason" class="form-input" rows="3" placeholder="Please provide reason for leave request" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: var(--spacing-4);">
+                    📤 Submit Leave Request
+                </button>
+            </form>
+        </section>
+
+        <!-- Recent Attendance -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>📋 Recent Attendance</h2>
+            <div id="recentAttendance" style="margin-top: var(--spacing-4);">
+                <!-- Recent attendance records will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Leave Requests Status -->
+        <section class="card">
+            <h2>📝 My Leave Requests</h2>
+            <div id="leaveRequests" style="margin-top: var(--spacing-4);">
+                <!-- Leave requests will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global state
+        let attendanceState = {
+            isCheckedIn: false,
+            checkInTime: null,
+            checkOutTime: null,
+            totalHours: 0
+        };
+
+        let leaveBalance = 15; // Annual leave balance
+
+        // Update current time and date
+        function updateDateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            document.getElementById('currentTime').textContent = timeString;
+            document.getElementById('currentDate').textContent = dateString;
+        }
+
+        // Load saved attendance state
+        function loadAttendanceState() {
+            const saved = localStorage.getItem('attendanceState');
+            if (saved) {
+                attendanceState = { ...attendanceState, ...JSON.parse(saved) };
+                updateUI();
+            }
+        }
+
+        // Save attendance state
+        function saveAttendanceState() {
+            localStorage.setItem('attendanceState', JSON.stringify(attendanceState));
+        }
+
+        // Check In function
+        function checkIn() {
+            const now = new Date();
+            attendanceState.isCheckedIn = true;
+            attendanceState.checkInTime = now.toISOString();
+            attendanceState.checkOutTime = null;
+
+            saveAttendanceState();
+            updateUI();
+
+            showNotification('✅ Checked in successfully!', 'success');
+            logActivity('check-in', now);
+        }
+
+        // Check Out function
+        function checkOut() {
+            const now = new Date();
+            attendanceState.isCheckedIn = false;
+            attendanceState.checkOutTime = now.toISOString();
+
+            saveAttendanceState();
+            updateUI();
+
+            showNotification('✅ Checked out successfully!', 'success');
+            logActivity('check-out', now);
+        }
+
+        // Update UI based on current state
+        function updateUI() {
+            const checkInBtn = document.getElementById('checkInBtn');
+            const checkOutBtn = document.getElementById('checkOutBtn');
+
+            if (attendanceState.isCheckedIn) {
+                checkInBtn.disabled = true;
+                checkOutBtn.disabled = false;
+            } else {
+                checkInBtn.disabled = false;
+                checkOutBtn.disabled = true;
+            }
+
+            updateSummary();
+        }
+
+        // Update today's summary
+        function updateSummary() {
+            const checkInTimeEl = document.getElementById('checkInTime');
+            const checkOutTimeEl = document.getElementById('checkOutTime');
+            const totalHoursEl = document.getElementById('totalHours');
+            const leaveBalanceEl = document.getElementById('leaveBalance');
+
+            // Check in time
+            if (attendanceState.checkInTime) {
+                const checkIn = new Date(attendanceState.checkInTime);
+                checkInTimeEl.textContent = checkIn.toLocaleTimeString('en-US', {
+                    hour12: true,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                checkInTimeEl.textContent = '--:--';
+            }
+
+            // Check out time
+            if (attendanceState.checkOutTime) {
+                const checkOut = new Date(attendanceState.checkOutTime);
+                checkOutTimeEl.textContent = checkOut.toLocaleTimeString('en-US', {
+                    hour12: true,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                checkOutTimeEl.textContent = '--:--';
+            }
+
+            // Total hours
+            if (attendanceState.checkInTime) {
+                const checkIn = new Date(attendanceState.checkInTime);
+                const checkOut = attendanceState.checkOutTime ?
+                    new Date(attendanceState.checkOutTime) : new Date();
+
+                const totalMs = checkOut - checkIn;
+                const totalHours = Math.floor(totalMs / (1000 * 60 * 60));
+                const totalMinutes = Math.floor((totalMs % (1000 * 60 * 60)) / (1000 * 60));
+
+                totalHoursEl.textContent = `${totalHours}h ${totalMinutes}m`;
+            } else {
+                totalHoursEl.textContent = '0h 0m';
+            }
+
+            // Leave balance
+            leaveBalanceEl.textContent = leaveBalance;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Log activity
+        function logActivity(type, timestamp) {
+            const activities = JSON.parse(localStorage.getItem('attendanceActivities') || '[]');
+            activities.unshift({
+                type,
+                timestamp: timestamp.toISOString(),
+                date: timestamp.toDateString()
+            });
+
+            // Keep only last 50 activities
+            if (activities.length > 50) {
+                activities.splice(50);
+            }
+
+            localStorage.setItem('attendanceActivities', JSON.stringify(activities));
+            loadRecentAttendance();
+        }
+
+        // Load recent attendance
+        function loadRecentAttendance() {
+            const activities = JSON.parse(localStorage.getItem('attendanceActivities') || '[]');
+            const container = document.getElementById('recentAttendance');
+
+            if (activities.length === 0) {
+                container.innerHTML = '<p style="color: var(--gray-600); text-align: center;">No recent attendance records</p>';
+                return;
+            }
+
+            const recentActivities = activities.slice(0, 10);
+            const html = recentActivities.map(activity => {
+                const date = new Date(activity.timestamp);
+                const timeString = date.toLocaleTimeString('en-US', {
+                    hour12: true,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                const dateString = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                const icons = {
+                    'check-in': '🟢',
+                    'check-out': '🔴',
+                    'leave-request': '🏖️'
+                };
+
+                const labels = {
+                    'check-in': 'Checked In',
+                    'check-out': 'Checked Out',
+                    'leave-request': 'Leave Request Submitted'
+                };
+
+                return `
+                    <div class="activity-item" style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3); border-bottom: 1px solid var(--gray-200);">
+                        <span style="font-size: 1.5rem;">${icons[activity.type]}</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">${labels[activity.type]}</div>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-600);">${dateString} at ${timeString}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        // Load leave requests
+        function loadLeaveRequests() {
+            const requests = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+            const container = document.getElementById('leaveRequests');
+
+            if (requests.length === 0) {
+                container.innerHTML = '<p style="color: var(--gray-600); text-align: center;">No leave requests found</p>';
+                return;
+            }
+
+            const html = requests.map(request => {
+                const statusColors = {
+                    pending: '#f59e0b',
+                    approved: '#10b981',
+                    rejected: '#ef4444'
+                };
+
+                const statusIcons = {
+                    pending: '⏳',
+                    approved: '✅',
+                    rejected: '❌'
+                };
+
+                return `
+                    <div class="leave-request-item" style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-4); border: 1px solid var(--gray-200); border-radius: 8px; margin-bottom: var(--spacing-3);">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-2); margin-bottom: var(--spacing-1);">
+                                <span style="font-size: 1.2rem;">${request.icon}</span>
+                                <h4>${request.type}</h4>
+                            </div>
+                            <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin-bottom: var(--spacing-1);">
+                                ${request.startDate} to ${request.endDate} (${request.totalDays} days)
+                            </p>
+                            <p style="color: var(--gray-700); font-size: var(--font-size-sm);">${request.reason}</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-1); color: ${statusColors[request.status]}; font-weight: 600; margin-bottom: var(--spacing-1);">
+                                <span>${statusIcons[request.status]}</span>
+                                <span style="text-transform: capitalize;">${request.status}</span>
+                            </div>
+                            <div style="font-size: var(--font-size-xs); color: var(--gray-500);">
+                                ${new Date(request.submittedDate).toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        // Request Leave function
+        function requestLeave() {
+            // Scroll to leave request form
+            document.querySelector('#leaveRequestForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Calculate total days between dates
+        function calculateTotalDays() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                document.getElementById('totalDays').value = diffDays;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAttendanceState();
+            updateDateTime();
+            loadRecentAttendance();
+            loadLeaveRequests();
+
+            // Update time every second
+            setInterval(updateDateTime, 1000);
+
+            // Update summary every minute
+            setInterval(updateSummary, 60000);
+
+            // Add event listeners for date inputs
+            document.getElementById('startDate').addEventListener('change', calculateTotalDays);
+            document.getElementById('endDate').addEventListener('change', calculateTotalDays);
+
+            // Handle leave request form submission
+            document.getElementById('leaveRequestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const leaveType = document.getElementById('leaveType').value;
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                const totalDays = document.getElementById('totalDays').value;
+                const reason = document.getElementById('leaveReason').value;
+
+                if (!leaveType || !startDate || !endDate || !reason) {
+                    showNotification('Please fill in all required fields', 'error');
+                    return;
+                }
+
+                const leaveTypeIcons = {
+                    annual: '🏖️',
+                    sick: '🤒',
+                    personal: '👤',
+                    emergency: '🚨',
+                    maternity: '👶',
+                    paternity: '👨‍👶'
+                };
+
+                const leaveTypeLabels = {
+                    annual: 'Annual Leave',
+                    sick: 'Sick Leave',
+                    personal: 'Personal Leave',
+                    emergency: 'Emergency Leave',
+                    maternity: 'Maternity Leave',
+                    paternity: 'Paternity Leave'
+                };
+
+                const newRequest = {
+                    id: Date.now(),
+                    type: leaveTypeLabels[leaveType],
+                    icon: leaveTypeIcons[leaveType],
+                    startDate: startDate,
+                    endDate: endDate,
+                    totalDays: totalDays,
+                    reason: reason,
+                    status: 'pending',
+                    submittedDate: new Date().toISOString()
+                };
+
+                // Save to localStorage
+                const requests = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+                requests.unshift(newRequest);
+                localStorage.setItem('leaveRequests', JSON.stringify(requests));
+
+                // Log activity
+                logActivity('leave-request', new Date());
+
+                // Show success message
+                showNotification('Leave request submitted successfully!', 'success');
+
+                // Reset form
+                this.reset();
+
+                // Reload leave requests
+                loadLeaveRequests();
+            });
+
+            // Add CSS styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100px); opacity: 0; }
+                }
+                .summary-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    padding: 20px;
+                    background: var(--gray-50);
+                    border-radius: 12px;
+                }
+                .summary-icon {
+                    font-size: 2rem;
+                    padding: 10px;
+                    background: white;
+                    border-radius: 8px;
+                }
+                .summary-content h3 {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                }
+                .summary-content p {
+                    color: var(--gray-600);
+                    font-size: 0.9rem;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Generate random activity
+        function generateRandomActivity() {
+            const activity = activityTypes[Math.floor(Math.random() * activityTypes.length)];
+            const user = sampleUsers[Math.floor(Math.random() * sampleUsers.length)];
+            const fromUser = sampleUsers[Math.floor(Math.random() * sampleUsers.length)];
+            
+            let message = activity.template
+                .replace('{user}', user.name)
+                .replace('{from}', fromUser.name)
+                .replace('{channel}', ['#general', '#development', '#marketing', '#random'][Math.floor(Math.random() * 4)])
+                .replace('{title}', ['Team Meeting', 'Project Update', 'New Policy', 'System Maintenance'][Math.floor(Math.random() * 4)]);
+            
+            return {
+                id: Date.now() + Math.random(),
+                type: activity.type,
+                icon: activity.icon,
+                message: message,
+                user: user,
+                timestamp: new Date()
+            };
+        }
+
+        // Add activity to feed
+        function addActivityToFeed(activity) {
+            if (liveFeedPaused) return;
+            
+            const feed = document.getElementById('liveFeed');
+            const activityElement = document.createElement('div');
+            activityElement.className = 'live-activity animate-slide-in';
+            activityElement.innerHTML = `
+                <div style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3); border-bottom: 1px solid var(--gray-200);">
+                    <img src="${activity.user.avatar}" alt="${activity.user.name}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                    <span style="font-size: 1.2rem;">${activity.icon}</span>
+                    <div style="flex: 1;">
+                        <div style="font-size: 0.9rem; color: var(--gray-700);">${activity.message}</div>
+                        <div style="font-size: 0.8rem; color: var(--gray-500);">${activity.timestamp.toLocaleTimeString()}</div>
+                    </div>
+                    <div class="activity-pulse"></div>
+                </div>
+            `;
+            
+            feed.insertBefore(activityElement, feed.firstChild);
+            
+            // Remove old activities (keep only 20)
+            const activities = feed.children;
+            if (activities.length > 20) {
+                for (let i = activities.length - 1; i >= 20; i--) {
+                    activities[i].remove();
+                }
+            }
+        }
+
+        // Update live statistics
+        function updateLiveStats() {
+            const stats = {
+                onlineUsers: Math.floor(Math.random() * 10) + 85,
+                activeChats: Math.floor(Math.random() * 5) + 20,
+                newAnnouncements: Math.floor(Math.random() * 3),
+                recognitions: Math.floor(Math.random() * 5) + 10
+            };
+            
+            document.getElementById('onlineUsers').textContent = stats.onlineUsers;
+            document.getElementById('activeChats').textContent = stats.activeChats;
+            document.getElementById('newAnnouncements').textContent = stats.newAnnouncements;
+            document.getElementById('recognitions').textContent = stats.recognitions;
+        }
+
+        // Load online users
+        function loadOnlineUsers() {
+            const container = document.getElementById('onlineUsersList');
+            const onlineUsers = sampleUsers.slice(0, Math.floor(Math.random() * 3) + 4);
+            
+            const html = onlineUsers.map(user => `
+                <div class="online-user" style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3); border-bottom: 1px solid var(--gray-200);">
+                    <div style="position: relative;">
+                        <img src="${user.avatar}" alt="${user.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">${user.name}</div>
+                        <div style="font-size: var(--font-size-sm); color: var(--secondary-color);">Active now</div>
+                    </div>
+                    <div style="color: var(--gray-500); font-size: var(--font-size-sm);">
+                        ${Math.floor(Math.random() * 30) + 1}m ago
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // Pause/Resume live feed
+        function pauseLiveFeed() {
+            const pauseBtn = document.getElementById('pauseBtn');
+            
+            if (liveFeedPaused) {
+                liveFeedPaused = false;
+                pauseBtn.innerHTML = '⏸️ Pause';
+                startLiveFeed();
+            } else {
+                liveFeedPaused = true;
+                pauseBtn.innerHTML = '▶️ Resume';
+                clearInterval(feedUpdateInterval);
+            }
+        }
+
+        // Clear feed
+        function clearFeed() {
+            document.getElementById('liveFeed').innerHTML = '';
+        }
+
+        // Start live feed
+        function startLiveFeed() {
+            if (feedUpdateInterval) clearInterval(feedUpdateInterval);
+            
+            feedUpdateInterval = setInterval(() => {
+                if (!liveFeedPaused) {
+                    addActivityToFeed(generateRandomActivity());
+                }
+            }, 3000 + Math.random() * 4000); // Random interval between 3-7 seconds
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            loadOnlineUsers();
+            updateLiveStats();
+            
+            // Start live updates
+            startLiveFeed();
+            
+            // Update stats every 10 seconds
+            statsUpdateInterval = setInterval(updateLiveStats, 10000);
+            
+            // Update online users every 30 seconds
+            setInterval(loadOnlineUsers, 30000);
+            
+            // Add initial activities
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    addActivityToFeed(generateRandomActivity());
+                }, i * 1000);
+            }
+            
+            // Add CSS styles
+            const style = document.createElement('style');
+            style.textContent = `
+                .live-indicator {
+                    width: 12px;
+                    height: 12px;
+                    background: #ef4444;
+                    border-radius: 50%;
+                    animation: pulse-red 2s infinite;
+                }
+                
+                @keyframes pulse-red {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.5; transform: scale(1.2); }
+                }
+                
+                .live-stat {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    padding: 20px;
+                    background: var(--gray-50);
+                    border-radius: 12px;
+                    position: relative;
+                }
+                
+                .stat-trend {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    color: var(--secondary-color);
+                }
+                
+                .stat-trend.up {
+                    color: #10b981;
+                }
+                
+                .live-feed {
+                    max-height: 400px;
+                    overflow-y: auto;
+                    border: 1px solid var(--gray-200);
+                    border-radius: 8px;
+                }
+                
+                .animate-slide-in {
+                    animation: slideInLeft 0.5s ease-out;
+                }
+                
+                @keyframes slideInLeft {
+                    from { transform: translateX(-20px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                
+                .activity-pulse {
+                    width: 8px;
+                    height: 8px;
+                    background: #10b981;
+                    border-radius: 50%;
+                    animation: pulse-green 2s infinite;
+                }
+                
+                @keyframes pulse-green {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.3; transform: scale(1.5); }
+                }
+                
+                .online-indicator {
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 12px;
+                    height: 12px;
+                    background: #10b981;
+                    border: 2px solid white;
+                    border-radius: 50%;
+                }
+                
+                .system-status {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                
+                .status-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    padding: 15px;
+                    background: var(--gray-50);
+                    border-radius: 8px;
+                }
+                
+                .status-indicator {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                }
+                
+                .status-indicator.online {
+                    background: #10b981;
+                }
+                
+                .status-indicator.warning {
+                    background: #f59e0b;
+                }
+                
+                .status-indicator.error {
+                    background: #ef4444;
+                }
+                
+                .status-info {
+                    flex: 1;
+                }
+                
+                .status-info h4 {
+                    margin-bottom: 4px;
+                    font-weight: 600;
+                }
+                
+                .status-info p {
+                    font-size: 0.9rem;
+                    color: var(--gray-600);
+                }
+                
+                .status-value {
+                    font-weight: 700;
+                    color: var(--primary-color);
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (feedUpdateInterval) clearInterval(feedUpdateInterval);
+            if (statsUpdateInterval) clearInterval(statsUpdateInterval);
+        });
+    </script>
+</body>
+</html>

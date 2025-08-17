@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS Social Connect - Dashboard</title>
+    <link rel="stylesheet" href="dashboard-clean.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏢</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🏢</span>
+                <h1>HRMS Social Connect</h1>
+            </div>
+            <div class="user-menu">
+                <div class="user-info">
+                    <span class="user-avatar">👤</span>
+                    <span class="user-name">John Doe</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <span>🚪</span>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-content">
+                    <h2>Welcome back, John! 👋</h2>
+                    <p>Manage your HR activities and connect with your team</p>
+                </div>
+                <div class="quick-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">127</span>
+                        <span class="stat-label">Employees</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Modules</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">89</span>
+                        <span class="stat-label">Online</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Categories -->
+            <section class="categories-section">
+                <h3 class="section-title">📋 Dashboard Categories</h3>
+                
+                <div class="categories-grid">
+                    <!-- Core HR Management -->
+                    <div class="category-card" onclick="navigateTo('registration.html')">
+                        <div class="category-header">
+                            <span class="category-icon">👤</span>
+                            <h4>Employee Registration</h4>
+                        </div>
+                        <p class="category-description">Register new employees and manage basic information</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('search.html')">
+                        <div class="category-header">
+                            <span class="category-icon">🔍</span>
+                            <h4>Employee Search</h4>
+                        </div>
+                        <p class="category-description">Search and find employee information quickly</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('profiles.html')">
+                        <div class="category-header">
+                            <span class="category-icon">👥</span>
+                            <h4>Employee Profiles</h4>
+                        </div>
+                        <p class="category-description">View detailed profiles and connect with colleagues</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('payroll.html')">
+                        <div class="category-header">
+                            <span class="category-icon">💰</span>
+                            <h4>Payroll Management</h4>
+                        </div>
+                        <p class="category-description">Manage employee salary and payroll information</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <!-- Communication & Social -->
+                    <div class="category-card" onclick="navigateTo('chat.html')">
+                        <div class="category-header">
+                            <span class="category-icon">💬</span>
+                            <h4>Chat & Messaging</h4>
+                        </div>
+                        <p class="category-description">Real-time communication with colleagues and teams</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('social-feed.html')">
+                        <div class="category-header">
+                            <span class="category-icon">📱</span>
+                            <h4>Social Feed</h4>
+                        </div>
+                        <p class="category-description">Share updates and stay connected with your team</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('announcements.html')">
+                        <div class="category-header">
+                            <span class="category-icon">📢</span>
+                            <h4>Announcements</h4>
+                        </div>
+                        <p class="category-description">Company news, updates, and important notices</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('events.html')">
+                        <div class="category-header">
+                            <span class="category-icon">📅</span>
+                            <h4>Events Calendar</h4>
+                        </div>
+                        <p class="category-description">Company events, meetings, and important dates</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <!-- Engagement & Feedback -->
+                    <div class="category-card" onclick="navigateTo('polls.html')">
+                        <div class="category-header">
+                            <span class="category-icon">📊</span>
+                            <h4>Polls & Surveys</h4>
+                        </div>
+                        <p class="category-description">Participate in company polls and share feedback</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('suggestions.html')">
+                        <div class="category-header">
+                            <span class="category-icon">💡</span>
+                            <h4>Suggestion Box</h4>
+                        </div>
+                        <p class="category-description">Share ideas and suggestions to improve workplace</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('recognition.html')">
+                        <div class="category-header">
+                            <span class="category-icon">🏆</span>
+                            <h4>Recognition</h4>
+                        </div>
+                        <p class="category-description">Recognize and celebrate employee achievements</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+
+                    <div class="category-card" onclick="navigateTo('gallery.html')">
+                        <div class="category-header">
+                            <span class="category-icon">📸</span>
+                            <h4>Photo Gallery</h4>
+                        </div>
+                        <p class="category-description">Share and view photos from company events</p>
+                        <div class="category-arrow">→</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions-section">
+                <h3 class="section-title">⚡ Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="navigateTo('registration.html')">
+                        <span class="action-icon">➕</span>
+                        <span>Add Employee</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="navigateTo('chat.html')">
+                        <span class="action-icon">💬</span>
+                        <span>Start Chat</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="navigateTo('announcements.html')">
+                        <span class="action-icon">📢</span>
+                        <span>New Announcement</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="navigateTo('recognition.html')">
+                        <span class="action-icon">🏆</span>
+                        <span>Give Recognition</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation function
+        function navigateTo(page) {
+            // Add loading animation
+            const card = event.currentTarget;
+            card.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                window.location.href = page;
+            }, 150);
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Add logout animation
+                document.body.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    window.location.href = 'auth.html';
+                }, 500);
+            }
+        }
+
+        // Add hover effects and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate category cards on load
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate-in');
+            });
+
+            // Add click ripple effect
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const ripple = document.createElement('div');
+                    ripple.className = 'ripple';
+                    
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any open modals or return to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

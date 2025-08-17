@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Management - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>💰 Payroll Management</h1>
+            <p>View and manage employee salary information</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Payroll Summary -->
+        <section class="card" style="margin-bottom: var(--spacing-8);">
+            <h2>📊 Payroll Summary</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--primary-color);">₹12,45,000</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Total Monthly Payroll</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--secondary-color);">₹98,000</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Average Salary</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--accent-color);">127</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Employees Paid</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--danger-color);">3</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Pending Payments</div>
+                </div>
+            </div>
+        </section>
+
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <!-- Payroll Actions -->
+            <section class="card">
+                <h2>⚡ Payroll Actions</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                    <button onclick="loadPayrollData()" class="btn btn-primary">
+                        📊 Load Payroll Data
+                    </button>
+                    <button onclick="generatePayslips()" class="btn btn-success">
+                        📄 Generate Payslips
+                    </button>
+                    <button onclick="exportPayroll()" class="btn btn-secondary">
+                        📤 Export to Excel
+                    </button>
+                    <button onclick="processPayments()" class="btn btn-secondary">
+                        💳 Process Payments
+                    </button>
+                </div>
+                
+                <div id="payrollData" class="results-container"></div>
+            </section>
+
+            <!-- Salary Breakdown -->
+            <section class="card" style="margin-top: var(--spacing-8);">
+                <h2>📈 Salary Breakdown by Department</h2>
+                <div id="departmentBreakdown">
+                    <div class="payroll-item">
+                        <span>Information Technology</span>
+                        <span class="salary">₹4,50,000</span>
+                    </div>
+                    <div class="payroll-item">
+                        <span>Sales</span>
+                        <span class="salary">₹2,80,000</span>
+                    </div>
+                    <div class="payroll-item">
+                        <span>Marketing</span>
+                        <span class="salary">₹2,10,000</span>
+                    </div>
+                    <div class="payroll-item">
+                        <span>Finance</span>
+                        <span class="salary">₹1,85,000</span>
+                    </div>
+                    <div class="payroll-item">
+                        <span>Human Resources</span>
+                        <span class="salary">₹1,20,000</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample payroll data
+        const payrollData = [
+            { name: "John Doe", salary: 125000, department: "IT", status: "Paid" },
+            { name: "Jane Smith", salary: 95000, department: "Marketing", status: "Paid" },
+            { name: "Mike Johnson", salary: 85000, department: "Sales", status: "Paid" },
+            { name: "Sarah Wilson", salary: 75000, department: "HR", status: "Pending" },
+            { name: "David Brown", salary: 110000, department: "Finance", status: "Paid" },
+            { name: "Lisa Davis", salary: 135000, department: "Operations", status: "Paid" },
+            { name: "Tom Anderson", salary: 140000, department: "IT", status: "Paid" },
+            { name: "Emily Taylor", salary: 70000, department: "Marketing", status: "Pending" }
+        ];
+
+        function loadPayrollData() {
+            const payrollContainer = document.getElementById('payrollData');
+            const button = event.target;
+            
+            // Add loading state
+            button.textContent = 'Loading...';
+            button.disabled = true;
+            payrollContainer.innerHTML = '<div class="loading">Loading payroll data...</div>';
+
+            setTimeout(() => {
+                const html = payrollData.map(item => `
+                    <div class="payroll-item animate-fade-in">
+                        <div>
+                            <span class="employee-name">${item.name}</span>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-600);">${item.department}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="salary">₹${item.salary.toLocaleString()}</span>
+                            <div style="font-size: var(--font-size-sm); color: ${item.status === 'Paid' ? 'var(--secondary-color)' : 'var(--danger-color)'};">
+                                ${item.status === 'Paid' ? '✅' : '⏳'} ${item.status}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                payrollContainer.innerHTML = html;
+                
+                button.textContent = '📊 Load Payroll Data';
+                button.disabled = false;
+            }, 1000);
+        }
+
+        function generatePayslips() {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            button.textContent = 'Generating...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = 'Payslips generated successfully for all employees!';
+                button.parentNode.insertBefore(alertDiv, button.nextSibling);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+
+        function exportPayroll() {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            button.textContent = 'Exporting...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = 'Payroll data exported to Excel successfully!';
+                button.parentNode.insertBefore(alertDiv, button.nextSibling);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 1500);
+        }
+
+        function processPayments() {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            button.textContent = 'Processing...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = 'Payments processed successfully for 3 pending employees!';
+                button.parentNode.insertBefore(alertDiv, button.nextSibling);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

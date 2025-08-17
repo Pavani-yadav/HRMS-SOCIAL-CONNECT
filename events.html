@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>📅 Events Calendar</h1>
+            <p>Stay updated with company events, meetings, and activities</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Create Event -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>➕ Create New Event</h2>
+            <form id="eventForm">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-4);">
+                    <div class="form-group">
+                        <label for="eventTitle" class="form-label">Event Title *</label>
+                        <input type="text" id="eventTitle" class="form-input" placeholder="Enter event title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventType" class="form-label">Event Type</label>
+                        <select id="eventType" class="form-input">
+                            <option value="meeting">🤝 Meeting</option>
+                            <option value="training">📚 Training</option>
+                            <option value="social">🎉 Social Event</option>
+                            <option value="deadline">⏰ Deadline</option>
+                            <option value="holiday">🏖️ Holiday</option>
+                            <option value="conference">🎤 Conference</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventDescription" class="form-label">Description</label>
+                    <textarea id="eventDescription" class="form-input" rows="3" placeholder="Event description and details"></textarea>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4);">
+                    <div class="form-group">
+                        <label for="eventDate" class="form-label">Date *</label>
+                        <input type="date" id="eventDate" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventTime" class="form-label">Time</label>
+                        <input type="time" id="eventTime" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventLocation" class="form-label">Location</label>
+                        <input type="text" id="eventLocation" class="form-input" placeholder="Event location">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">📅 Create Event</button>
+            </form>
+        </section>
+
+        <!-- Calendar View Toggle -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-4);">
+                <div style="display: flex; gap: var(--spacing-3);">
+                    <button class="btn btn-secondary view-btn active" onclick="switchView('upcoming')">📋 Upcoming</button>
+                    <button class="btn btn-secondary view-btn" onclick="switchView('calendar')">📅 Calendar</button>
+                    <button class="btn btn-secondary view-btn" onclick="switchView('my-events')">👤 My Events</button>
+                </div>
+                
+                <div style="display: flex; gap: var(--spacing-2);">
+                    <select id="filterType" class="form-input" onchange="filterEvents()">
+                        <option value="">All Types</option>
+                        <option value="meeting">🤝 Meetings</option>
+                        <option value="training">📚 Training</option>
+                        <option value="social">🎉 Social Events</option>
+                        <option value="deadline">⏰ Deadlines</option>
+                        <option value="holiday">🏖️ Holidays</option>
+                        <option value="conference">🎤 Conferences</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Display -->
+        <div id="eventsContainer">
+            <!-- Events will be loaded here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample events data
+        let events = [
+            {
+                id: 1,
+                title: "Team Building Workshop",
+                description: "Interactive workshop to improve team collaboration and communication skills",
+                type: "training",
+                date: "2024-01-25",
+                time: "09:00",
+                location: "Conference Room A",
+                organizer: "HR Department",
+                attendees: 15,
+                userAttending: false
+            },
+            {
+                id: 2,
+                title: "Q4 Performance Reviews Due",
+                description: "Deadline for submitting Q4 performance review documents",
+                type: "deadline",
+                date: "2024-01-31",
+                time: "17:00",
+                location: "Online",
+                organizer: "HR Department",
+                attendees: 0,
+                userAttending: false
+            },
+            {
+                id: 3,
+                title: "Monthly All-Hands Meeting",
+                description: "Company-wide meeting to discuss progress, updates, and upcoming initiatives",
+                type: "meeting",
+                date: "2024-02-01",
+                time: "14:00",
+                location: "Main Auditorium",
+                organizer: "Management",
+                attendees: 127,
+                userAttending: true
+            },
+            {
+                id: 4,
+                title: "Valentine's Day Office Party",
+                description: "Celebrate Valentine's Day with colleagues - food, music, and fun activities",
+                type: "social",
+                date: "2024-02-14",
+                time: "16:00",
+                location: "Office Cafeteria",
+                organizer: "Events Committee",
+                attendees: 45,
+                userAttending: false
+            },
+            {
+                id: 5,
+                title: "Tech Conference 2024",
+                description: "Annual technology conference featuring latest trends and innovations",
+                type: "conference",
+                date: "2024-03-15",
+                time: "08:00",
+                location: "Convention Center",
+                organizer: "IT Department",
+                attendees: 8,
+                userAttending: true
+            },
+            {
+                id: 6,
+                title: "Presidents Day Holiday",
+                description: "Office closed for Presidents Day holiday",
+                type: "holiday",
+                date: "2024-02-19",
+                time: "00:00",
+                location: "N/A",
+                organizer: "Company",
+                attendees: 0,
+                userAttending: false
+            }
+        ];
+
+        let currentView = 'upcoming';
+
+        function getEventIcon(type) {
+            const icons = {
+                meeting: "🤝",
+                training: "📚",
+                social: "🎉",
+                deadline: "⏰",
+                holiday: "🏖️",
+                conference: "🎤"
+            };
+            return icons[type] || "📅";
+        }
+
+        function getEventColor(type) {
+            const colors = {
+                meeting: "var(--primary-color)",
+                training: "var(--secondary-color)",
+                social: "var(--accent-color)",
+                deadline: "var(--danger-color)",
+                holiday: "#10b981",
+                conference: "#8b5cf6"
+            };
+            return colors[type] || "var(--gray-500)";
+        }
+
+        function loadEvents(eventsToShow = events) {
+            const container = document.getElementById('eventsContainer');
+            
+            if (eventsToShow.length === 0) {
+                container.innerHTML = '<div class="no-results">No events found.</div>';
+                return;
+            }
+            
+            if (currentView === 'upcoming') {
+                loadUpcomingView(eventsToShow);
+            } else if (currentView === 'calendar') {
+                loadCalendarView(eventsToShow);
+            } else if (currentView === 'my-events') {
+                loadMyEventsView(eventsToShow);
+            }
+        }
+
+        function loadUpcomingView(eventsToShow) {
+            const container = document.getElementById('eventsContainer');
+            
+            // Sort by date
+            const sortedEvents = eventsToShow.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            const eventCards = sortedEvents.map(event => `
+                <div class="event-card animate-fade-in">
+                    <div class="event-date" style="background: ${getEventColor(event.type)};">
+                        ${getEventIcon(event.type)} ${new Date(event.date).toLocaleDateString()}
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-3);">
+                        <div style="flex: 1;">
+                            <h3 style="margin-bottom: var(--spacing-2);">${event.title}</h3>
+                            <p style="color: var(--gray-600); margin-bottom: var(--spacing-2);">${event.description}</p>
+                            
+                            <div style="display: flex; gap: var(--spacing-4); color: var(--gray-500); font-size: var(--font-size-sm);">
+                                ${event.time !== '00:00' ? `<span>🕐 ${event.time}</span>` : ''}
+                                ${event.location !== 'N/A' ? `<span>📍 ${event.location}</span>` : ''}
+                                <span>👤 ${event.organizer}</span>
+                                ${event.attendees > 0 ? `<span>👥 ${event.attendees} attending</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--spacing-3);">
+                        ${event.type !== 'holiday' && event.type !== 'deadline' ? `
+                            <button class="btn ${event.userAttending ? 'btn-success' : 'btn-primary'}" onclick="toggleAttendance(${event.id})">
+                                ${event.userAttending ? '✅ Attending' : '📝 RSVP'}
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-secondary" onclick="shareEvent(${event.id})">📤 Share</button>
+                        <button class="btn btn-secondary" onclick="addToCalendar(${event.id})">📅 Add to Calendar</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = eventCards;
+        }
+
+        function loadCalendarView(eventsToShow) {
+            const container = document.getElementById('eventsContainer');
+            container.innerHTML = `
+                <div class="card">
+                    <h3 style="text-align: center; margin-bottom: var(--spacing-4);">📅 Calendar View</h3>
+                    <div style="text-align: center; padding: var(--spacing-8); color: var(--gray-500);">
+                        <div style="font-size: 4rem; margin-bottom: var(--spacing-4);">📅</div>
+                        <p>Interactive calendar view would be implemented here with a calendar library like FullCalendar.js</p>
+                        <p style="margin-top: var(--spacing-2);">For now, please use the "Upcoming" view to see all events.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadMyEventsView(eventsToShow) {
+            const container = document.getElementById('eventsContainer');
+            const myEvents = eventsToShow.filter(event => event.userAttending);
+            
+            if (myEvents.length === 0) {
+                container.innerHTML = '<div class="no-results">You haven\'t RSVP\'d to any events yet.</div>';
+                return;
+            }
+            
+            loadUpcomingView(myEvents);
+        }
+
+        function switchView(view) {
+            currentView = view;
+            
+            // Update view button states
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            filterEvents();
+        }
+
+        function filterEvents() {
+            const filterType = document.getElementById('filterType').value;
+            
+            let filteredEvents = events;
+            if (filterType) {
+                filteredEvents = events.filter(event => event.type === filterType);
+            }
+            
+            loadEvents(filteredEvents);
+        }
+
+        function toggleAttendance(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (event) {
+                if (event.userAttending) {
+                    event.attendees--;
+                    event.userAttending = false;
+                } else {
+                    event.attendees++;
+                    event.userAttending = true;
+                }
+                
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = event.userAttending ? 'RSVP confirmed!' : 'RSVP cancelled.';
+                document.querySelector('main .container').insertBefore(alertDiv, document.querySelector('main .container').firstChild);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                filterEvents();
+            }
+        }
+
+        function shareEvent(eventId) {
+            alert(`Sharing event ${eventId}...`);
+        }
+
+        function addToCalendar(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (event) {
+                alert(`Adding "${event.title}" to your calendar...`);
+            }
+        }
+
+        // Handle event form submission
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('eventTitle').value;
+            const type = document.getElementById('eventType').value;
+            const description = document.getElementById('eventDescription').value;
+            const date = document.getElementById('eventDate').value;
+            const time = document.getElementById('eventTime').value || '00:00';
+            const location = document.getElementById('eventLocation').value || 'TBD';
+            
+            const newEvent = {
+                id: events.length + 1,
+                title: title,
+                description: description,
+                type: type,
+                date: date,
+                time: time,
+                location: location,
+                organizer: "Current User",
+                attendees: 1,
+                userAttending: true
+            };
+            
+            events.push(newEvent);
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success';
+            alertDiv.textContent = 'Event created successfully!';
+            this.parentNode.insertBefore(alertDiv, this);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+            
+            this.reset();
+            filterEvents();
+        });
+
+        // Set default date to today
+        document.getElementById('eventDate').valueAsDate = new Date();
+
+        // Load events on page load
+        window.addEventListener('load', () => {
+            loadEvents();
+        });
+    </script>
+</body>
+</html>

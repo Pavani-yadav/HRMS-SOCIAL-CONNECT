@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏰</text></svg>">
+</head>
+<body>
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Current Status Card -->
+        <section class="card" style="margin-bottom: var(--spacing-6); background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <div style="text-align: center;">
+                <h2 style="color: white; margin-bottom: var(--spacing-4);">⏰ Today's Attendance</h2>
+                <div id="currentTime" style="font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-4);">
+                    Loading...
+                </div>
+                <div id="currentDate" style="font-size: 1.2rem; opacity: 0.9; margin-bottom: var(--spacing-6);">
+                    Loading...
+                </div>
+                
+                <div id="attendanceStatus" style="margin-bottom: var(--spacing-6);">
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="status-icon">🔴</span>
+                        <span class="status-text">Not Checked In</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: var(--spacing-4); justify-content: center; flex-wrap: wrap;">
+                    <button id="checkInBtn" class="btn btn-success" onclick="checkIn()" style="background: #10b981; border: none;">
+                        <span>🟢</span> Check In
+                    </button>
+                    <button id="checkOutBtn" class="btn btn-danger" onclick="checkOut()" style="background: #ef4444; border: none;" disabled>
+                        <span>🔴</span> Check Out
+                    </button>
+                    <button id="breakBtn" class="btn btn-secondary" onclick="toggleBreak()" style="background: #f59e0b; border: none;" disabled>
+                        <span>☕</span> <span id="breakText">Start Break</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Summary -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>📊 Today's Summary</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                <div class="summary-item">
+                    <div class="summary-icon">🕐</div>
+                    <div class="summary-content">
+                        <h3 id="checkInTime">--:--</h3>
+                        <p>Check In Time</p>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">🕕</div>
+                    <div class="summary-content">
+                        <h3 id="checkOutTime">--:--</h3>
+                        <p>Check Out Time</p>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">⏱️</div>
+                    <div class="summary-content">
+                        <h3 id="totalHours">0h 0m</h3>
+                        <p>Total Hours</p>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon">☕</div>
+                    <div class="summary-content">
+                        <h3 id="breakTime">0h 0m</h3>
+                        <p>Break Time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>⚡ Quick Actions</h2>
+            <div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap; margin-top: var(--spacing-4);">
+                <button class="btn btn-primary" onclick="viewWeeklyReport()">
+                    📅 Weekly Report
+                </button>
+                <button class="btn btn-secondary" onclick="viewMonthlyReport()">
+                    📊 Monthly Report
+                </button>
+                <button class="btn btn-secondary" onclick="requestLeave()">
+                    🏖️ Request Leave
+                </button>
+                <button class="btn btn-secondary" onclick="viewTeamAttendance()">
+                    👥 Team Attendance
+                </button>
+            </div>
+        </section>
+
+        <!-- Recent Attendance -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>📋 Recent Attendance</h2>
+            <div id="recentAttendance" style="margin-top: var(--spacing-4);">
+                <!-- Recent attendance records will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Live Team Status -->
+        <section class="card">
+            <h2>👥 Live Team Status</h2>
+            <div id="teamStatus" style="margin-top: var(--spacing-4);">
+                <!-- Team status will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global state
+        let attendanceState = {
+            isCheckedIn: false,
+            checkInTime: null,
+            checkOutTime: null,
+            isOnBreak: false,
+            breakStartTime: null,
+            totalBreakTime: 0,
+            breaks: []
+        };
+
+        // Load saved state from localStorage
+        function loadAttendanceState() {
+            const saved = localStorage.getItem('attendanceState');
+            if (saved) {
+                attendanceState = { ...attendanceState, ...JSON.parse(saved) };
+                updateUI();
+            }
+        }
+
+        // Save state to localStorage
+        function saveAttendanceState() {
+            localStorage.setItem('attendanceState', JSON.stringify(attendanceState));
+        }
+
+        // Update current time and date
+        function updateDateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: true, 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            document.getElementById('currentTime').textContent = timeString;
+            document.getElementById('currentDate').textContent = dateString;
+        }
+
+        // Check In function
+        function checkIn() {
+            const now = new Date();
+            attendanceState.isCheckedIn = true;
+            attendanceState.checkInTime = now.toISOString();
+            attendanceState.checkOutTime = null;
+            
+            saveAttendanceState();
+            updateUI();
+            
+            showNotification('✅ Checked in successfully!', 'success');
+            logActivity('check-in', now);
+        }
+
+        // Check Out function
+        function checkOut() {
+            const now = new Date();
+            attendanceState.isCheckedIn = false;
+            attendanceState.checkOutTime = now.toISOString();
+            
+            // End break if on break
+            if (attendanceState.isOnBreak) {
+                endBreak();
+            }
+            
+            saveAttendanceState();
+            updateUI();
+            
+            showNotification('✅ Checked out successfully!', 'success');
+            logActivity('check-out', now);
+        }
+
+        // Toggle Break function
+        function toggleBreak() {
+            if (attendanceState.isOnBreak) {
+                endBreak();
+            } else {
+                startBreak();
+            }
+        }
+
+        function startBreak() {
+            const now = new Date();
+            attendanceState.isOnBreak = true;
+            attendanceState.breakStartTime = now.toISOString();
+            
+            saveAttendanceState();
+            updateUI();
+            
+            showNotification('☕ Break started', 'info');
+            logActivity('break-start', now);
+        }
+
+        function endBreak() {
+            if (!attendanceState.isOnBreak) return;
+            
+            const now = new Date();
+            const breakStart = new Date(attendanceState.breakStartTime);
+            const breakDuration = now - breakStart;
+            
+            attendanceState.isOnBreak = false;
+            attendanceState.totalBreakTime += breakDuration;
+            attendanceState.breaks.push({
+                start: attendanceState.breakStartTime,
+                end: now.toISOString(),
+                duration: breakDuration
+            });
+            attendanceState.breakStartTime = null;
+            
+            saveAttendanceState();
+            updateUI();
+            
+            showNotification('✅ Break ended', 'success');
+            logActivity('break-end', now);
+        }
+
+        // Update UI based on current state
+        function updateUI() {
+            const checkInBtn = document.getElementById('checkInBtn');
+            const checkOutBtn = document.getElementById('checkOutBtn');
+            const breakBtn = document.getElementById('breakBtn');
+            const breakText = document.getElementById('breakText');
+            const statusIndicator = document.getElementById('statusIndicator');
+            
+            if (attendanceState.isCheckedIn) {
+                checkInBtn.disabled = true;
+                checkOutBtn.disabled = false;
+                breakBtn.disabled = false;
+                
+                statusIndicator.innerHTML = `
+                    <span class="status-icon">🟢</span>
+                    <span class="status-text">Checked In</span>
+                `;
+                
+                if (attendanceState.isOnBreak) {
+                    breakText.textContent = 'End Break';
+                    breakBtn.style.background = '#ef4444';
+                    statusIndicator.innerHTML = `
+                        <span class="status-icon">☕</span>
+                        <span class="status-text">On Break</span>
+                    `;
+                } else {
+                    breakText.textContent = 'Start Break';
+                    breakBtn.style.background = '#f59e0b';
+                }
+            } else {
+                checkInBtn.disabled = false;
+                checkOutBtn.disabled = true;
+                breakBtn.disabled = true;
+                
+                statusIndicator.innerHTML = `
+                    <span class="status-icon">🔴</span>
+                    <span class="status-text">Not Checked In</span>
+                `;
+            }
+            
+            updateSummary();
+        }
+
+        // Update today's summary
+        function updateSummary() {
+            const checkInTimeEl = document.getElementById('checkInTime');
+            const checkOutTimeEl = document.getElementById('checkOutTime');
+            const totalHoursEl = document.getElementById('totalHours');
+            const breakTimeEl = document.getElementById('breakTime');
+            
+            // Check in time
+            if (attendanceState.checkInTime) {
+                const checkIn = new Date(attendanceState.checkInTime);
+                checkInTimeEl.textContent = checkIn.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+            } else {
+                checkInTimeEl.textContent = '--:--';
+            }
+            
+            // Check out time
+            if (attendanceState.checkOutTime) {
+                const checkOut = new Date(attendanceState.checkOutTime);
+                checkOutTimeEl.textContent = checkOut.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+            } else {
+                checkOutTimeEl.textContent = '--:--';
+            }
+            
+            // Total hours
+            if (attendanceState.checkInTime) {
+                const checkIn = new Date(attendanceState.checkInTime);
+                const checkOut = attendanceState.checkOutTime ? 
+                    new Date(attendanceState.checkOutTime) : new Date();
+                
+                const totalMs = checkOut - checkIn;
+                const totalHours = Math.floor(totalMs / (1000 * 60 * 60));
+                const totalMinutes = Math.floor((totalMs % (1000 * 60 * 60)) / (1000 * 60));
+                
+                totalHoursEl.textContent = `${totalHours}h ${totalMinutes}m`;
+            } else {
+                totalHoursEl.textContent = '0h 0m';
+            }
+            
+            // Break time
+            let totalBreakMs = attendanceState.totalBreakTime;
+            if (attendanceState.isOnBreak && attendanceState.breakStartTime) {
+                const breakStart = new Date(attendanceState.breakStartTime);
+                const now = new Date();
+                totalBreakMs += (now - breakStart);
+            }
+            
+            const breakHours = Math.floor(totalBreakMs / (1000 * 60 * 60));
+            const breakMinutes = Math.floor((totalBreakMs % (1000 * 60 * 60)) / (1000 * 60));
+            breakTimeEl.textContent = `${breakHours}h ${breakMinutes}m`;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Log activity
+        function logActivity(type, timestamp) {
+            const activities = JSON.parse(localStorage.getItem('attendanceActivities') || '[]');
+            activities.unshift({
+                type,
+                timestamp: timestamp.toISOString(),
+                date: timestamp.toDateString()
+            });
+            
+            // Keep only last 50 activities
+            if (activities.length > 50) {
+                activities.splice(50);
+            }
+            
+            localStorage.setItem('attendanceActivities', JSON.stringify(activities));
+            loadRecentAttendance();
+        }
+
+        // Load recent attendance
+        function loadRecentAttendance() {
+            const activities = JSON.parse(localStorage.getItem('attendanceActivities') || '[]');
+            const container = document.getElementById('recentAttendance');
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<p style="color: var(--gray-600); text-align: center;">No recent attendance records</p>';
+                return;
+            }
+            
+            const recentActivities = activities.slice(0, 10);
+            const html = recentActivities.map(activity => {
+                const date = new Date(activity.timestamp);
+                const timeString = date.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                const dateString = date.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+                
+                const icons = {
+                    'check-in': '🟢',
+                    'check-out': '🔴',
+                    'break-start': '☕',
+                    'break-end': '✅'
+                };
+                
+                const labels = {
+                    'check-in': 'Checked In',
+                    'check-out': 'Checked Out',
+                    'break-start': 'Break Started',
+                    'break-end': 'Break Ended'
+                };
+                
+                return `
+                    <div class="activity-item" style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3); border-bottom: 1px solid var(--gray-200);">
+                        <span style="font-size: 1.5rem;">${icons[activity.type]}</span>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">${labels[activity.type]}</div>
+                            <div style="font-size: var(--font-size-sm); color: var(--gray-600);">${dateString} at ${timeString}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // Load team status
+        function loadTeamStatus() {
+            const teamMembers = [
+                { name: 'Sarah Wilson', status: 'online', avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face' },
+                { name: 'Mike Johnson', status: 'break', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face' },
+                { name: 'Jane Smith', status: 'online', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face' },
+                { name: 'David Brown', status: 'offline', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face' }
+            ];
+            
+            const container = document.getElementById('teamStatus');
+            const html = teamMembers.map(member => {
+                const statusColors = {
+                    online: '#10b981',
+                    break: '#f59e0b',
+                    offline: '#6b7280'
+                };
+                
+                const statusLabels = {
+                    online: 'Online',
+                    break: 'On Break',
+                    offline: 'Offline'
+                };
+                
+                return `
+                    <div class="team-member" style="display: flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3); border-bottom: 1px solid var(--gray-200);">
+                        <div style="position: relative;">
+                            <img src="${member.avatar}" alt="${member.name}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                            <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: ${statusColors[member.status]}; border: 2px solid white; border-radius: 50%;"></div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600;">${member.name}</div>
+                            <div style="font-size: var(--font-size-sm); color: ${statusColors[member.status]};">${statusLabels[member.status]}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // Quick action functions
+        function viewWeeklyReport() {
+            alert('Weekly attendance report would open here');
+        }
+
+        function viewMonthlyReport() {
+            alert('Monthly attendance report would open here');
+        }
+
+        function requestLeave() {
+            alert('Leave request form would open here');
+        }
+
+        function viewTeamAttendance() {
+            alert('Team attendance overview would open here');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAttendanceState();
+            updateDateTime();
+            loadRecentAttendance();
+            loadTeamStatus();
+            
+            // Update time every second
+            setInterval(updateDateTime, 1000);
+            
+            // Update summary every minute
+            setInterval(updateSummary, 60000);
+            
+            // Add CSS animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100px); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100px); opacity: 0; }
+                }
+                .status-indicator {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                }
+                .summary-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    padding: 20px;
+                    background: var(--gray-50);
+                    border-radius: 12px;
+                }
+                .summary-icon {
+                    font-size: 2rem;
+                    padding: 10px;
+                    background: white;
+                    border-radius: 8px;
+                }
+                .summary-content h3 {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                }
+                .summary-content p {
+                    color: var(--gray-600);
+                    font-size: 0.9rem;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

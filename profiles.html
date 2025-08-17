@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Profiles - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👥</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>👥 Employee Profiles</h1>
+            <p>Connect with your colleagues and explore team profiles</p>
+            <a href="dashboard-clean.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Search and Filter -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap; align-items: end;">
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label for="profileSearch" class="form-label">Search Profiles</label>
+                    <input type="text" id="profileSearch" class="form-input" placeholder="Search by name, role, or department">
+                </div>
+                <div class="form-group">
+                    <label for="departmentFilter" class="form-label">Department</label>
+                    <select id="departmentFilter" class="form-input">
+                        <option value="">All Departments</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="HR">Human Resources</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Operations">Operations</option>
+                    </select>
+                </div>
+                <button onclick="filterProfiles()" class="btn btn-primary">🔍 Search</button>
+            </div>
+        </section>
+
+        <!-- Employee Profiles Grid -->
+        <div id="profilesGrid" class="grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+            <!-- Profiles will be loaded here -->
+        </div>
+    </main>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample employee profiles data
+        const profiles = [
+            {
+                id: 1,
+                name: "John Doe",
+                role: "Senior Software Engineer",
+                department: "IT",
+                email: "john.doe@company.com",
+                phone: "+1 234-567-8901",
+                avatar: "👨‍💻",
+                joinDate: "2022-01-15",
+                skills: ["JavaScript", "React", "Node.js", "Python", "AWS"],
+                bio: "Passionate full-stack developer with 5+ years of experience building scalable web applications.",
+                achievements: ["Employee of the Month - March 2023", "Led successful migration to microservices"],
+                projects: ["E-commerce Platform", "Mobile App Backend", "Data Analytics Dashboard"]
+            },
+            {
+                id: 2,
+                name: "Jane Smith",
+                role: "Marketing Manager",
+                department: "Marketing",
+                email: "jane.smith@company.com",
+                phone: "+1 234-567-8902",
+                avatar: "👩‍💼",
+                joinDate: "2021-08-20",
+                skills: ["Digital Marketing", "Content Strategy", "SEO", "Social Media", "Analytics"],
+                bio: "Creative marketing professional focused on driving brand growth through innovative campaigns.",
+                achievements: ["Increased brand awareness by 40%", "Best Campaign Award 2023"],
+                projects: ["Brand Redesign", "Social Media Campaign", "Product Launch Strategy"]
+            },
+            {
+                id: 3,
+                name: "Mike Johnson",
+                role: "Sales Representative",
+                department: "Sales",
+                email: "mike.johnson@company.com",
+                phone: "+1 234-567-8903",
+                avatar: "👨‍💼",
+                joinDate: "2023-03-10",
+                skills: ["Sales Strategy", "Client Relations", "CRM", "Negotiation", "Lead Generation"],
+                bio: "Results-driven sales professional with a track record of exceeding targets.",
+                achievements: ["Top Performer Q3 2023", "Closed largest deal in company history"],
+                projects: ["Enterprise Client Acquisition", "Sales Process Optimization"]
+            },
+            {
+                id: 4,
+                name: "Sarah Wilson",
+                role: "HR Specialist",
+                department: "HR",
+                email: "sarah.wilson@company.com",
+                phone: "+1 234-567-8904",
+                avatar: "👩‍🎓",
+                joinDate: "2020-11-05",
+                skills: ["Recruitment", "Employee Relations", "Training", "Policy Development", "HRIS"],
+                bio: "Dedicated HR professional committed to creating positive workplace experiences.",
+                achievements: ["Reduced turnover by 25%", "Implemented new onboarding program"],
+                projects: ["Diversity & Inclusion Initiative", "Performance Management System"]
+            },
+            {
+                id: 5,
+                name: "David Brown",
+                role: "Financial Analyst",
+                department: "Finance",
+                email: "david.brown@company.com",
+                phone: "+1 234-567-8905",
+                avatar: "👨‍📊",
+                joinDate: "2022-06-12",
+                skills: ["Financial Modeling", "Data Analysis", "Excel", "SQL", "Budgeting"],
+                bio: "Detail-oriented financial analyst with expertise in data-driven decision making.",
+                achievements: ["Identified $500K cost savings", "Streamlined reporting process"],
+                projects: ["Budget Optimization", "Financial Dashboard", "Cost Analysis"]
+            },
+            {
+                id: 6,
+                name: "Lisa Davis",
+                role: "Operations Manager",
+                department: "Operations",
+                email: "lisa.davis@company.com",
+                phone: "+1 234-567-8906",
+                avatar: "👩‍🔧",
+                joinDate: "2019-09-30",
+                skills: ["Process Improvement", "Project Management", "Lean Six Sigma", "Team Leadership"],
+                bio: "Experienced operations leader focused on efficiency and continuous improvement.",
+                achievements: ["Improved efficiency by 30%", "Six Sigma Black Belt Certification"],
+                projects: ["Process Automation", "Quality Management System", "Vendor Management"]
+            }
+        ];
+
+        function loadProfiles(profilesToShow = profiles) {
+            const grid = document.getElementById('profilesGrid');
+            
+            if (profilesToShow.length === 0) {
+                grid.innerHTML = '<div class="no-results" style="grid-column: 1 / -1;">No profiles found matching your criteria.</div>';
+                return;
+            }
+            
+            const profileCards = profilesToShow.map(profile => `
+                <div class="card card-interactive animate-fade-in" onclick="openProfileModal(${profile.id})">
+                    <div style="text-align: center; margin-bottom: var(--spacing-4);">
+                        <div style="font-size: 4rem; margin-bottom: var(--spacing-2);">${profile.avatar}</div>
+                        <h3 style="margin-bottom: var(--spacing-1);">${profile.name}</h3>
+                        <p style="color: var(--primary-color); font-weight: 500;">${profile.role}</p>
+                        <p style="color: var(--gray-600); font-size: var(--font-size-sm);">${profile.department}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--spacing-4);">
+                        <p style="color: var(--gray-600); font-size: var(--font-size-sm); line-height: 1.4;">
+                            ${profile.bio.substring(0, 100)}...
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--spacing-4);">
+                        <h4 style="font-size: var(--font-size-sm); margin-bottom: var(--spacing-2); color: var(--gray-700);">Top Skills</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-1);">
+                            ${profile.skills.slice(0, 3).map(skill => `
+                                <span style="background: var(--gray-100); color: var(--gray-700); padding: var(--spacing-1) var(--spacing-2); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+                                    ${skill}
+                                </span>
+                            `).join('')}
+                            ${profile.skills.length > 3 ? `<span style="color: var(--gray-500); font-size: var(--font-size-xs);">+${profile.skills.length - 3} more</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--spacing-2);">
+                        <button class="btn btn-primary" style="flex: 1; font-size: var(--font-size-sm);" onclick="event.stopPropagation(); sendMessage('${profile.name}')">
+                            💬 Message
+                        </button>
+                        <button class="btn btn-secondary" style="flex: 1; font-size: var(--font-size-sm);" onclick="event.stopPropagation(); viewProfile(${profile.id})">
+                            👁️ View
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            grid.innerHTML = profileCards;
+        }
+
+        function filterProfiles() {
+            const searchTerm = document.getElementById('profileSearch').value.toLowerCase();
+            const department = document.getElementById('departmentFilter').value;
+            
+            let filtered = profiles;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(profile => 
+                    profile.name.toLowerCase().includes(searchTerm) ||
+                    profile.role.toLowerCase().includes(searchTerm) ||
+                    profile.department.toLowerCase().includes(searchTerm) ||
+                    profile.skills.some(skill => skill.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (department) {
+                filtered = filtered.filter(profile => profile.department === department);
+            }
+            
+            loadProfiles(filtered);
+        }
+
+        function openProfileModal(profileId) {
+            const profile = profiles.find(p => p.id === profileId);
+            const modal = document.getElementById('profileModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: var(--spacing-6);">
+                    <div style="font-size: 6rem; margin-bottom: var(--spacing-3);">${profile.avatar}</div>
+                    <h2>${profile.name}</h2>
+                    <p style="color: var(--primary-color); font-weight: 500; font-size: var(--font-size-lg);">${profile.role}</p>
+                    <p style="color: var(--gray-600);">${profile.department} • Joined ${new Date(profile.joinDate).toLocaleDateString()}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-6);">
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-3);">📧 Contact Information</h3>
+                        <p style="margin-bottom: var(--spacing-2);"><strong>Email:</strong> ${profile.email}</p>
+                        <p style="margin-bottom: var(--spacing-4);"><strong>Phone:</strong> ${profile.phone}</p>
+                        
+                        <h3 style="margin-bottom: var(--spacing-3);">📝 About</h3>
+                        <p style="color: var(--gray-600); line-height: 1.6;">${profile.bio}</p>
+                    </div>
+                    
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-3);">🛠️ Skills & Expertise</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-2); margin-bottom: var(--spacing-4);">
+                            ${profile.skills.map(skill => `
+                                <span style="background: var(--primary-color); color: white; padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-md); font-size: var(--font-size-sm);">
+                                    ${skill}
+                                </span>
+                            `).join('')}
+                        </div>
+                        
+                        <h3 style="margin-bottom: var(--spacing-3);">🏆 Achievements</h3>
+                        <ul style="color: var(--gray-600); line-height: 1.6;">
+                            ${profile.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="margin-top: var(--spacing-6);">
+                    <h3 style="margin-bottom: var(--spacing-3);">🚀 Recent Projects</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-2);">
+                        ${profile.projects.map(project => `
+                            <span style="background: var(--gray-100); color: var(--gray-700); padding: var(--spacing-2) var(--spacing-3); border-radius: var(--radius-md); font-size: var(--font-size-sm);">
+                                ${project}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: var(--spacing-3); margin-top: var(--spacing-6); justify-content: center;">
+                    <button class="btn btn-primary" onclick="sendMessage('${profile.name}')">💬 Send Message</button>
+                    <button class="btn btn-success" onclick="recognizeEmployee('${profile.name}')">🏆 Recognize</button>
+                    <button class="btn btn-secondary" onclick="closeModal()">✖️ Close</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        function sendMessage(name) {
+            alert(`Opening chat with ${name}...`);
+            // This would integrate with the messaging system
+        }
+
+        function recognizeEmployee(name) {
+            alert(`Opening recognition form for ${name}...`);
+            // This would integrate with the recognition system
+        }
+
+        function viewProfile(profileId) {
+            openProfileModal(profileId);
+        }
+
+        // Load profiles on page load
+        window.addEventListener('load', () => {
+            loadProfiles();
+        });
+
+        // Add search functionality
+        document.getElementById('profileSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterProfiles();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('profileModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

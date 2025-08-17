@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat & Messaging - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>💬 Chat & Messaging</h1>
+            <p>Connect and communicate with your colleagues in real-time</p>
+            <a href="dashboard-clean.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div style="display: grid; grid-template-columns: 300px 1fr; gap: var(--spacing-6); height: 70vh;">
+            <!-- Contacts/Channels Sidebar -->
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <div style="padding: var(--spacing-4); border-bottom: 1px solid var(--gray-200);">
+                    <h3>💬 Conversations</h3>
+                    <div style="display: flex; gap: var(--spacing-2); margin-top: var(--spacing-3);">
+                        <button class="btn btn-primary chat-tab active" onclick="switchTab('direct')">👤 Direct</button>
+                        <button class="btn btn-secondary chat-tab" onclick="switchTab('channels')">📢 Channels</button>
+                    </div>
+                </div>
+                
+                <div style="padding: var(--spacing-4);">
+                    <input type="text" id="searchContacts" class="form-input" placeholder="Search conversations..." style="margin-bottom: var(--spacing-4);">
+                    
+                    <div id="contactsList">
+                        <!-- Contacts will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="card" style="padding: 0; display: flex; flex-direction: column;">
+                <!-- Chat Header -->
+                <div id="chatHeader" style="padding: var(--spacing-4); border-bottom: 1px solid var(--gray-200); background: var(--gray-50);">
+                    <div style="text-align: center; color: var(--gray-500);">
+                        <div style="font-size: 3rem; margin-bottom: var(--spacing-2);">💬</div>
+                        <p>Select a conversation to start chatting</p>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div id="messagesContainer" class="chat-container" style="flex: 1; padding: var(--spacing-4); overflow-y: auto; display: none;">
+                    <!-- Messages will be loaded here -->
+                </div>
+
+                <!-- Message Input -->
+                <div id="messageInput" style="padding: var(--spacing-4); border-top: 1px solid var(--gray-200); display: none;">
+                    <div class="chat-input-container">
+                        <input type="text" id="messageText" class="chat-input" placeholder="Type your message...">
+                        <button class="btn btn-primary" onclick="sendMessage()">📤 Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample contacts and channels data
+        const contacts = [
+            { id: 1, name: "John Doe", role: "Senior Developer", avatar: "👨‍💻", status: "online", lastMessage: "Sure, I'll review the code", lastTime: "2m ago" },
+            { id: 2, name: "Jane Smith", role: "Marketing Manager", avatar: "👩‍💼", status: "online", lastMessage: "The campaign looks great!", lastTime: "5m ago" },
+            { id: 3, name: "Mike Johnson", role: "Sales Rep", avatar: "👨‍💼", status: "away", lastMessage: "Let's schedule a meeting", lastTime: "1h ago" },
+            { id: 4, name: "Sarah Wilson", role: "HR Specialist", avatar: "👩‍🎓", status: "offline", lastMessage: "Thanks for the update", lastTime: "2h ago" },
+            { id: 5, name: "David Brown", role: "Financial Analyst", avatar: "👨‍📊", status: "online", lastMessage: "I'll send the report today", lastTime: "3h ago" }
+        ];
+
+        const channels = [
+            { id: 1, name: "general", description: "General company discussions", members: 127, avatar: "💬", unread: 3 },
+            { id: 2, name: "development", description: "Development team discussions", members: 15, avatar: "💻", unread: 0 },
+            { id: 3, name: "marketing", description: "Marketing team coordination", members: 8, avatar: "📈", unread: 1 },
+            { id: 4, name: "random", description: "Random fun conversations", members: 89, avatar: "🎲", unread: 5 },
+            { id: 5, name: "announcements", description: "Company announcements", members: 127, avatar: "📢", unread: 0 }
+        ];
+
+        // Sample messages for different conversations
+        const messages = {
+            contact_1: [
+                { id: 1, sender: "John Doe", content: "Hey! Did you get a chance to review the new feature?", timestamp: "10:30 AM", sent: false },
+                { id: 2, sender: "You", content: "Yes, I looked at it. The implementation looks solid!", timestamp: "10:32 AM", sent: true },
+                { id: 3, sender: "John Doe", content: "Great! Any suggestions for improvements?", timestamp: "10:33 AM", sent: false },
+                { id: 4, sender: "You", content: "Maybe we could add some error handling for edge cases", timestamp: "10:35 AM", sent: true },
+                { id: 5, sender: "John Doe", content: "Sure, I'll review the code and add that", timestamp: "10:36 AM", sent: false }
+            ],
+            contact_2: [
+                { id: 1, sender: "Jane Smith", content: "The new marketing campaign is ready for review!", timestamp: "9:15 AM", sent: false },
+                { id: 2, sender: "You", content: "Awesome! I'll take a look at it today", timestamp: "9:20 AM", sent: true },
+                { id: 3, sender: "Jane Smith", content: "The campaign looks great! Really impressed with the creativity", timestamp: "11:45 AM", sent: false }
+            ],
+            channel_1: [
+                { id: 1, sender: "HR Team", content: "Good morning everyone! Don't forget about the team building event tomorrow", timestamp: "8:00 AM", sent: false },
+                { id: 2, sender: "Mike Johnson", content: "Looking forward to it! 🎉", timestamp: "8:05 AM", sent: false },
+                { id: 3, sender: "You", content: "Count me in! What time does it start?", timestamp: "8:10 AM", sent: true }
+            ]
+        };
+
+        let currentTab = 'direct';
+        let currentConversation = null;
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.chat-tab').forEach(btn => {
+                btn.classList.remove('active', 'btn-primary');
+                btn.classList.add('btn-secondary');
+            });
+            event.target.classList.remove('btn-secondary');
+            event.target.classList.add('btn-primary', 'active');
+            
+            loadContactsList();
+            resetChatArea();
+        }
+
+        function loadContactsList() {
+            const container = document.getElementById('contactsList');
+            
+            if (currentTab === 'direct') {
+                const contactItems = contacts.map(contact => `
+                    <div class="employee-card" onclick="openConversation('contact_${contact.id}', '${contact.name}', '${contact.avatar}')" style="cursor: pointer; margin-bottom: var(--spacing-2);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-3);">
+                            <div style="position: relative;">
+                                <span style="font-size: 2rem;">${contact.avatar}</span>
+                                <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; border-radius: 50%; background: ${getStatusColor(contact.status)}; border: 2px solid white;"></div>
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="font-weight: 600; margin-bottom: var(--spacing-1);">${contact.name}</div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--spacing-1);">${contact.role}</div>
+                                <div style="font-size: var(--font-size-xs); color: var(--gray-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    ${contact.lastMessage} • ${contact.lastTime}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                container.innerHTML = contactItems;
+            } else {
+                const channelItems = channels.map(channel => `
+                    <div class="employee-card" onclick="openConversation('channel_${channel.id}', '#${channel.name}', '${channel.avatar}')" style="cursor: pointer; margin-bottom: var(--spacing-2);">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-3);">
+                            <span style="font-size: 2rem;">${channel.avatar}</span>
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-weight: 600;">#${channel.name}</div>
+                                    ${channel.unread > 0 ? `<span style="background: var(--danger-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-xs);">${channel.unread}</span>` : ''}
+                                </div>
+                                <div style="font-size: var(--font-size-sm); color: var(--gray-600); margin-bottom: var(--spacing-1);">${channel.description}</div>
+                                <div style="font-size: var(--font-size-xs); color: var(--gray-500);">${channel.members} members</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                container.innerHTML = channelItems;
+            }
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                online: '#10b981',
+                away: '#f59e0b',
+                offline: '#6b7280'
+            };
+            return colors[status] || '#6b7280';
+        }
+
+        function openConversation(conversationId, name, avatar) {
+            currentConversation = conversationId;
+            
+            // Update chat header
+            const header = document.getElementById('chatHeader');
+            header.innerHTML = `
+                <div style="display: flex; align-items: center; gap: var(--spacing-3);">
+                    <span style="font-size: 2rem;">${avatar}</span>
+                    <div>
+                        <h3 style="margin-bottom: var(--spacing-1);">${name}</h3>
+                        <p style="color: var(--gray-600); font-size: var(--font-size-sm);">
+                            ${conversationId.startsWith('channel_') ? `Channel • ${channels.find(c => c.id == conversationId.split('_')[1])?.members} members` : 'Direct Message'}
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Show chat area
+            document.getElementById('messagesContainer').style.display = 'block';
+            document.getElementById('messageInput').style.display = 'block';
+            
+            loadMessages(conversationId);
+        }
+
+        function loadMessages(conversationId) {
+            const container = document.getElementById('messagesContainer');
+            const conversationMessages = messages[conversationId] || [];
+            
+            if (conversationMessages.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--gray-500); padding: var(--spacing-8);">No messages yet. Start the conversation!</div>';
+                return;
+            }
+            
+            const messageElements = conversationMessages.map(message => `
+                <div class="chat-message ${message.sent ? 'sent' : 'received'}">
+                    ${!message.sent ? `<div style="font-weight: 600; margin-bottom: var(--spacing-1); font-size: var(--font-size-sm);">${message.sender}</div>` : ''}
+                    <div>${message.content}</div>
+                    <div style="font-size: var(--font-size-xs); opacity: 0.7; margin-top: var(--spacing-1);">${message.timestamp}</div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = messageElements;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageText');
+            const content = input.value.trim();
+            
+            if (!content || !currentConversation) return;
+            
+            // Add message to conversation
+            if (!messages[currentConversation]) {
+                messages[currentConversation] = [];
+            }
+            
+            const newMessage = {
+                id: messages[currentConversation].length + 1,
+                sender: "You",
+                content: content,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                sent: true
+            };
+            
+            messages[currentConversation].push(newMessage);
+            
+            // Clear input
+            input.value = '';
+            
+            // Reload messages
+            loadMessages(currentConversation);
+            
+            // Simulate response after 2 seconds
+            setTimeout(() => {
+                const responses = [
+                    "Thanks for the message!",
+                    "Got it, I'll look into that.",
+                    "Sounds good to me!",
+                    "Let me get back to you on that.",
+                    "Great idea! 👍"
+                ];
+                
+                const responseMessage = {
+                    id: messages[currentConversation].length + 1,
+                    sender: currentConversation.startsWith('channel_') ? "Team Member" : contacts.find(c => c.id == currentConversation.split('_')[1])?.name || "Colleague",
+                    content: responses[Math.floor(Math.random() * responses.length)],
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    sent: false
+                };
+                
+                messages[currentConversation].push(responseMessage);
+                loadMessages(currentConversation);
+            }, 2000);
+        }
+
+        function resetChatArea() {
+            currentConversation = null;
+            document.getElementById('chatHeader').innerHTML = `
+                <div style="text-align: center; color: var(--gray-500);">
+                    <div style="font-size: 3rem; margin-bottom: var(--spacing-2);">💬</div>
+                    <p>Select a conversation to start chatting</p>
+                </div>
+            `;
+            document.getElementById('messagesContainer').style.display = 'none';
+            document.getElementById('messageInput').style.display = 'none';
+        }
+
+        // Handle Enter key in message input
+        document.getElementById('messageText').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Load contacts on page load
+        window.addEventListener('load', () => {
+            loadContactsList();
+        });
+    </script>
+</body>
+</html>

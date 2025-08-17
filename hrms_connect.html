@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRMS Social Connect - Integration Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>🌐 HRMS Social Connect</h1>
+            <p>Integration Hub for External HRMS Systems and Social Tools</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="grid">
+            <!-- Integration Status Card -->
+            <section class="card">
+                <h2>📊 Integration Status</h2>
+                <div style="margin-bottom: var(--spacing-4);">
+                    <div class="payroll-item">
+                        <span>System Status</span>
+                        <span style="color: var(--secondary-color); font-weight: 600;">🟢 Online</span>
+                    </div>
+                    <div class="payroll-item">
+                        <span>Active Connections</span>
+                        <span style="color: var(--primary-color); font-weight: 600;">3 Systems</span>
+                    </div>
+                    <div class="payroll-item">
+                        <span>Last Sync</span>
+                        <span style="color: var(--gray-600);" id="lastSync">2024-01-19 14:30:25</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Available Integrations Card -->
+            <section class="card">
+                <h2>🔗 Available Integrations</h2>
+                <div style="display: grid; gap: var(--spacing-4);">
+                    <div class="employee-card">
+                        <div class="employee-name">💼 LinkedIn Talent Hub</div>
+                        <div class="employee-details">Connect with LinkedIn for talent acquisition and professional networking</div>
+                        <button class="btn btn-primary" style="margin-top: var(--spacing-3);">Connect</button>
+                    </div>
+                    <div class="employee-card">
+                        <div class="employee-name">📧 Microsoft Teams</div>
+                        <div class="employee-details">Integrate with Teams for communication and collaboration</div>
+                        <button class="btn btn-primary" style="margin-top: var(--spacing-3);">Connect</button>
+                    </div>
+                    <div class="employee-card">
+                        <div class="employee-name">📱 Slack Workspace</div>
+                        <div class="employee-details">Connect with Slack for team communication and updates</div>
+                        <button class="btn btn-primary" style="margin-top: var(--spacing-3);">Connect</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Features Card -->
+            <section class="card">
+                <h2>👥 Social Features</h2>
+                <div style="display: grid; gap: var(--spacing-4);">
+                    <div class="employee-card">
+                        <div class="employee-name">🎉 Employee Recognition</div>
+                        <div class="employee-details">Celebrate achievements and milestones</div>
+                        <button class="btn btn-success" style="margin-top: var(--spacing-3);">Launch</button>
+                    </div>
+                    <div class="employee-card">
+                        <div class="employee-name">📅 Team Calendar</div>
+                        <div class="employee-details">Shared calendar for events and meetings</div>
+                        <button class="btn btn-success" style="margin-top: var(--spacing-3);">View Calendar</button>
+                    </div>
+                    <div class="employee-card">
+                        <div class="employee-name">💬 Discussion Forums</div>
+                        <div class="employee-details">Company-wide discussions and announcements</div>
+                        <button class="btn btn-success" style="margin-top: var(--spacing-3);">Join Discussion</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Dashboard Card -->
+            <section class="card">
+                <h2>📈 Analytics Dashboard</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                    Monitor engagement and system performance
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--spacing-4);">
+                    <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--primary-color);">127</div>
+                        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Active Users</div>
+                    </div>
+                    <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--secondary-color);">89%</div>
+                        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Engagement Rate</div>
+                    </div>
+                    <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--accent-color);">24</div>
+                        <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Integrations</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <section class="card" style="margin-top: var(--spacing-8);">
+            <h2>⚡ Quick Actions</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                <button class="btn btn-primary">🔄 Sync All Systems</button>
+                <button class="btn btn-secondary">⚙️ Configure Settings</button>
+                <button class="btn btn-success">📊 Generate Report</button>
+                <button class="btn btn-secondary">🔔 Send Notification</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Connecting teams, empowering organizations.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Update last sync time
+        document.getElementById('lastSync').textContent = new Date().toLocaleString();
+        
+        // Add some interactivity
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (this.textContent.includes('Connect') || this.textContent.includes('Launch') || this.textContent.includes('View') || this.textContent.includes('Join')) {
+                    const originalText = this.textContent;
+                    this.style.background = 'var(--secondary-color)';
+                    this.textContent = '✅ ' + this.textContent.replace(/🔗|💼|📧|📱|🎉|📅|💬/, '');
+                    setTimeout(() => {
+                        this.style.background = '';
+                        this.textContent = originalText;
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

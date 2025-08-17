@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Feed - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>📱 Social Feed</h1>
+            <p>Connect, share, and stay updated with your colleagues</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div style="max-width: 600px; margin: 0 auto;">
+            <!-- Create Post -->
+            <section class="card" style="margin-bottom: var(--spacing-6);">
+                <h2>✍️ Share an Update</h2>
+                <form id="postForm">
+                    <div class="form-group">
+                        <textarea id="postContent" class="form-input" rows="3" placeholder="What's on your mind? Share updates, achievements, or interesting thoughts with your colleagues..." required></textarea>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; gap: var(--spacing-2);">
+                            <button type="button" class="btn btn-secondary" onclick="addEmoji('🎉')">🎉</button>
+                            <button type="button" class="btn btn-secondary" onclick="addEmoji('💡')">💡</button>
+                            <button type="button" class="btn btn-secondary" onclick="addEmoji('🚀')">🚀</button>
+                            <button type="button" class="btn btn-secondary" onclick="addEmoji('👏')">👏</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary">📝 Post</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Feed Filter -->
+            <section class="card" style="margin-bottom: var(--spacing-6);">
+                <div style="display: flex; gap: var(--spacing-3); flex-wrap: wrap;">
+                    <button class="btn btn-secondary filter-btn active" onclick="filterFeed('all')">📱 All Posts</button>
+                    <button class="btn btn-secondary filter-btn" onclick="filterFeed('announcements')">📢 Announcements</button>
+                    <button class="btn btn-secondary filter-btn" onclick="filterFeed('achievements')">🏆 Achievements</button>
+                    <button class="btn btn-secondary filter-btn" onclick="filterFeed('social')">💬 Social</button>
+                    <button class="btn btn-secondary filter-btn" onclick="filterFeed('questions')">❓ Questions</button>
+                </div>
+            </section>
+
+            <!-- Social Feed -->
+            <div id="socialFeed">
+                <!-- Posts will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample posts data
+        let posts = [
+            {
+                id: 1,
+                author: "Jane Smith",
+                avatar: "👩‍💼",
+                role: "Marketing Manager",
+                content: "Excited to share that our latest marketing campaign exceeded expectations by 150%! 🚀 Huge thanks to the entire marketing team for their creativity and hard work. #TeamWork #Success",
+                timestamp: "2024-01-18T14:30:00",
+                category: "achievements",
+                likes: 28,
+                comments: 12,
+                shares: 5,
+                userLiked: false,
+                userShared: false
+            },
+            {
+                id: 2,
+                author: "John Doe",
+                avatar: "👨‍💻",
+                role: "Senior Developer",
+                content: "Just deployed our new microservices architecture! The performance improvements are incredible - 50% faster response times. 💡 Anyone interested in a tech talk about the implementation?",
+                timestamp: "2024-01-18T11:15:00",
+                category: "social",
+                likes: 15,
+                comments: 8,
+                shares: 3,
+                userLiked: true,
+                userShared: false
+            },
+            {
+                id: 3,
+                author: "HR Department",
+                avatar: "👥",
+                role: "Human Resources",
+                content: "📢 Reminder: Open enrollment for health benefits ends this Friday! Don't forget to review and update your selections. Contact HR if you need assistance. #Benefits #Deadline",
+                timestamp: "2024-01-18T09:00:00",
+                category: "announcements",
+                likes: 8,
+                comments: 3,
+                shares: 12,
+                userLiked: false,
+                userShared: true
+            },
+            {
+                id: 4,
+                author: "Mike Johnson",
+                avatar: "👨‍💼",
+                role: "Sales Representative",
+                content: "Question for the team: What's your favorite productivity app or tool? Looking to optimize my workflow and would love some recommendations! 🤔 #ProductivityTips",
+                timestamp: "2024-01-17T16:45:00",
+                category: "questions",
+                likes: 12,
+                comments: 18,
+                shares: 2,
+                userLiked: false,
+                userShared: false
+            },
+            {
+                id: 5,
+                author: "Sarah Wilson",
+                avatar: "👩‍🎓",
+                role: "HR Specialist",
+                content: "Congratulations to David Brown for completing his Project Management certification! 🎉 Your dedication to continuous learning is inspiring. #ContinuousLearning #Congratulations",
+                timestamp: "2024-01-17T13:20:00",
+                category: "achievements",
+                likes: 22,
+                comments: 6,
+                shares: 4,
+                userLiked: false,
+                userShared: false
+            },
+            {
+                id: 6,
+                author: "Lisa Davis",
+                avatar: "👩‍🔧",
+                role: "Operations Manager",
+                content: "Coffee chat anyone? ☕ I'll be in the break room around 3 PM if anyone wants to discuss the new process improvements or just catch up! #CoffeeChat #Networking",
+                timestamp: "2024-01-17T10:30:00",
+                category: "social",
+                likes: 9,
+                comments: 7,
+                shares: 1,
+                userLiked: false,
+                userShared: false
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        function loadPosts(postsToShow = posts) {
+            const feed = document.getElementById('socialFeed');
+            
+            if (postsToShow.length === 0) {
+                feed.innerHTML = '<div class="no-results">No posts found for this filter.</div>';
+                return;
+            }
+            
+            const postCards = postsToShow.map(post => `
+                <div class="post-card animate-fade-in">
+                    <div class="post-header">
+                        <div class="post-avatar">${post.avatar}</div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: var(--spacing-1);">${post.author}</h4>
+                            <p style="color: var(--gray-600); font-size: var(--font-size-sm);">
+                                ${post.role} • ${getTimeAgo(post.timestamp)}
+                            </p>
+                        </div>
+                        <div style="background: ${getCategoryColor(post.category)}; color: white; padding: var(--spacing-1) var(--spacing-2); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+                            ${getCategoryIcon(post.category)} ${post.category.toUpperCase()}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--spacing-4); line-height: 1.6;">
+                        ${post.content}
+                    </div>
+                    
+                    <div class="post-actions">
+                        <div class="post-action ${post.userLiked ? 'active' : ''}" onclick="likePost(${post.id})">
+                            <span>👍</span>
+                            <span>${post.likes} ${post.userLiked ? '(Liked)' : ''}</span>
+                        </div>
+                        <div class="post-action" onclick="commentPost(${post.id})">
+                            <span>💬</span>
+                            <span>${post.comments} Comments</span>
+                        </div>
+                        <div class="post-action ${post.userShared ? 'active' : ''}" onclick="sharePost(${post.id})">
+                            <span>📤</span>
+                            <span>${post.shares} ${post.userShared ? '(Shared)' : ''}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            feed.innerHTML = postCards;
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                announcements: "📢",
+                achievements: "🏆",
+                social: "💬",
+                questions: "❓"
+            };
+            return icons[category] || "📱";
+        }
+
+        function getCategoryColor(category) {
+            const colors = {
+                announcements: "var(--primary-color)",
+                achievements: "var(--accent-color)",
+                social: "var(--secondary-color)",
+                questions: "#8b5cf6"
+            };
+            return colors[category] || "var(--gray-500)";
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const postTime = new Date(timestamp);
+            const diffInMinutes = Math.floor((now - postTime) / (1000 * 60));
+            
+            if (diffInMinutes < 1) return 'Just now';
+            if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+            
+            const diffInHours = Math.floor(diffInMinutes / 60);
+            if (diffInHours < 24) return `${diffInHours}h ago`;
+            
+            const diffInDays = Math.floor(diffInHours / 24);
+            if (diffInDays < 7) return `${diffInDays}d ago`;
+            
+            return postTime.toLocaleDateString();
+        }
+
+        function filterFeed(category) {
+            currentFilter = category;
+            
+            // Update filter button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            let filteredPosts = posts;
+            if (category !== 'all') {
+                filteredPosts = posts.filter(post => post.category === category);
+            }
+            
+            // Sort by timestamp (newest first)
+            filteredPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            loadPosts(filteredPosts);
+        }
+
+        function likePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                if (post.userLiked) {
+                    post.likes--;
+                    post.userLiked = false;
+                } else {
+                    post.likes++;
+                    post.userLiked = true;
+                }
+                filterFeed(currentFilter); // Reload with current filter
+            }
+        }
+
+        function commentPost(postId) {
+            alert(`Opening comments for post ${postId}...`);
+            // This would open a comments modal or navigate to detailed view
+        }
+
+        function sharePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post && !post.userShared) {
+                post.shares++;
+                post.userShared = true;
+                
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success';
+                alertDiv.textContent = 'Post shared successfully!';
+                document.querySelector('main .container').insertBefore(alertDiv, document.querySelector('main .container').firstChild);
+                
+                setTimeout(() => alertDiv.remove(), 3000);
+                
+                filterFeed(currentFilter); // Reload with current filter
+            }
+        }
+
+        function addEmoji(emoji) {
+            const textarea = document.getElementById('postContent');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+            
+            textarea.value = textBefore + emoji + textAfter;
+            textarea.focus();
+            textarea.setSelectionRange(cursorPos + emoji.length, cursorPos + emoji.length);
+        }
+
+        // Handle post form submission
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const content = document.getElementById('postContent').value.trim();
+            
+            if (!content) {
+                alert('Please enter some content for your post.');
+                return;
+            }
+            
+            // Determine category based on content
+            let category = 'social';
+            if (content.includes('?')) category = 'questions';
+            if (content.includes('🏆') || content.includes('achievement') || content.includes('congratulations')) category = 'achievements';
+            if (content.includes('📢') || content.includes('reminder') || content.includes('announcement')) category = 'announcements';
+            
+            const newPost = {
+                id: posts.length + 1,
+                author: "Current User",
+                avatar: "👤",
+                role: "Employee",
+                content: content,
+                timestamp: new Date().toISOString(),
+                category: category,
+                likes: 0,
+                comments: 0,
+                shares: 0,
+                userLiked: false,
+                userShared: false
+            };
+            
+            posts.unshift(newPost);
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success';
+            alertDiv.textContent = 'Your post has been shared!';
+            this.parentNode.insertBefore(alertDiv, this);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+            
+            this.reset();
+            filterFeed(currentFilter); // Reload with current filter
+        });
+
+        // Load posts on page load
+        window.addEventListener('load', () => {
+            loadPosts();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Recognition - HRMS Social Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>🏆 Employee Recognition</h1>
+            <p>Celebrate achievements and recognize outstanding contributions</p>
+            <a href="dashboard.html" class="btn btn-secondary" style="margin-top: var(--spacing-4);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Recognition Stats -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>📊 Recognition Overview</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4); margin-top: var(--spacing-4);">
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--accent-color);">47</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Total Recognitions</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--secondary-color);">12</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">This Month</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--primary-color);">8</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Award Categories</div>
+                </div>
+                <div style="text-align: center; padding: var(--spacing-4); background: var(--gray-50); border-radius: var(--radius-md);">
+                    <div style="font-size: var(--font-size-2xl); font-weight: 700; color: var(--danger-color);">3</div>
+                    <div style="font-size: var(--font-size-sm); color: var(--gray-600);">Pending Nominations</div>
+                </div>
+            </div>
+        </section>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-6); margin-bottom: var(--spacing-6);">
+            <!-- Nominate Someone -->
+            <section class="card">
+                <h2>🌟 Nominate a Colleague</h2>
+                <form id="nominationForm">
+                    <div class="form-group">
+                        <label for="nomineeSelect" class="form-label">Select Employee *</label>
+                        <select id="nomineeSelect" class="form-input" required>
+                            <option value="">Choose an employee</option>
+                            <option value="john-doe">John Doe - Software Engineer</option>
+                            <option value="jane-smith">Jane Smith - Marketing Manager</option>
+                            <option value="mike-johnson">Mike Johnson - Sales Rep</option>
+                            <option value="sarah-wilson">Sarah Wilson - HR Specialist</option>
+                            <option value="david-brown">David Brown - Financial Analyst</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="awardCategory" class="form-label">Award Category *</label>
+                        <select id="awardCategory" class="form-input" required>
+                            <option value="">Select category</option>
+                            <option value="excellence">🌟 Excellence in Work</option>
+                            <option value="teamwork">🤝 Outstanding Teamwork</option>
+                            <option value="innovation">💡 Innovation & Creativity</option>
+                            <option value="leadership">👑 Leadership Excellence</option>
+                            <option value="customer">😊 Customer Service</option>
+                            <option value="mentor">🎓 Mentorship</option>
+                            <option value="improvement">📈 Process Improvement</option>
+                            <option value="values">❤️ Living Company Values</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nominationReason" class="form-label">Reason for Nomination *</label>
+                        <textarea id="nominationReason" class="form-input" rows="4" placeholder="Describe why this person deserves recognition..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        🏆 Submit Nomination
+                    </button>
+                </form>
+            </section>
+
+            <!-- Quick Recognition -->
+            <section class="card">
+                <h2>⚡ Quick Recognition</h2>
+                <p style="color: var(--gray-600); margin-bottom: var(--spacing-4); font-size: var(--font-size-sm);">
+                    Send instant appreciation with these quick recognition badges
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-3);">
+                    <button class="btn btn-secondary" onclick="quickRecognition('Great Job!')" style="display: flex; flex-direction: column; align-items: center; padding: var(--spacing-4);">
+                        <span style="font-size: 2rem; margin-bottom: var(--spacing-1);">👏</span>
+                        <span style="font-size: var(--font-size-sm);">Great Job!</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="quickRecognition('Team Player')" style="display: flex; flex-direction: column; align-items: center; padding: var(--spacing-4);">
+                        <span style="font-size: 2rem; margin-bottom: var(--spacing-1);">🤝</span>
+                        <span style="font-size: var(--font-size-sm);">Team Player</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="quickRecognition('Problem Solver')" style="display: flex; flex-direction: column; align-items: center; padding: var(--spacing-4);">
+                        <span style="font-size: 2rem; margin-bottom: var(--spacing-1);">🧩</span>
+                        <span style="font-size: var(--font-size-sm);">Problem Solver</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="quickRecognition('Innovator')" style="display: flex; flex-direction: column; align-items: center; padding: var(--spacing-4);">
+                        <span style="font-size: 2rem; margin-bottom: var(--spacing-1);">💡</span>
+                        <span style="font-size: var(--font-size-sm);">Innovator</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Recent Recognitions -->
+        <section class="card" style="margin-bottom: var(--spacing-6);">
+            <h2>🎉 Recent Recognitions</h2>
+            <div id="recentRecognitions">
+                <!-- Recent recognitions will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Hall of Fame -->
+        <section class="card">
+            <h2>🏛️ Hall of Fame</h2>
+            <p style="color: var(--gray-600); margin-bottom: var(--spacing-4);">
+                Top recognized employees this quarter
+            </p>
+            <div id="hallOfFame" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-4);">
+                <!-- Hall of fame will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--spacing-8); color: var(--gray-500); border-top: 1px solid var(--gray-200); margin-top: var(--spacing-16);">
+        <div class="container">
+            <p>&copy; 2024 HRMS Social Connect. Built with modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample recognition data
+        let recognitions = [
+            {
+                id: 1,
+                nominee: "John Doe",
+                nominator: "Jane Smith",
+                category: "innovation",
+                reason: "John developed an innovative solution that reduced our deployment time by 50%. His creative approach to automation has significantly improved our development workflow.",
+                date: "2024-01-18",
+                status: "approved",
+                likes: 15,
+                avatar: "👨‍💻"
+            },
+            {
+                id: 2,
+                nominee: "Sarah Wilson",
+                nominator: "Mike Johnson",
+                category: "teamwork",
+                reason: "Sarah consistently goes above and beyond to help team members. Her collaborative spirit and willingness to share knowledge makes our team stronger.",
+                date: "2024-01-17",
+                status: "approved",
+                likes: 22,
+                avatar: "👩‍🎓"
+            },
+            {
+                id: 3,
+                nominee: "David Brown",
+                nominator: "Lisa Davis",
+                category: "excellence",
+                reason: "David's attention to detail and analytical skills helped identify cost savings of $50K this quarter. His dedication to excellence is truly inspiring.",
+                date: "2024-01-16",
+                status: "approved",
+                likes: 18,
+                avatar: "👨‍📊"
+            },
+            {
+                id: 4,
+                nominee: "Jane Smith",
+                nominator: "John Doe",
+                category: "leadership",
+                reason: "Jane's leadership during the product launch was exceptional. She kept the team motivated and ensured we delivered on time despite challenges.",
+                date: "2024-01-15",
+                status: "approved",
+                likes: 28,
+                avatar: "👩‍💼"
+            }
+        ];
+
+        const hallOfFameData = [
+            { name: "Jane Smith", recognitions: 8, avatar: "👩‍💼", title: "Marketing Manager" },
+            { name: "John Doe", recognitions: 6, avatar: "👨‍💻", title: "Senior Developer" },
+            { name: "Sarah Wilson", recognitions: 5, avatar: "👩‍🎓", title: "HR Specialist" },
+            { name: "David Brown", recognitions: 4, avatar: "👨‍📊", title: "Financial Analyst" }
+        ];
+
+        function getCategoryIcon(category) {
+            const icons = {
+                excellence: "🌟",
+                teamwork: "🤝",
+                innovation: "💡",
+                leadership: "👑",
+                customer: "😊",
+                mentor: "🎓",
+                improvement: "📈",
+                values: "❤️"
+            };
+            return icons[category] || "🏆";
+        }
+
+        function getCategoryColor(category) {
+            const colors = {
+                excellence: "var(--accent-color)",
+                teamwork: "var(--secondary-color)",
+                innovation: "var(--primary-color)",
+                leadership: "#8b5cf6",
+                customer: "#06b6d4",
+                mentor: "#10b981",
+                improvement: "#f59e0b",
+                values: "#ef4444"
+            };
+            return colors[category] || "var(--gray-500)";
+        }
+
+        function loadRecentRecognitions() {
+            const container = document.getElementById('recentRecognitions');
+            
+            const recognitionCards = recognitions.map(recognition => `
+                <div class="post-card animate-fade-in">
+                    <div class="post-header">
+                        <div class="post-avatar">${recognition.avatar}</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--spacing-1);">${recognition.nominee}</h4>
+                            <p style="color: var(--gray-600); font-size: var(--font-size-sm);">
+                                Recognized by ${recognition.nominator} • ${new Date(recognition.date).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <div class="recognition-badge" style="background: ${getCategoryColor(recognition.category)};">
+                            ${getCategoryIcon(recognition.category)} ${recognition.category.charAt(0).toUpperCase() + recognition.category.slice(1)}
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--gray-700); line-height: 1.6; margin-bottom: var(--spacing-4);">
+                        ${recognition.reason}
+                    </p>
+                    
+                    <div class="post-actions">
+                        <div class="post-action" onclick="likeRecognition(${recognition.id})">
+                            <span>👍</span>
+                            <span>${recognition.likes} likes</span>
+                        </div>
+                        <div class="post-action" onclick="shareRecognition(${recognition.id})">
+                            <span>📤</span>
+                            <span>Share</span>
+                        </div>
+                        <div class="post-action" onclick="commentRecognition(${recognition.id})">
+                            <span>💬</span>
+                            <span>Comment</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = recognitionCards;
+        }
+
+        function loadHallOfFame() {
+            const container = document.getElementById('hallOfFame');
+            
+            const hallOfFameCards = hallOfFameData.map((person, index) => `
+                <div class="card" style="text-align: center; position: relative;">
+                    ${index === 0 ? '<div style="position: absolute; top: -10px; right: -10px; background: var(--accent-color); color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold;">👑</div>' : ''}
+                    <div style="font-size: 4rem; margin-bottom: var(--spacing-2);">${person.avatar}</div>
+                    <h4 style="margin-bottom: var(--spacing-1);">${person.name}</h4>
+                    <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin-bottom: var(--spacing-2);">${person.title}</p>
+                    <div style="background: var(--gray-100); padding: var(--spacing-2); border-radius: var(--radius-md);">
+                        <span style="font-weight: 600; color: var(--primary-color);">${person.recognitions}</span>
+                        <span style="color: var(--gray-600); font-size: var(--font-size-sm);"> recognitions</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = hallOfFameCards;
+        }
+
+        function quickRecognition(type) {
+            alert(`Quick recognition: ${type}\nSelect an employee to send this recognition to.`);
+            // This would open a modal to select employee and send quick recognition
+        }
+
+        function likeRecognition(id) {
+            const recognition = recognitions.find(r => r.id === id);
+            if (recognition) {
+                recognition.likes++;
+                loadRecentRecognitions();
+            }
+        }
+
+        function shareRecognition(id) {
+            alert(`Sharing recognition ${id}...`);
+        }
+
+        function commentRecognition(id) {
+            alert(`Opening comments for recognition ${id}...`);
+        }
+
+        // Handle nomination form submission
+        document.getElementById('nominationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nominee = document.getElementById('nomineeSelect').value;
+            const category = document.getElementById('awardCategory').value;
+            const reason = document.getElementById('nominationReason').value;
+            
+            const newRecognition = {
+                id: recognitions.length + 1,
+                nominee: nominee.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                nominator: "Current User",
+                category: category,
+                reason: reason,
+                date: new Date().toISOString().split('T')[0],
+                status: "pending",
+                likes: 0,
+                avatar: "👤"
+            };
+            
+            recognitions.unshift(newRecognition);
+            
+            // Show success message
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success';
+            alertDiv.textContent = 'Nomination submitted successfully! It will be reviewed by management.';
+            this.parentNode.insertBefore(alertDiv, this);
+            
+            setTimeout(() => alertDiv.remove(), 3000);
+            
+            this.reset();
+            loadRecentRecognitions();
+        });
+
+        // Load data on page load
+        window.addEventListener('load', () => {
+            loadRecentRecognitions();
+            loadHallOfFame();
+        });
+    </script>
+</body>
+</html>
